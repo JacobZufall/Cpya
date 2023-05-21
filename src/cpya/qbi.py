@@ -1,152 +1,80 @@
 """
-Versioning for this file is formatted by date.
-YYYY.MM.DD.v
-The last number is for if there are multiple versions in a single day.
-For example, a release on May 15th, 2023 would be "2023.05.15.1", assuming it's the first release of the day.
+Tax note: QBI deductions are only allowed for a QTB or SSTB. If it is neither of those, then a QBI deduction is not
+allowed. This module only asks IF your business is a QTB OR an SSTB, not if it's one of the two. It is assumed that
+you, as the user, know not to take a QBI deduction if your business is not a QTB or an SSTB.
 
-These numbers are based on the numbers issued by the IRS yearly, and are expected to change. When these numbers
-change, they will be updated as soon as possible. Currently planning on providing a way to manually override
-these numbers easily, in case the update isn't quick enough for some people. Ideally, we should be able to
-automatically pull these numbers from the web, but that's not even planned yet.
+DO NOT INCLUDE NET CAPITAL GAINS IN INCOME.
 """
-import math
 
-tax_limits: dict = {
-    "single": {
-        "lower": 170_050,
-        "upper": 220_050,
-        "phase_in": 50_000
-    },
+# These variables let me easily assign duplicate values to tax_limits.
+# My reasoning for this is it makes the code look cleaner inside of functions later on.
+# Main point being, it reduces the amount of conditionals needed. :)
+# Having two variables like this also makes it easier to change.
+tl_s: dict[str:int] = {"lower": 170_050, "upper": 220_050, "phase_in": 50_000}
+tl_m: dict[str:int] = {"lower": 340_100, "upper": 440_100, "phase_in": 100_000}
 
-    "married": {
-        "lower": 340_100,
-        "upper": 440_100,
-        "phase_in": 100_000
-    }
+tax_limits: dict[str:dict[str:int]] = {"s": tl_s, "mfj": tl_m, "mfs": tl_s, "hoh": tl_s}
+
+standard_deduction: dict[str:int] = {
+    "s": 12_950,
+    "mfj": 25_900,
+    # Despite "mfs" == "s", there are individual to make other code easier to read.
+    "mfs": 12_950,
+    "hoh": 19_400
 }
 
 
-def calc_w2_limit(wages: float, ubia: float = 0.0) -> float:
-    # Will always get returned if there's no argument for UBIA.
-    num_one: float = wages * 0.5
-    num_two: float = (wages * 0.25) + (ubia * 0.025)
-
-    return max(num_one, num_two)
+def calc_tax_inc(agi: float, f_status: str) -> float:
+    return agi - standard_deduction[f_status]
 
 
-def calc_excess(qbi_amt: float, w2_limit: float) -> float:
-    return (0.2 * qbi_amt) - w2_limit
+def calc_ten_qbi(ord_inc: float, sstb_per: float) -> float:
+    return ord_inc * sstb_per * 0.2
 
 
-def calc_tn_qbi(qbi_amt: float) -> float:
-    return qbi_amt * 0.2
+def calc_overall_limit(agi: float, net_cap_gain: float = 0) -> float:
+    return (agi - net_cap_gain) * 0.2
 
 
-def calc_phase_in_per(tax_inc: float, f_status: str) -> float | None:
-    if f_status.upper() == "S" or f_status.upper() == "HOH" or f_status.upper() == "MFS":
-        return (tax_inc - tax_limits["single"]["lower"]) / tax_limits["single"]["phase_in"]
-    elif f_status.upper() == "MFJ":
-        return (tax_inc - tax_limits["married"]["lower"]) / tax_limits["married"]["phase_in"]
+def calc_199a_qbi(ten_qbi: float, overall_limit: float) -> float:
+    return min(ten_qbi, overall_limit)
 
 
-def calc_cat_one(tax_inc: float, qbi_amt: float, net_cap_gain: float, b_type: str) -> float | None:
-    tn_qbi: float = calc_tn_qbi(qbi_amt)
-    if b_type.upper() == "QTB":
-        return tn_qbi
-    elif b_type.upper() == "SSTB":
-        limit: float = (tax_inc - net_cap_gain) * 0.2
-        if limit < tn_qbi:
-            return limit
-        else:
-            return tn_qbi
+def calc_w2_limit(w2_wages: float, sstb_per: float, ubia: float) -> float:
+    return max(w2_wages * sstb_per * 0.5, (w2_wages * sstb_per * 0.25) + (ubia * 0.025))
 
 
-def calc_cat_three(tax_inc: float, qbi_amt: float, w2_wages: float, f_status: str, b_type: str) -> float | None:
-    if b_type.upper() == "QTB":
-        tn_qbi: float = calc_tn_qbi(qbi_amt)
-        w2_limit: float = calc_w2_limit(w2_wages)
-        overall_limit: float = calc_tn_qbi(tax_inc)
+# Returns a table with [0] == phase in % and [1] == SSTB applicable %.
+def calc_phase_in(f_status: str, tax_inc: float, sstb: bool) -> list[float]:
+    percentages: list[float] = []
 
-        phase_in_per: float = calc_phase_in_per(tax_inc, f_status)
-        excess: float = calc_excess(qbi_amt, w2_limit)
+    percentages[0] = (tax_inc - standard_deduction[f_status]) / tax_limits[f_status]["phase_in"]
 
-        red_amt: float = excess * phase_in_per
-        red_qbi: float = tn_qbi - red_amt
-
-        return min(red_qbi, w2_limit, overall_limit)
-
-    elif b_type.upper() == "SSTB":
-        phase_in_per: float = calc_phase_in_per(tax_inc, f_status)
-        applied_per: float = 1.0 - phase_in_per
-
-        tn_qbi: float = calc_tn_qbi(qbi_amt * applied_per)
-        w2_limit: float = calc_w2_limit(w2_wages * applied_per)
-        overall_limit: float = calc_tn_qbi(tax_inc)
-
-        excess: float = calc_excess(tn_qbi, w2_limit)
-        red_amt: float = excess * phase_in_per
-        red_qbi: float = tn_qbi - red_amt
-
-        return min(red_qbi, w2_limit, overall_limit)
-
-
-def calc_cat_two(tax_inc: float, qbi_amt: float, w2_wages: float, ubia: float, b_type: str) -> float | None:
-    if b_type.upper() == "QTB":
-        tn_qbi: float = calc_tn_qbi(qbi_amt)
-        w2_limit: float = calc_w2_limit(w2_wages, ubia)
-        overall_limit: float = calc_tn_qbi(tax_inc)
-
-        return min(tn_qbi, w2_limit, overall_limit)
-
-    elif b_type.upper() == "SSTB":
-        # There is no QBI deduction allowed for an SSTB for Category 2.
-        return 0.0
-
-
-# Filing status needs to be changed to a boolean applicable to if the filing status is MFJ.
-# MFJ is the only filing status that is different, so it'd be a lot easier to use if it were a boolean.
-def qbi(filing_status: str,
-        b_type: str,
-        taxable_income: float,
-        net_capital_gains: float,
-        w2_wages: float,
-        qbi_amt: float = 0.0,
-        ubia: float = 0.0) -> float:
-
-    if math.floor(qbi_amt) == 0:
-        qbi_amt = taxable_income
-
-    # For taxpayers with a filing status of Single or Head of Household.
-    # Married Filing Single is included in here, since it's treated the same as filing single.
-    if filing_status.upper() == "S" or filing_status.upper() == "HOH" or filing_status.upper() == "MFS":
-        if taxable_income <= tax_limits["single"]["lower"]:
-            # Category 1
-            return calc_cat_one(taxable_income, qbi_amt, net_capital_gains, b_type)
-        elif tax_limits["single"]["lower"] < taxable_income < tax_limits["single"]["upper"]:
-            # Category 3
-            return calc_cat_three(taxable_income, qbi_amt, w2_wages, filing_status, b_type)
-        elif taxable_income >= tax_limits["single"]["upper"]:
-            # Category 2
-            return calc_cat_two(taxable_income, qbi_amt, w2_wages, ubia, b_type)
-        else:
-            return 0.0  # Returns 0 if they enter an invalid filing status.
-
-    # For taxpayers with a filing status of Married Filing Jointly.
-    elif filing_status.upper() == "MFJ":
-        if taxable_income <= tax_limits["married"]["lower"]:
-            return calc_cat_one(taxable_income, qbi_amt, net_capital_gains, b_type)
-        elif tax_limits["married"]["lower"] < taxable_income < tax_limits["married"]["upper"]:
-            return calc_cat_three(taxable_income, qbi_amt, w2_wages, filing_status, b_type)
-        elif taxable_income >= tax_limits["married"]["upper"]:
-            return calc_cat_two(taxable_income, qbi_amt, w2_wages, ubia, b_type)
-        else:
-            return 0.0
-
+    # Using this conditional here means we don't have to use it in other functions.
+    # percentages[1] is always multiplied with another value. Therefore, if it == 1, it has no effect.
+    if sstb:
+        percentages[1] = 1
     else:
-        return 0.0
+        percentages[1] = 1 - percentages[0]
+
+    return percentages
+
+
+def calc_cat_one(ord_inc: float, agi: float, net_cap_gain: float) -> float:
+    # SSTBs and QTBs are treated equally, which is why the second argument in calc_ten_qbi() is hard coded as 1.0.
+    return calc_199a_qbi(calc_ten_qbi(ord_inc, 1.0), calc_overall_limit(agi, net_cap_gain))
+
+
+def calc_cat_two(f_status: str, ord_inc: float, agi: float, w2_wages: float, ubia: float, net_cap_gain: float, sstb: bool = False):
+    tax_inc: float = calc_tax_inc(agi, f_status)
+    percentages: list[float] = calc_phase_in(f_status, tax_inc, sstb)
+
+    ten_qbi: float = calc_ten_qbi(ord_inc, percentages[1])
+    w2_limit = calc_w2_limit(w2_wages, percentages[1], ubia)
+
+    return min()
+
 
 
 if __name__ == "__main__":
-    print(qbi("S", "SSTB", 135_050, 7_500, 135_050, 50_000, 30_000))
-    print(qbi("S", "SSTB", 194_050, 11_250, 194_050, 70_000, 45_000))
-    print(qbi("S", "SSTB", 135_050, 7_500, 135_050, 50_000, 30_000))
+    pass
