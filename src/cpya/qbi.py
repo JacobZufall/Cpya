@@ -13,7 +13,7 @@ DO NOT INCLUDE NET CAPITAL GAINS IN INCOME.
 tl_s: dict[str:int] = {"lower": 170_050, "upper": 220_050, "phase_in": 50_000}
 tl_m: dict[str:int] = {"lower": 340_100, "upper": 440_100, "phase_in": 100_000}
 
-tax_limits: dict[str:dict[str:int]] = {"s": tl_s, "mfj": tl_m, "mfs": tl_s, "hoh": tl_s}
+tax_limits: dict[str:any] = {"s": tl_s, "mfj": tl_m, "mfs": tl_s, "hoh": tl_s}
 
 standard_deduction: dict[str:int] = {
     "s": 12_950,
@@ -65,15 +65,24 @@ def calc_cat_one(ord_inc: float, agi: float, net_cap_gain: float) -> float:
     return calc_199a_qbi(calc_ten_qbi(ord_inc, 1.0), calc_overall_limit(agi, net_cap_gain))
 
 
-def calc_cat_two(f_status: str, ord_inc: float, agi: float, w2_wages: float, ubia: float, net_cap_gain: float, sstb: bool = False):
+def calc_cat_two(f_status: str, ord_inc: float, agi: float, w2_wages: float, ubia: float, net_cap_gain: float, sstb: bool = False) -> float:
     tax_inc: float = calc_tax_inc(agi, f_status)
     percentages: list[float] = calc_phase_in(f_status, tax_inc, sstb)
 
     ten_qbi: float = calc_ten_qbi(ord_inc, percentages[1])
-    w2_limit = calc_w2_limit(w2_wages, percentages[1], ubia)
+    w2_limit: float = calc_w2_limit(w2_wages, percentages[1], ubia)
 
-    return min()
+    # If w2_limit > ten_qbi, then there is no reduction. The use of the min() function below makes it so that if this
+    # is true, then red_amt == 0, which makes red_qbi == ten_qbi. This allows us to use one return statement.
+    red_amt: float = (ten_qbi - min(ten_qbi, w2_limit)) * calc_phase_in(f_status, tax_inc, sstb)[0]
+    red_qbi = ten_qbi - red_amt
+    overall_limit: float = calc_overall_limit(agi, net_cap_gain)
 
+    return min(red_qbi, overall_limit)
+
+
+def calc_cat_three():
+    pass
 
 
 if __name__ == "__main__":
