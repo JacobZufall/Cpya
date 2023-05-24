@@ -69,7 +69,6 @@ def qbi(filing_status: str, ord_inc: float, agi: float, w2_wages: float, ubia: f
     # Category 3
     elif tax_limits[filing_status]["lower"] < tax_inc < tax_limits[filing_status]["upper"]:
 
-        print("Running calculation three.")  # Debug
         percentages: list[float] = calc_phase_in(filing_status, tax_inc, sstb)
 
         ten_qbi: float = calc_ten_qbi(ord_inc, percentages[1])
@@ -86,7 +85,6 @@ def qbi(filing_status: str, ord_inc: float, agi: float, w2_wages: float, ubia: f
     # Category 2
     else:
 
-        print("Running calculation two.")  # Debug
         percentages: list[float] = calc_phase_in(filing_status, tax_inc, sstb)
 
         ten_qbi: float = calc_ten_qbi(ord_inc, percentages[1])
