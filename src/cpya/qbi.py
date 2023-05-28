@@ -76,7 +76,7 @@ def qbi(filing_status: str, ord_inc: float, agi: float, w2_wages: float, ubia: f
 
         # If w2_limit > ten_qbi, then there is no reduction. The use of the min() function below makes it so that if
         # this is true, then red_amt == 0, which makes red_qbi == ten_qbi. This allows us to use one return statement.
-        red_amt: float = (ten_qbi - min(ten_qbi, w2_limit)) * calc_phase_in(filing_status, tax_inc, sstb)[0]
+        red_amt: float = (ten_qbi - min(ten_qbi, w2_limit)) * percentages[0]
         red_qbi = ten_qbi - red_amt
         overall_limit: float = calc_overall_limit(tax_inc, net_cap_gain)
 
