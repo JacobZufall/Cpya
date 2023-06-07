@@ -1,27 +1,24 @@
-"""
-Tax note: QBI deductions are only allowed for a QTB or SSTB. If it is neither of those, then a QBI deduction is not
-allowed. This module only asks IF your business is a QTB OR an SSTB, not if it's one of the two. It is assumed that
-you, as the user, know not to take a QBI deduction if your business is not a QTB or an SSTB.
+# qbi.py
+# 2023.06.07
 
-DO NOT INCLUDE NET CAPITAL GAINS IN ORDINARY INCOME.
-"""
+# Tax note: QBI deductions are only allowed for a QTB or SSTB. If it is neither of those, then a QBI deduction is not
+# allowed. This module only asks IF your business is a QTB OR an SSTB, not if it's one of the two. It is assumed that
+# you, as the user, know not to take a QBI deduction if your business is not a QTB or an SSTB.
+
+# DO NOT INCLUDE NET CAPITAL GAINS IN ORDINARY INCOME.
 
 # These variables let me easily assign duplicate values to tax_limits.
 # My reasoning for this is it makes the code look cleaner inside of functions later on.
 # Main point being, it reduces the amount of conditionals needed. :)
 # Having two variables like this also makes it easier to change.
+from tax_def.standard_deduction import StandardDeduction
+
+
 tl_s: dict[str:int] = {"lower": 170_050, "upper": 220_050, "phase_in": 50_000}
 tl_m: dict[str:int] = {"lower": 340_100, "upper": 440_100, "phase_in": 100_000}
 
 tax_limits: dict[str:any] = {"s": tl_s, "mfj": tl_m, "mfs": tl_s, "hoh": tl_s}
-
-standard_deduction: dict[str:int] = {
-    "s": 12_950,
-    "mfj": 25_900,
-    # Despite "mfs" == "s", there are individual to make other code easier to read.
-    "mfs": 12_950,
-    "hoh": 19_400
-}
+std_ded: StandardDeduction = StandardDeduction()
 
 
 def calc_ten_qbi(ord_inc: float, sstb_per: float) -> float:
@@ -29,7 +26,7 @@ def calc_ten_qbi(ord_inc: float, sstb_per: float) -> float:
 
 
 def calc_tax_inc(agi: float, f_status: str) -> float:
-    return agi - standard_deduction[f_status]
+    return agi - std_ded.__getattribute__(f_status)
 
 
 def calc_w2_limit(w2_wages: float, sstb_per: float, ubia: float) -> float:
@@ -56,9 +53,12 @@ def calc_phase_in(f_status: str, tax_inc: float, sstb: bool) -> list[float]:
     return percentages
 
 
-def qbi(filing_status: str, ord_inc: float, agi: float, w2_wages: float, ubia: float, net_cap_gain: float = 0.0, sstb: bool = False) -> float:
+def qbi(tax_year: int, filing_status: str, ord_inc: float, agi: float, w2_wages: float, ubia: float, net_cap_gain: float = 0.0, sstb: bool = False) -> float:
 
     tax_inc: float = calc_tax_inc(agi, filing_status)
+    # Since objects are mutable, I figured that this was the best way to do this.
+    std_ded.year = tax_year
+    std_ded.reset_deduction()
 
     # Category 1
     if tax_inc <= tax_limits[filing_status]["lower"]:
@@ -102,6 +102,4 @@ def qbi(filing_status: str, ord_inc: float, agi: float, w2_wages: float, ubia: f
 
 
 if __name__ == "__main__":
-    print(qbi("s", 130_000, 148_000, 50_000, 30_000, 7_500))  # Cat 1
-    print(qbi("s", 195_000, 207_000, 75_000, 45_000, 11_250))  # Cat 3
-    print(qbi("s", 325_000, 345_000, 125_000, 75_000, 18_750))  # Cat 2
+    print(qbi(2022, "s", 400_000, 148_000, 50_000, 30_000, 7_500))
