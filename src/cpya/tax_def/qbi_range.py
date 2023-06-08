@@ -2,26 +2,77 @@
 # 2023.06.07
 # Supports tax years 2018 - present.
 # The QBI deduction cannot be claimed in tax years ending on or before 12/31/2025.
+# There is no plan to remove this class after the 2025 tax year.
 
 import datetime
 current_year: int = int(datetime.date.today().year)
 
-years: dict[int:list[int]] = {
-    # year: [lower, upper]
-    2018: [],
-    2019: [],
-    2020: [],
-    2021: [],
-    2022: [],
-    2023: []
+years: dict[int:dict[str:list[int]]] = {
+    # year: {
+    #     "status": [lower, upper]
+    # },
+
+    2018: {
+        "s": [157_500, 207_500],
+        "m": [315_000, 415_000]
+    },
+
+    2019: {
+        "s": [160_700, 210_700],
+        "m": [321_400, 421_400]
+    },
+
+    2020: {
+        "s": [163_300, 213_300],
+        "m": [326_600, 426_600]
+    },
+
+    2021: {
+        "s": [164_900, 214_900],
+        "m": [329_800, 429_800]
+    },
+
+    2022: {
+        "s": [170_050, 220_050],
+        "m": [340_100, 440_100]
+    },
+
+    2023: {
+        "s": [182_100, 232_100],
+        "m": [364_200, 464_200]
+    },
 }
 
 
 class QbiRange:
-    def __init__(self, lower_s: int, upper_s: int, lower_m: int, upper_m: int):
-        self.lower_s = lower_s
-        self.upper_s = upper_s
-        self.phase_in_s = upper_s - lower_s
-        self.lower_m = lower_m
-        self.lower_s = lower_s
-        self.phase_in_m = upper_m - lower_m
+    def __init__(self, year: int = current_year):
+        if current_year < year < (current_year - 10):
+            self.year: int = current_year
+            print(f"The year {year} is not supported and the attribute has defaulted to the current year of "
+                  f"{current_year}\n. This may be because you are using a year in which the QBI deduction did not "
+                  f"exist, or the package has not been updated with that year's numbers.\nYou can manually change the "
+                  f"numbers by calling the override_qbi() method.")
+        else:
+            self.year: int = year
+
+        self.s_lower = years[year]["s"][0]
+        self.s_upper = years[year]["s"][1]
+        self.m_lower = years[year]["m"][0]
+        self.m_upper = years[year]["m"][1]
+
+    def override_qbi(self, status: str, lower: int, upper: int):
+        if status == "s":
+            self.s_lower = lower
+            self.s_upper = upper
+        elif status == "m":
+            self.m_lower = lower
+            self.m_upper = upper
+        else:
+            print(f"Valid statuses include \"s\" and \"m\". You entered {status}.\nNo values have been updated.")
+
+    # Resets the QBI to the default for the current year.
+    def reset_qbi(self):
+        self.s_lower = years[self.year]["s"][0]
+        self.s_upper = years[self.year]["s"][1]
+        self.m_lower = years[self.year]["m"][0]
+        self.m_upper = years[self.year]["m"][1]
