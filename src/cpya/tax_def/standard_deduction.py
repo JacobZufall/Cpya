@@ -25,7 +25,7 @@ years: dict[int:list[int]] = {
 
 class StandardDeduction:
     def __init__(self, year: int = current_year):
-        if current_year < year < (current_year - 10):
+        if current_year < year or year < (current_year - 10):
             self.year: int = current_year
             print(f"The year {year} is not supported and the attribute has defaulted to the current year of "
                   f"{current_year}\n. Please call the override_deduction() method in order to use non-supported years.")
@@ -47,6 +47,13 @@ class StandardDeduction:
 
     # Resets the deductions to default.
     def reset_deduction(self):
+        if current_year < self.year or self.year < (current_year - 10):
+            self.year: int = current_year
+            # For some reason, self.year always equals current year. Need to figure out why and fix.
+            print(f"The year {self.year} is not supported and the attribute has defaulted to the current year of "
+                  f"{current_year}.\nPlease call the override_deduction() method in order to use "
+                  f"non-supported years.\n")
+
         self.s = years[self.year][0]
         self.mfj = years[self.year][0] * 2
         self.mfs = years[self.year][0]

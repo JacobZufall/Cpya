@@ -12,12 +12,9 @@
 # Main point being, it reduces the amount of conditionals needed. :)
 # Having two variables like this also makes it easier to change.
 from tax_def.standard_deduction import StandardDeduction
+from tax_def.qbi_range import QbiRange
 
-
-tl_s: dict[str:int] = {"lower": 170_050, "upper": 220_050, "phase_in": 50_000}
-tl_m: dict[str:int] = {"lower": 340_100, "upper": 440_100, "phase_in": 100_000}
-
-tax_limits: dict[str:any] = {"s": tl_s, "mfj": tl_m, "mfs": tl_s, "hoh": tl_s}
+qbi_range: QbiRange = QbiRange()
 std_ded: StandardDeduction = StandardDeduction()
 
 
@@ -41,7 +38,7 @@ def calc_overall_limit(tax_inc: float, net_cap_gain: float = 0) -> float:
 def calc_phase_in(f_status: str, tax_inc: float, sstb: bool) -> list[float]:
     percentages: list[float] = [0, 0]
 
-    percentages[0] = (tax_inc - tax_limits[f_status]["lower"]) / tax_limits[f_status]["phase_in"]
+    percentages[0] = (tax_inc - qbi_range.__getattribute__(f"{f_status}_lower") / qbi_range.__getattribute__(f"{f_status}_phase_in"))
 
     # Using this conditional here means we don't have to use it in other functions.
     # percentages[1] is always multiplied with another value. Therefore, if it == 1, it has no effect.
@@ -58,16 +55,18 @@ def qbi(tax_year: int, filing_status: str, ord_inc: float, agi: float, w2_wages:
     tax_inc: float = calc_tax_inc(agi, filing_status)
     # Since objects are mutable, I figured that this was the best way to do this.
     std_ded.year = tax_year
+    qbi_range.year = tax_year
     std_ded.reset_deduction()
+    qbi_range.reset_qbi()
 
     # Category 1
-    if tax_inc <= tax_limits[filing_status]["lower"]:
+    if tax_inc <= qbi_range.__getattribute__(f"{filing_status}_lower"):
 
         # SSTBs and QTBs are treated equally, which is why the second argument in calc_ten_qbi() is hard coded as 1.0.
         return min(calc_ten_qbi(ord_inc, 1.0), calc_overall_limit(calc_tax_inc(agi, filing_status), net_cap_gain))
 
     # Category 3
-    elif tax_limits[filing_status]["lower"] < tax_inc < tax_limits[filing_status]["upper"]:
+    elif qbi_range.__getattribute__(f"{filing_status}_lower") < tax_inc < qbi_range.__getattribute__(f"{filing_status}_upper"):
 
         percentages: list[float] = calc_phase_in(filing_status, tax_inc, sstb)
 
@@ -102,4 +101,4 @@ def qbi(tax_year: int, filing_status: str, ord_inc: float, agi: float, w2_wages:
 
 
 if __name__ == "__main__":
-    print(qbi(2022, "s", 400_000, 148_000, 50_000, 30_000, 7_500))
+    print(qbi(2038, "s", 400_000, 148_000, 50_000, 30_000, 7_500))

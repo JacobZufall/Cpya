@@ -46,7 +46,7 @@ years: dict[int:dict[str:list[int]]] = {
 
 class QbiRange:
     def __init__(self, year: int = current_year):
-        if current_year < year < (current_year - 10):
+        if current_year < year or year < (current_year - 10):
             self.year: int = current_year
             print(f"The year {year} is not supported and the attribute has defaulted to the current year of "
                   f"{current_year}\n. This may be because you are using a year in which the QBI deduction did not "
@@ -55,10 +55,16 @@ class QbiRange:
         else:
             self.year: int = year
 
+        # Currently, the phase is consistently 50,000 and 100,000 every year. However, the calculation was still
+        # coded in incase the IRS decides to shake things up.
+
         self.s_lower = years[year]["s"][0]
         self.s_upper = years[year]["s"][1]
+        self.s_phase_in = self.s_upper - self.s_lower
+
         self.m_lower = years[year]["m"][0]
         self.m_upper = years[year]["m"][1]
+        self.m_phase_in = self.m_upper = self.m_lower
 
     def override_qbi(self, status: str, lower: int, upper: int):
         if status == "s":
@@ -72,6 +78,14 @@ class QbiRange:
 
     # Resets the QBI to the default for the current year.
     def reset_qbi(self):
+        if (current_year < self.year or 2025 < self.year) or self.year < 2018:
+            self.year: int = current_year
+            # For some reason, self.year always equals current year. Need to figure out why and fix.
+            print(f"The year {self.year} is not supported and the attribute has defaulted to the current year of "
+                  f"{current_year}.\nThis may be because you are using a year in which the QBI deduction did not "
+                  f"exist, or the package has not been updated with that year's numbers.\nYou can manually change the "
+                  f"numbers by calling the override_qbi() method.\n")
+
         self.s_lower = years[self.year]["s"][0]
         self.s_upper = years[self.year]["s"][1]
         self.m_lower = years[self.year]["m"][0]
