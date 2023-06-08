@@ -46,7 +46,7 @@ years: dict[int:dict[str:list[int]]] = {
 
 class QbiRange:
     def __init__(self, year: int = current_year):
-        if current_year < year or year < (current_year - 10):
+        if (current_year < year or 2025 < year) or year < 2018:
             self.year: int = current_year
             print(f"The year {year} is not supported and the attribute has defaulted to the current year of "
                   f"{current_year}\n. This may be because you are using a year in which the QBI deduction did not "
