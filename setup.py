@@ -6,7 +6,7 @@ LONG_DESCRIPTION = "Cpya is a useful Python package that allows you utilize many
                    "ease!"
 
 setup(
-    name="cpya",
+    name="cpya_jacobzufall",
     version=VERSION,
     author="Jacob Zufall",
     author_email="jacobzufall@gmail.com",
