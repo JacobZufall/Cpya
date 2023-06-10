@@ -57,9 +57,9 @@ class StandardDeduction:
     # Useful if you need to use the standard deduction from a year that is no longer supported.
     def override(self, s: int, hoh: int):
         """
+        Used to change the standard deduction for filing statuses manually.
 
-        :param s: The desired value for single, married filing separately, and is automatically doubled for married
-        filing jointly filing status.
+        :param s: The desired value for single filing status. Used to calculate other filing statuses.
         :param hoh: The desired value for head of household filing status.
         :return: Nothing.
         """
