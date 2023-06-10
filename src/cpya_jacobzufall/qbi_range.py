@@ -46,28 +46,54 @@ class QbiRange:
         },
     }
 
-    def __init__(self, year: int = current_year):
-        if (self.current_year < year or 2025 < year) or year < 2018:
+    def define(self):
+        """
+
+        :return: Nothing.
+        """
+        if (self.current_year < self.year or 2025 < self.year) or self.year < 2018:
             self.year: int = self.current_year
-            print(f"The year {year} is not supported and the attribute has defaulted to the current year of "
+            print(f"The year {self.year} is not supported and the attribute has defaulted to the current year of "
                   f"{self.current_year}\n. This may be because you are using a year in which the QBI deduction did not "
                   f"exist, or the package has not been updated with that year's numbers.\nYou can manually change the "
                   f"numbers by calling the override_qbi() method.")
-        else:
-            self.year: int = year
 
         # Currently, the phase is consistently 50,000 and 100,000 every year. However, the calculation was still
         # coded in incase the IRS decides to shake things up.
 
-        self.s_lower = self.years[year]["s"][0]
-        self.s_upper = self.years[year]["s"][1]
+        self.s_lower = self.years[self.year]["s"][0]
+        self.s_upper = self.years[self.year]["s"][1]
         self.s_phase_in = self.s_upper - self.s_lower
 
-        self.m_lower = self.years[year]["m"][0]
-        self.m_upper = self.years[year]["m"][1]
+        self.m_lower = self.years[self.year]["m"][0]
+        self.m_upper = self.years[self.year]["m"][1]
         self.m_phase_in = self.m_upper = self.m_lower
 
-    def override_qbi(self, status: str, lower: int, upper: int):
+    def __init__(self, year: int = current_year):
+        """
+
+        :param year: The relevant tax year.
+        """
+        self.year = year
+
+        self.s_lower = None
+        self.s_upper = None
+        self.s_phase_in = None
+
+        self.m_lower = None
+        self.m_upper = None
+        self.m_phase_in = None
+
+        self.define()
+
+    def override(self, status: str, lower: int, upper: int):
+        """
+
+        :param status: The filing status to change the limits for.
+        :param lower: The lower limit for phase-in.
+        :param upper: The upper limit for phase-in.
+        :return: Nothing.
+        """
         if status == "s":
             self.s_lower = lower
             self.s_upper = upper
@@ -77,17 +103,4 @@ class QbiRange:
         else:
             print(f"Valid statuses include \"s\" and \"m\". You entered {status}.\nNo values have been updated.")
 
-    # Resets the QBI to the default for the current year.
-    def reset_qbi(self):
-        if (self.current_year < self.year or 2025 < self.year) or self.year < 2018:
-            self.year: int = self.current_year
-            # For some reason, self.year always equals current year. Need to figure out why and fix.
-            print(f"The year {self.year} is not supported and the attribute has defaulted to the current year of "
-                  f"{self.current_year}.\nThis may be because you are using a year in which the QBI deduction did not "
-                  f"exist, or the package has not been updated with that year's numbers.\nYou can manually change the "
-                  f"numbers by calling the override_qbi() method.\n")
-
-        self.s_lower = self.years[self.year]["s"][0]
-        self.s_upper = self.years[self.year]["s"][1]
-        self.m_lower = self.years[self.year]["m"][0]
-        self.m_upper = self.years[self.year]["m"][1]
+        self.define()

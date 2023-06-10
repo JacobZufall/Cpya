@@ -17,8 +17,8 @@ class Qbi:
     def calculate_qbi(self):
         self.std_ded.year = self.tax_year
         self.qbi_range.year = self.tax_year
-        self.std_ded.reset_deduction()
-        self.qbi_range.reset_qbi()
+        self.std_ded.reset()
+        self.qbi_range.define()
 
         self.tax_inc = self.agi - self.std_ded.__getattribute__(self.filing_status)
         self.phase_in = (self.tax_inc - self.qbi_range.__getattribute__(f"{self.filing_status}_lower") /
