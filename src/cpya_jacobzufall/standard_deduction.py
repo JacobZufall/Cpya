@@ -1,4 +1,6 @@
-# standard_deduction.py
+"""
+standard_deduction.py
+"""
 
 import datetime
 
@@ -23,7 +25,6 @@ class StandardDeduction:
 
     def define(self):
         """
-
         :return: Nothing.
         """
         if self.current_year < self.year or self.year < (self.current_year - 10):
@@ -41,7 +42,6 @@ class StandardDeduction:
 
     def __init__(self, year: int = current_year):
         """
-
         :param year: The relevant tax year.
         """
         self.year = year
@@ -53,11 +53,10 @@ class StandardDeduction:
 
         self.define()
 
-    # Overrides the default deduction set by the IRS.
-    # Useful if you need to use the standard deduction from a year that is no longer supported.
-    def override(self, s: int, hoh: int):
+    def override(self, s: float, hoh: float):
         """
-        Used to change the standard deduction for filing statuses manually.
+        Used to change the standard deduction for filing statuses manually. Useful when trying to use a year that is
+        no longer supported.
 
         :param s: The desired value for single filing status. Used to calculate other filing statuses.
         :param hoh: The desired value for head of household filing status.

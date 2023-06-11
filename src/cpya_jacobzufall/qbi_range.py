@@ -1,8 +1,10 @@
-# qbi_range.py
+"""
+qbi_range.py
 
-# Supports tax years 2018 - present.
-# The QBI deduction cannot be claimed in tax years ending on or before 12/31/2025.
-# There is no plan to remove this class after the 2025 tax year.
+Supports tax years 2018 - present.
+The QBI deduction cannot be claimed in tax years ending on or before 12/31/2025.
+There is no plan to remove this class after the 2025 tax year.
+"""
 
 import datetime
 
@@ -86,9 +88,8 @@ class QbiRange:
 
         self.define()
 
-    def override(self, status: str, lower: int, upper: int):
+    def override(self, status: str, lower: float, upper: float):
         """
-
         :param status: The filing status to change the limits for.
         :param lower: The lower limit for phase-in.
         :param upper: The upper limit for phase-in.
