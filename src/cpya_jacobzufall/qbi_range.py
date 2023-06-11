@@ -48,7 +48,7 @@ class QbiRange:
         },
     }
 
-    def define(self):
+    def define_qbi(self):
         """
 
         :return: Nothing.
@@ -86,9 +86,9 @@ class QbiRange:
         self.m_upper = None
         self.m_phase_in = None
 
-        self.define()
+        self.define_qbi()
 
-    def override(self, status: str, lower: float, upper: float):
+    def override_qbi(self, status: str, lower: float, upper: float):
         """
         :param status: The filing status to change the limits for.
         :param lower: The lower limit for phase-in.
@@ -104,4 +104,4 @@ class QbiRange:
         else:
             print(f"Valid statuses include \"s\" and \"m\". You entered {status}.\nNo values have been updated.")
 
-        self.define()
+        self.define_qbi()

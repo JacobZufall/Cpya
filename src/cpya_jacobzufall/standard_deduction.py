@@ -23,7 +23,7 @@ class StandardDeduction:
         2023: [13_850, 20_800]
     }
 
-    def define(self):
+    def define_std_ded(self):
         """
         :return: Nothing.
         """
@@ -51,9 +51,9 @@ class StandardDeduction:
         self.mfs = None
         self.hoh = None
 
-        self.define()
+        self.define_std_ded()
 
-    def override(self, s: float, hoh: float):
+    def override_std_ded(self, s: float, hoh: float):
         """
         Used to change the standard deduction for filing statuses manually. Useful when trying to use a year that is
         no longer supported.
