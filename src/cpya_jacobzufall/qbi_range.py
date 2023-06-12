@@ -12,7 +12,7 @@ import datetime
 class QbiRange:
     current_year: int = int(datetime.date.today().year)
 
-    years: dict[int:dict[str:list[int]]] = {
+    qbi_years: dict[int:dict[str:list[int]]] = {
         # year: {
         #     "status": [lower, upper]
         # },
@@ -48,7 +48,7 @@ class QbiRange:
         },
     }
 
-    def define(self):
+    def define_qbi(self):
         """
 
         :return: Nothing.
@@ -63,12 +63,12 @@ class QbiRange:
         # Currently, the phase is consistently 50,000 and 100,000 every year. However, the calculation was still
         # coded in incase the IRS decides to shake things up.
 
-        self.s_lower = self.years[self.year]["s"][0]
-        self.s_upper = self.years[self.year]["s"][1]
+        self.s_lower = self.qbi_years[self.year]["s"][0]
+        self.s_upper = self.qbi_years[self.year]["s"][1]
         self.s_phase_in = self.s_upper - self.s_lower
 
-        self.m_lower = self.years[self.year]["m"][0]
-        self.m_upper = self.years[self.year]["m"][1]
+        self.m_lower = self.qbi_years[self.year]["m"][0]
+        self.m_upper = self.qbi_years[self.year]["m"][1]
         self.m_phase_in = self.m_upper = self.m_lower
 
     def __init__(self, year: int = current_year):
@@ -86,9 +86,9 @@ class QbiRange:
         self.m_upper = None
         self.m_phase_in = None
 
-        self.define()
+        self.define_qbi()
 
-    def override(self, status: str, lower: float, upper: float):
+    def override_qbi(self, status: str, lower: float, upper: float):
         """
         :param status: The filing status to change the limits for.
         :param lower: The lower limit for phase-in.
@@ -104,4 +104,4 @@ class QbiRange:
         else:
             print(f"Valid statuses include \"s\" and \"m\". You entered {status}.\nNo values have been updated.")
 
-        self.define()
+        self.define_qbi()
