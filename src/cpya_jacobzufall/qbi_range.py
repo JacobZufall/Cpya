@@ -48,7 +48,7 @@ class QbiRange:
         },
     }
 
-    def define_qbi(self):
+    def define_qbi(self) -> None:
         """
 
         :return: Nothing.
@@ -71,24 +71,7 @@ class QbiRange:
         self.m_upper = self.qbi_years[self.year]["m"][1]
         self.m_phase_in = self.m_upper = self.m_lower
 
-    def __init__(self, year: int = current_year):
-        """
-
-        :param year: The relevant tax year.
-        """
-        self.year = year
-
-        self.s_lower = None
-        self.s_upper = None
-        self.s_phase_in = None
-
-        self.m_lower = None
-        self.m_upper = None
-        self.m_phase_in = None
-
-        self.define_qbi()
-
-    def override_qbi(self, status: str, lower: float, upper: float):
+    def override_qbi(self, status: str, lower: float, upper: float) -> None:
         """
         :param status: The filing status to change the limits for.
         :param lower: The lower limit for phase-in.
@@ -103,5 +86,22 @@ class QbiRange:
             self.m_upper = upper
         else:
             print(f"Valid statuses include \"s\" and \"m\". You entered {status}.\nNo values have been updated.")
+
+        self.define_qbi()
+
+    def __init__(self, year: int = current_year):
+        """
+
+        :param year: The relevant tax year.
+        """
+        self.year = year
+
+        self.s_lower = None
+        self.s_upper = None
+        self.s_phase_in = None
+
+        self.m_lower = None
+        self.m_upper = None
+        self.m_phase_in = None
 
         self.define_qbi()

@@ -12,9 +12,8 @@ from src.cpya_jacobzufall.qbi_range import QbiRange
 from src.cpya_jacobzufall.standard_deduction import StandardDeduction
 
 
-# LOTS OF STUFF IS MISSING TYPE HINTS, FIX THAT.
 class Qbi(QbiRange, StandardDeduction):
-    def calculate_qbi(self):
+    def calculate_qbi(self) -> None:
         """
         :return: Nothing.
         """

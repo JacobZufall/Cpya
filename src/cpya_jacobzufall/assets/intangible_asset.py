@@ -7,6 +7,14 @@ from asset import Asset
 
 # Might want to consider using months instead of years.
 class IntangibleAsset(Asset):
+    def amortize(self, periods: int = 1) -> None:
+        """
+
+        :param periods: The number of periods (usually years) to depreciate.
+        :return: Nothing.
+        """
+        self.value -= periods * (self.value / self.LIFE)
+
     def __init__(self, name: str, life: int, value: float):
         """
 
@@ -15,11 +23,3 @@ class IntangibleAsset(Asset):
         :param value: The value of the asset.
         """
         super().__init__(name=name, life=life, value=value)
-
-    def amortize(self, periods: int = 1):
-        """
-
-        :param periods: The number of periods (usually years) to depreciate.
-        :return: Nothing.
-        """
-        self.value -= periods * (self.value / self.life)
