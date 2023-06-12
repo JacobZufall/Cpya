@@ -1,5 +1,8 @@
 """
 standard_deduction.py
+
+Need to consider how many years to include.
+Does the IRS have an API?
 """
 
 import datetime
@@ -8,7 +11,7 @@ import datetime
 class StandardDeduction:
     current_year: int = int(datetime.date.today().year)
 
-    years: dict[int:list[int]] = {
+    std_ded_years: dict[int:list[int]] = {
         # year: [single, head of household]
         2013: [6_100, 8_950],
         2014: [6_200, 9_100],
@@ -35,10 +38,10 @@ class StandardDeduction:
         else:
             self.year: int = self.year
 
-        self.s: int = self.years[self.year][0]
-        self.mfj: int = self.years[self.year][0] * 2
-        self.mfs: int = self.years[self.year][0]
-        self.hoh: int = self.years[self.year][1]
+        self.s: int = self.std_ded_years[self.year][0]
+        self.mfj: int = self.std_ded_years[self.year][0] * 2
+        self.mfs: int = self.std_ded_years[self.year][0]
+        self.hoh: int = self.std_ded_years[self.year][1]
 
     def __init__(self, year: int = current_year):
         """

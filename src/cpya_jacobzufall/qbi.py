@@ -12,19 +12,12 @@ from src.cpya_jacobzufall.qbi_range import QbiRange
 from src.cpya_jacobzufall.standard_deduction import StandardDeduction
 
 
+# LOTS OF STUFF IS MISSING TYPE HINTS, FIX THAT.
 class Qbi(QbiRange, StandardDeduction):
-    # qbi_range: QbiRange = QbiRange()
-    # std_ded: StandardDeduction = StandardDeduction()
-
     def calculate_qbi(self):
         """
         :return: Nothing.
         """
-        # self.std_ded.year = self.tax_year
-        # self.qbi_range.year = self.tax_year
-        # self.std_ded.define_std_ded()
-        # self.qbi_range.define_qbi()
-
         self.tax_inc = self.agi - self.__getattribute__(self.filing_status)
         self.phase_in = (self.tax_inc - self.__getattribute__(f"{self.qbi_status}_lower") /
                          self.__getattribute__(f"{self.qbi_status}_phase_in"))
@@ -37,11 +30,12 @@ class Qbi(QbiRange, StandardDeduction):
             self.sstb_per = 1
 
         self.overall_limit = (self.tax_inc - self.net_cap_gain) * 0.2
-        self.w2_limit = max(self.w2_wages * self.sstb_per * 0.5,
-                            (self.w2_wages * self.sstb_per * 0.25) + (self.ubia * 0.025))
 
         self.ten_qbi = self.ord_inc * self.sstb_per * 0.2
-        self.red_qbi = self.ten_qbi - ((self.ten_qbi - min(self.ten_qbi, self.w2_limit)) * self.phase_in)
+        self.red_qbi = self.ten_qbi - ((self.ten_qbi - min(self.ten_qbi,
+                                                           max(self.w2_wages * self.sstb_per * 0.5,
+                                                               (self.w2_wages * self.sstb_per * 0.25) +
+                                                               (self.ubia * 0.025)))) * self.phase_in)
 
         # Category 1
         if self.tax_inc <= self.__getattribute__(f"{self.qbi_status}_lower"):
@@ -67,36 +61,40 @@ class Qbi(QbiRange, StandardDeduction):
         :param net_cap_gain: The net capital gain.
         :param sstb: Is the business a specified service or trade business?
         """
-        self.tax_year = tax_year
-        self.filing_status = filing_status
-        self.ord_inc = ord_inc
-        self.agi = agi
-        self.w2_wages = w2_wages
-        self.ubia = ubia
-        self.net_cap_gain = net_cap_gain
-        self.sstb = sstb
+        QbiRange.__init__(self, tax_year)
+        StandardDeduction.__init__(self, tax_year)
+
+        # Checks to make sure that the tax year is eligible for a QBI and supported by standard_deduction.py.
+        if tax_year in QbiRange.qbi_years and tax_year in StandardDeduction.std_ded_years:
+            self.tax_year: int = tax_year
+        else:
+            # If it's not valid, we default to the current year.
+            self.tax_year: int = self.current_year
+            print(f"The year {tax_year} is not a valid year for a QBI deduction or is no longer supported for a "
+                  f"standard deduction. The year {self.tax_year} has been selected. If needed, call \"override_qbi\" "
+                  f"and \"override_std_ded\" to manually input your own numbers. These methods will automatically "
+                  f"calculate the rest from the numbers given.")
+
+        self.filing_status: str = filing_status
+        self.ord_inc: float = ord_inc
+        self.agi: float = agi
+        self.w2_wages: float = w2_wages
+        self.ubia: float = ubia
+        self.net_cap_gain: float = net_cap_gain
+        self.sstb: bool = sstb
 
         # For QBI deductions, the only one that's different is MFJ. Single, MFS, and HoH are all treated the same.
         if filing_status == "mfj":
-            self.qbi_status = "m"
+            self.qbi_status: str = "m"
         else:
-            self.qbi_status = "s"
-
-        QbiRange.__init__(self, tax_year)
-        StandardDeduction.__init__(self, tax_year)
+            self.qbi_status: str = "s"
 
         self.qbi = None
         self.red_qbi = None
         self.ten_qbi = None
-        self.w2_limit = None
         self.overall_limit = None
         self.sstb_per = None
         self.phase_in = None
         self.tax_inc = None
 
         self.calculate_qbi()
-
-
-if __name__ == "__main__":
-    myQbi: Qbi = Qbi(2022, "s", 400_000.0, 148_000.0, 50_000.0, 30_000.0, 7_500.0)
-    print(myQbi.qbi)
