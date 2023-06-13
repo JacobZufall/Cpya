@@ -13,5 +13,5 @@ class Asset:
         self.name = name
         self.LIFE = life
         # The default value of an asset.
-        self.D_VALUE = value
-        self.value = self.D_VALUE
+        self.DEF_VALUE = value
+        self.value = self.DEF_VALUE
