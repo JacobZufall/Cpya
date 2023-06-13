@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-VERSION = "2023.05.17.1"
+VERSION = "2023.06.12.1"
 DESCRIPTION = "The Python package for accountants."
 LONG_DESCRIPTION = "Cpya is a useful Python package that allows you utilize many essential accounting functions with " \
                    "ease!"
@@ -17,13 +17,11 @@ setup(
 
     keywords=[
         "python:",
-        "first package"
     ],
 
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Education",
-        "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: Microsoft :: Windows",

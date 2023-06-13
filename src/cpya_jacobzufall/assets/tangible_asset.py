@@ -28,29 +28,36 @@ class TangibleAsset(Asset):
         """
 
         # Straight Line
-        if method == 1:
-            self.value -= periods * (self.depr_value / self.LIFE)
-            self.rem_life -= periods
-            self.depr_value = self.value - self.s_value
+        if self.depr_value > 0:
+            if method == 1:
+                self.value -= periods * (self.depr_value / self.LIFE)
+                self.rem_life -= periods
 
-        # Declining Balance
-        elif method == 2:
-            self.value -= 2 * (self.depr_value / self.LIFE)
+                self.depr_value = self.value - self.s_value
 
-        # Double Declining Balance
-        elif method == 3:
-            pass
+            # Declining Balance
+            elif method == 2:
+                self.prev_depr = 2 * ((self.depr_value - self.prev_depr) / self.LIFE)
+                self.value -= self.prev_depr
 
-        # Sum of the Years' Digits
-        elif method == 4:
-            pass
+                self.depr_value = self.value - self.s_value
 
-        # Units of Production
-        elif method == 5:
-            pass
+            # Double Declining Balance
+            elif method == 3:
+                pass
 
+            # Sum of the Years' Digits
+            elif method == 4:
+                pass
+
+            # Units of Production
+            elif method == 5:
+                pass
+
+            else:
+                print(f"{method} is not a valid option. Options for depreciation range from 1 - 5.")
         else:
-            print(f"{method} is not a valid option. Options for depreciation range from 1 - 5.")
+            print(f"Asset \"{self.name}\" is fully depreciated! Current value = {self.value}.")
 
     def __init__(self, name: str, life: int, value: float, s_value: float = 0.0):
         """
@@ -66,5 +73,6 @@ class TangibleAsset(Asset):
         self.s_value = None
         self.depr_value = None
         self.rem_life = None
+        self.prev_depr = 0
 
         self.define_asset()
