@@ -8,8 +8,8 @@ you, as the user, know not to take a QBI deduction if your business is not a QTB
 DO NOT INCLUDE NET CAPITAL GAINS IN ORDINARY INCOME.
 """
 
-from src.cpya_jacobzufall.qbi_range import QbiRange
-from src.cpya_jacobzufall.standard_deduction import StandardDeduction
+from src.taxpy.qbi_range import QbiRange
+from src.taxpy.standard_deduction import StandardDeduction
 
 
 class Qbi(QbiRange, StandardDeduction):
