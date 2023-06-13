@@ -13,7 +13,7 @@ from src.taxpy.standard_deduction import StandardDeduction
 
 
 class Qbi(QbiRange, StandardDeduction):
-    def calculate_qbi(self) -> None:
+    def calculate_qbi(self) -> float:
         """
         :return: Nothing.
         """
@@ -38,15 +38,15 @@ class Qbi(QbiRange, StandardDeduction):
 
         # Category 1
         if self.tax_inc <= self.__getattribute__(f"{self.qbi_status}_lower"):
-            self.qbi = min(self.ten_qbi, self.overall_limit)
+            return min(self.ten_qbi, self.overall_limit)
         # Category 3
         elif self.__getattribute__(
                 f"{self.qbi_status}_lower") < self.tax_inc < self.__getattribute__(
                 f"{self.qbi_status}_upper"):
-            self.qbi = min(self.red_qbi, self.overall_limit)
+            return min(self.red_qbi, self.overall_limit)
         # Category 2
         else:
-            min(self.red_qbi, self.overall_limit) * self.sstb_per
+            return min(self.red_qbi, self.overall_limit) * self.sstb_per
 
     def __init__(self, tax_year: int, filing_status: str, ord_inc: float, agi: float, w2_wages: float,
                  ubia: float = 0.0, net_cap_gain: float = 0.0, sstb: bool = False):
@@ -88,7 +88,6 @@ class Qbi(QbiRange, StandardDeduction):
         else:
             self.qbi_status: str = "s"
 
-        self.qbi = None
         self.red_qbi = None
         self.ten_qbi = None
         self.overall_limit = None
@@ -96,4 +95,4 @@ class Qbi(QbiRange, StandardDeduction):
         self.phase_in = None
         self.tax_inc = None
 
-        self.calculate_qbi()
+        self.qbi = self.calculate_qbi()
