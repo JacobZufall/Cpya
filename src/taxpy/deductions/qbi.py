@@ -8,14 +8,16 @@ you, as the user, know not to take a QBI deduction if your business is not a QTB
 DO NOT INCLUDE NET CAPITAL GAINS IN ORDINARY INCOME.
 """
 
-from src.taxpy.qbi_range import QbiRange
-from src.taxpy.standard_deduction import StandardDeduction
+from src.taxpy.deductions.qbi_range import QbiRange
+from src.taxpy.deductions.standard_deduction import StandardDeduction
 
 
+# Would it be better to combine QbiRange into Qbi, or is it better that Qbi inherits QbiRange. I don't think any other
+# class would need to inherit from QbiRange, so it doesn't make much sense for it to be its own class in its own file.
 class Qbi(QbiRange, StandardDeduction):
     def calculate_qbi(self) -> float:
         """
-        :return: Nothing.
+        :return: The QBI deduction.
         """
         self.tax_inc = self.agi - self.__getattribute__(self.filing_status)
         self.phase_in = (self.tax_inc - self.__getattribute__(f"{self.qbi_status}_lower") /
