@@ -2,35 +2,17 @@
 balance_sheet.py
 """
 
+from financial_statement import FinancialStatement
 
-class BalanceSheet:
-    @staticmethod
-    def __check_balance(bal: bool) -> str:
-        if bal:
-            return "debit"
-        else:
-            return "credit"
 
+class BalanceSheet(FinancialStatement):
     def add_account(self, name: str, category: str, d_bal: bool) -> None:
-        """
-        Creates a new account with a default balance of $0.
-        :param name: The name of the account.
-        :param category: The category of the account (asset/liability/equity).
-        :param d_bal: Debit/credit balance. (True == debit, False == credit).
-        :return: Nothing.
-        """
         self.bs[category][name] = {
-            "d/c": self.__check_balance(d_bal),
+            "d/c": self.check_balance(d_bal),
             "bal": 0.0
         }
 
     def del_account(self, name: str) -> None:
-        """
-        Deletes a specified account from the balance sheet.
-        :param name: The name of the account.
-        :return: Nothing.
-        """
-
         # This isn't pretty, but I don't have a better method at this moment.
         try:
             self.bs["asset"].pop(name)
@@ -65,23 +47,7 @@ class BalanceSheet:
         else:
             return False
 
-    def __calc_true_value(self, category: str, account: str,) -> float:
-        """
-        :param category: The category of the account.
-        :param account: The name of the account.
-        :return: The true value of the account.
-        """
-        if self.bs[category][account]["d/c"] == "debit":
-            return abs(self.bs[category][account]["balance"])
-        else:
-            return self.bs[category][account]["balance"] * -1
-
     def true_value(self, account: str) -> float:
-        """
-        Returns a debit account as a positive float and a credit account as a negative float.
-        :param account: The name of the account.
-        :return: The true value of an account.
-        """
         try:
             self.bs["asset"][account]
         except KeyError:
@@ -93,16 +59,16 @@ class BalanceSheet:
                 except KeyError:
                     print("Account not found!")
                 else:
-                    return self.__calc_true_value("equity", account)
+                    return self.calc_true_value(self.bs, "equity", account)
             else:
-                return self.__calc_true_value("liability", account)
+                return self.calc_true_value(self.bs, "liability", account)
         else:
-            return self.__calc_true_value("asset", account)
+            return self.calc_true_value(self.bs, "asset", account)
 
     def __init__(self):
         """
         Here is and example of what the balance sheet looks like.\n
-        Type is dict[str:dict[str:[dict[str:any]]], if needed.
+        Type is dict[str:dict[str:dict[str:any]]], if needed.
 
         self.bs = {
             "asset": {
@@ -132,6 +98,8 @@ class BalanceSheet:
             "liability": {},
             "equity": {}
         }
+
+        super().__init__()
 
 
 if __name__ == "__main__":
