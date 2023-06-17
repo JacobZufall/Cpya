@@ -28,12 +28,12 @@ class FinancialStatement:
         """
 
     @abstractmethod
-    def add_account(self, name: str, category: str, d_bal: bool) -> None:
+    def add_account(self, name: str, category: str, contra: bool):
         """
         Creates a new account with a default balance of $0.
         :param name: The name of the account.
         :param category: The category of the account (asset/liability/equity/revenue/expense).
-        :param d_bal: Debit/credit balance. (True == debit, False == credit).
+        :param contra: If the account is a contra account.
         :return: Nothing.
         """
 
@@ -45,5 +45,22 @@ class FinancialStatement:
         :return: Nothing.
         """
 
-    def __init_subclass__(cls):
+    # @abstractmethod
+    # def save_fs(self, file_name: str, path: str = "data/bal_sht/"):
+    #     """
+    #     :param file_name: The name of the JSON file to be created.
+    #     :param path: The folder the file should be saved to.
+    #     :return: Nothing.
+    #     """
+    #
+    # @abstractmethod
+    # def load_fs(self, file: str, validate: bool = True):
+    #     """
+    #     Loads said file and validates that it is the correct financial statement.
+    #     :param file: The name of the JSON file to open.
+    #     :param validate: Checks if the file being loaded is the correct financial statement.
+    #     :return: Nothing.
+    #     """
+
+    def __init__(self):
         pass

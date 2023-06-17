@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
 
-VERSION = "2023.06.12.1"
-DESCRIPTION = "The Python package for accountants."
-LONG_DESCRIPTION = "TaxPy is a useful Python package that allows you utilize many essential accounting functions with " \
-                   "ease!"
+VERSION: str = "2023 BETA"
+DESCRIPTION: str = "The Python package for accountants."
+LONG_DESCRIPTION: str = "TaxPy is a useful Python package that allows you utilize many essential accounting " \
+                        "functions with ease!"
 
 setup(
     name="taxpy",

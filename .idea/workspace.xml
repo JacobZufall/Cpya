@@ -4,10 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a49b14fc-a951-47dd-bd19-77c5a467b5c2" name="Changes" comment="Added balance_sheet.py, and other things">
-      <change afterPath="$PROJECT_DIR$/src/taxpy/financial_statements/financial_statement.py" afterDir="false" />
+    <list default="true" id="a49b14fc-a951-47dd-bd19-77c5a467b5c2" name="Changes" comment="Modified BalanceSheet to inherit from FinancialStatement">
+      <change afterPath="$PROJECT_DIR$/src/taxpy/financial_statements/income_statement.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/taxpy/financial_statements/balance_sheet.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/financial_statements/balance_sheet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/taxpy/financial_statements/financial_statement.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/financial_statements/financial_statement.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,7 +67,12 @@
       <workItem from="1686667263456" duration="50000" />
       <workItem from="1686668176162" duration="298000" />
       <workItem from="1686668488686" duration="2491000" />
-      <workItem from="1686754991698" duration="3337000" />
+      <workItem from="1686754991698" duration="3606000" />
+      <workItem from="1686764594410" duration="738000" />
+      <workItem from="1686766816586" duration="78000" />
+      <workItem from="1686796121659" duration="2568000" />
+      <workItem from="1686839122702" duration="2221000" />
+      <workItem from="1686843461885" duration="24000" />
     </task>
     <task id="LOCAL-00001" summary="Added balance_sheet.py, and other things">
       <created>1686756190237</created>
@@ -74,18 +81,39 @@
       <option name="project" value="LOCAL" />
       <updated>1686756190237</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Modified BalanceSheet to inherit from FinancialStatement">
+      <created>1686760805246</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1686760805246</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Added balance_sheet.py, and other things" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added balance_sheet.py, and other things" />
+    <MESSAGE value="Modified BalanceSheet to inherit from FinancialStatement" />
+    <option name="LAST_COMMIT_MESSAGE" value="Modified BalanceSheet to inherit from FinancialStatement" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/taxpy$income_statement.coverage" NAME="income_statement Coverage Results" MODIFIED="1686765210559" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy/financial_statements" />
+    <SUITE FILE_PATH="coverage/taxpy$financial_statement.coverage" NAME="financial_statement Coverage Results" MODIFIED="1686840690906" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy/financial_statements" />
     <SUITE FILE_PATH="coverage/taxpy$qbi.coverage" NAME="qbi Coverage Results" MODIFIED="1686667289055" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy" />
-    <SUITE FILE_PATH="coverage/taxpy$balance_sheet.coverage" NAME="balance_sheet Coverage Results" MODIFIED="1686760288058" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy/financial_statements" />
+    <SUITE FILE_PATH="coverage/taxpy$balance_sheet.coverage" NAME="balance_sheet Coverage Results" MODIFIED="1686841220121" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy/financial_statements" />
   </component>
 </project>
