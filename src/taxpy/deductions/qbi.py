@@ -15,41 +15,6 @@ from src.taxpy.deductions.standard_deduction import StandardDeduction
 # Would it be better to combine QbiRange into Qbi, or is it better that Qbi inherits QbiRange. I don't think any other
 # class would need to inherit from QbiRange, so it doesn't make much sense for it to be its own class in its own file.
 class Qbi(QbiRange, StandardDeduction):
-    def calculate_qbi(self) -> float:
-        """
-        :return: The QBI deduction.
-        """
-        self.tax_inc = self.agi - self.__getattribute__(self.filing_status)
-        self.phase_in = (self.tax_inc - self.__getattribute__(f"{self.qbi_status}_lower") /
-                         self.__getattribute__(f"{self.qbi_status}_phase_in"))
-
-        # If it's a QTB (not an SSTB), then there is no SSTB%. In this case, self.sstb_per = 1, or 100%, so it has no
-        # effect when it is used.
-        if self.sstb:
-            self.sstb_per = 1 - self.phase_in
-        else:
-            self.sstb_per = 1
-
-        self.overall_limit = (self.tax_inc - self.net_cap_gain) * 0.2
-
-        self.ten_qbi = self.ord_inc * self.sstb_per * 0.2
-        self.red_qbi = self.ten_qbi - ((self.ten_qbi - min(self.ten_qbi,
-                                                           max(self.w2_wages * self.sstb_per * 0.5,
-                                                               (self.w2_wages * self.sstb_per * 0.25) +
-                                                               (self.ubia * 0.025)))) * self.phase_in)
-
-        # Category 1
-        if self.tax_inc <= self.__getattribute__(f"{self.qbi_status}_lower"):
-            return min(self.ten_qbi, self.overall_limit)
-        # Category 3
-        elif self.__getattribute__(
-                f"{self.qbi_status}_lower") < self.tax_inc < self.__getattribute__(
-                f"{self.qbi_status}_upper"):
-            return min(self.red_qbi, self.overall_limit)
-        # Category 2
-        else:
-            return min(self.red_qbi, self.overall_limit) * self.sstb_per
-
     def __init__(self, tax_year: int, filing_status: str, ord_inc: float, agi: float, w2_wages: float,
                  ubia: float = 0.0, net_cap_gain: float = 0.0, sstb: bool = False):
         """
@@ -62,6 +27,7 @@ class Qbi(QbiRange, StandardDeduction):
         :param net_cap_gain: The net capital gain.
         :param sstb: Is the business a specified service or trade business?
         """
+        # I'm assuming that accounts know what all of these variable names mean but I for sure do not.
         QbiRange.__init__(self, tax_year)
         StandardDeduction.__init__(self, tax_year)
 
@@ -98,3 +64,45 @@ class Qbi(QbiRange, StandardDeduction):
         self.tax_inc = None
 
         self.qbi = self.calculate_qbi()
+    
+    def calculate_qbi(self) -> float:
+        """
+        :return: The QBI deduction.
+        """
+        self.tax_inc = self.agi - self.__getattribute__(self.filing_status)
+        
+        # Why are you calling self.__getattribute__ on your own instance.  In the case where this is
+        # required you are likely doing something wrong.
+        self.phase_in = (self.tax_inc - self.__getattribute__(f"{self.qbi_status}_lower") /
+                         self.__getattribute__(f"{self.qbi_status}_phase_in"))
+
+        # If it's a QTB (not an SSTB), then there is no SSTB%. In this case, self.sstb_per = 1, or 100%, so it has no
+        # effect when it is used.
+        if self.sstb:
+            self.sstb_per = 1 - self.phase_in
+        else:
+            self.sstb_per = 1
+
+        self.overall_limit = (self.tax_inc - self.net_cap_gain) * 0.2
+
+        self.ten_qbi = self.ord_inc * self.sstb_per * 0.2
+        
+        # You should feel bad about this line of code, I am impressed but you should still feel bad.
+        self.red_qbi = self.ten_qbi - ((self.ten_qbi - min(self.ten_qbi,
+                                                           max(self.w2_wages * self.sstb_per * 0.5,
+                                                               (self.w2_wages * self.sstb_per * 0.25) +
+                                                               (self.ubia * 0.025)))) * self.phase_in)
+
+        # Category 1
+        if self.tax_inc <= self.__getattribute__(f"{self.qbi_status}_lower"):
+            return min(self.ten_qbi, self.overall_limit)
+        # Category 3
+        elif self.__getattribute__(
+                f"{self.qbi_status}_lower") < self.tax_inc < self.__getattribute__(
+                f"{self.qbi_status}_upper"):
+            return min(self.red_qbi, self.overall_limit)
+        # Category 2
+        else:
+            return min(self.red_qbi, self.overall_limit) * self.sstb_per
+
+
