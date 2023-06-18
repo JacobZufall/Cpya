@@ -81,6 +81,7 @@ class QbiRange:
                   f"{self.current_year}\n. This may be because you are using a year in which the QBI deduction did not "
                   f"exist, or the package has not been updated with that year's numbers.\nYou can manually change the "
                   f"numbers by calling the override_qbi() method.")
+            raise ValueError("Unsupported year")
 
         # Currently, the phase is consistently 50,000 and 100,000 every year. However, the calculation was still
         # coded in incase the IRS decides to shake things up.
