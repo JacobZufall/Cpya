@@ -6,6 +6,22 @@ from asset import Asset
 
 
 class TangibleAsset(Asset):
+    def __init__(self, name: str, life: int, value: float, s_value: float = 0.0):
+        """
+        :param name: The name of the asset.
+        :param life: The life of the asset (months).
+        :param value: The value of the asset ($).
+        :param s_value: The salvage value of the asset ($).
+        """
+        super().__init__(name=name, life=life, value=value)
+        self.S_VALUE = s_value
+
+        self.depr_value = None
+        self.rem_life = None
+        self.prev_depr = 0
+
+        self.define_asset()
+    
     def define_asset(self) -> None:
         """
         Defines the asset or resets it to its original state.
@@ -65,18 +81,4 @@ class TangibleAsset(Asset):
         else:
             print(f"Asset \"{self.name}\" is fully depreciated! Current value = {self.value}.")
 
-    def __init__(self, name: str, life: int, value: float, s_value: float = 0.0):
-        """
-        :param name: The name of the asset.
-        :param life: The life of the asset (months).
-        :param value: The value of the asset ($).
-        :param s_value: The salvage value of the asset ($).
-        """
-        super().__init__(name=name, life=life, value=value)
-        self.S_VALUE = s_value
 
-        self.depr_value = None
-        self.rem_life = None
-        self.prev_depr = 0
-
-        self.define_asset()

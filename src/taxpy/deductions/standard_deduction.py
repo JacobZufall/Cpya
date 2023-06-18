@@ -13,6 +13,8 @@ class StandardDeduction:
 
     std_ded_years: dict[int:list[int]] = {
         # year: [single, head of household]
+        
+        # Use a tuple probably. as well as allow the user to define values to this customlly
         2013: [6_100, 8_950],
         2014: [6_200, 9_100],
         2015: [6_300, 9_250],
@@ -25,11 +27,25 @@ class StandardDeduction:
         2022: [12_950, 19_400],
         2023: [13_850, 20_800]
     }
+    
+    def __init__(self, year: int = current_year):
+        """
+        :param year: The relevant tax year.
+        """
+        self.year = year
+
+        self.s = None
+        self.mfj = None
+        self.mfs = None
+        self.hoh = None
+
+        self.define_std_ded()
 
     def define_std_ded(self) -> None:
         """
         :return: Nothing.
         """
+        # You would likely be much better off using the datetime lib.
         if self.current_year < self.year or self.year < (self.current_year - 10):
             self.year: int = self.current_year
             print(f"The year {self.year} is not supported and the attribute has defaulted to the current year of "
@@ -57,15 +73,3 @@ class StandardDeduction:
         self.mfs = s
         self.hoh = hoh
 
-    def __init__(self, year: int = current_year):
-        """
-        :param year: The relevant tax year.
-        """
-        self.year = year
-
-        self.s = None
-        self.mfj = None
-        self.mfs = None
-        self.hoh = None
-
-        self.define_std_ded()

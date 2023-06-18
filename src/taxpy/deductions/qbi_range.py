@@ -16,7 +16,10 @@ class QbiRange:
         # year: {
         #     "status": [lower, upper]
         # },
-
+        
+        # If I understood what this what I could tell you that it's likely implemented incorrectly.
+        # it seems the keys "s" and "m" are both fixed at length of 2.  In such cases you should use
+        # a tuple.
         2018: {
             "s": [157_500, 207_500],
             "m": [315_000, 415_000]
@@ -47,12 +50,31 @@ class QbiRange:
             "m": [364_200, 464_200]
         },
     }
+    
+    def __init__(self, year: int = current_year):
+        """
+
+        :param year: The relevant tax year.
+        """
+        # init at top.
+        self.year = year
+
+        self.s_lower = None
+        self.s_upper = None
+        self.s_phase_in = None
+
+        self.m_lower = None
+        self.m_upper = None
+        self.m_phase_in = None
+
+        self.define_qbi()
 
     def define_qbi(self) -> None:
         """
 
         :return: Nothing.
         """
+        # TODO: Allow the programmer to assign values for years which the class does not by default contain.
         if (self.current_year < self.year or 2025 < self.year) or self.year < 2018:
             self.year: int = self.current_year
             print(f"The year {self.year} is not supported and the attribute has defaulted to the current year of "
@@ -89,19 +111,3 @@ class QbiRange:
 
         self.define_qbi()
 
-    def __init__(self, year: int = current_year):
-        """
-
-        :param year: The relevant tax year.
-        """
-        self.year = year
-
-        self.s_lower = None
-        self.s_upper = None
-        self.s_phase_in = None
-
-        self.m_lower = None
-        self.m_upper = None
-        self.m_phase_in = None
-
-        self.define_qbi()
