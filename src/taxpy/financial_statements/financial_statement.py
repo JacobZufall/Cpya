@@ -5,6 +5,9 @@ from abc import abstractmethod
 
 
 class FinancialStatement:
+    def __init__(self):
+        pass
+    
     @classmethod
     def check_balance(cls, bal: bool) -> str:
         if bal:
@@ -61,6 +64,3 @@ class FinancialStatement:
     #     :param validate: Checks if the file being loaded is the correct financial statement.
     #     :return: Nothing.
     #     """
-
-    def __init__(self):
-        pass
