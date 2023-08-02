@@ -13,8 +13,6 @@ class StandardDeduction:
 
     std_ded_years: dict[int:list[int]] = {
         # year: [single, head of household]
-        
-        # Use a tuple probably. as well as allow the user to define values to this customlly
         2013: [6_100, 8_950],
         2014: [6_200, 9_100],
         2015: [6_300, 9_250],

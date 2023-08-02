@@ -27,12 +27,12 @@ class TangibleAsset(Asset):
         Defines the asset or resets it to its original state.
         :return: Nothing.
         """
-        self.value = self.DEF_VALUE
+        self.value = self._default_value
         # The depreciable value.
         self.depr_value = self.value - self.S_VALUE
 
         # The remaining life of the asset.
-        self.rem_life = self.LIFE
+        self.rem_life = self._life
 
     def depreciate(self, method: int, periods: int = 1) -> None:
         """
@@ -51,21 +51,21 @@ class TangibleAsset(Asset):
 
             # Straight Line
             if method == 1:
-                self.value -= periods * (self.depr_value / self.LIFE)
+                self.value -= periods * (self.depr_value / self._life)
                 self.rem_life -= periods
 
                 self.depr_value = self.value - self.S_VALUE
 
             # Declining Balance
             elif method == 2:
-                self.prev_depr = 2 * ((self.depr_value - self.prev_depr) / self.LIFE)
+                self.prev_depr = 2 * ((self.depr_value - self.prev_depr) / self._life)
                 self.value -= self.prev_depr
 
                 self.depr_value = self.value - self.S_VALUE
 
             # Double Declining Balance
             elif method == 3:
-                self.value -= (((self.DEF_VALUE - self.S_VALUE) / self.LIFE) * 2) * self.value
+                self.value -= (((self._default_value - self.S_VALUE) / self._life) * 2) * self.value
 
             # Sum of the Years' Digits
             elif method == 4:

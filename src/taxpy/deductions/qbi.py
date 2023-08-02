@@ -73,6 +73,8 @@ class Qbi(QbiRange, StandardDeduction):
         
         # Why are you calling self.__getattribute__ on your own instance.  In the case where this is
         # required you are likely doing something wrong.
+
+        # I don't remember :(
         self.phase_in = (self.tax_inc - self.__getattribute__(f"{self.qbi_status}_lower") /
                          self.__getattribute__(f"{self.qbi_status}_phase_in"))
 
@@ -104,5 +106,3 @@ class Qbi(QbiRange, StandardDeduction):
         # Category 2
         else:
             return min(self.red_qbi, self.overall_limit) * self.sstb_per
-
-

@@ -16,10 +16,6 @@ class QbiRange:
         # year: {
         #     "status": [lower, upper]
         # },
-        
-        # If I understood what this what I could tell you that it's likely implemented incorrectly.
-        # it seems the keys "s" and "m" are both fixed at length of 2.  In such cases you should use
-        # a tuple.
         2018: {
             "s": [157_500, 207_500],
             "m": [315_000, 415_000]
@@ -56,7 +52,6 @@ class QbiRange:
 
         :param year: The relevant tax year.
         """
-        # init at top.
         self.year = year
 
         self.s_lower = None
@@ -111,4 +106,3 @@ class QbiRange:
             print(f"Valid statuses include \"s\" and \"m\". You entered {status}.\nNo values have been updated.")
 
         self.define_qbi()
-
