@@ -75,6 +75,7 @@ class Qbi(QbiRange, StandardDeduction):
         # required you are likely doing something wrong.
 
         # I don't remember :(
+        # TODO: Address the comment above and implement a better way of doing what's happening below.
         self.phase_in = (self.tax_inc - self.__getattribute__(f"{self.qbi_status}_lower") /
                          self.__getattribute__(f"{self.qbi_status}_phase_in"))
 
