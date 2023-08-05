@@ -70,12 +70,6 @@ class Qbi(QbiRange, StandardDeduction):
         :return: The QBI deduction.
         """
         self.tax_inc = self.agi - self.__getattribute__(self.filing_status)
-        
-        # Why are you calling self.__getattribute__ on your own instance.  In the case where this is
-        # required you are likely doing something wrong.
-
-        # I don't remember :(
-        # TODO: Address the comment above and implement a better way of doing what's happening below.
         self.phase_in = (self.tax_inc - self.__getattribute__(f"{self.qbi_status}_lower") /
                          self.__getattribute__(f"{self.qbi_status}_phase_in"))
 
@@ -90,7 +84,7 @@ class Qbi(QbiRange, StandardDeduction):
 
         self.ten_qbi = self.ord_inc * self.sstb_per * 0.2
         
-        # You should feel bad about this line of code, I am impressed but you should still feel bad.
+        # You should feel bad about this line of code, I am impressed, but you should still feel bad.
         self.red_qbi = self.ten_qbi - ((self.ten_qbi - min(self.ten_qbi,
                                                            max(self.w2_wages * self.sstb_per * 0.5,
                                                                (self.w2_wages * self.sstb_per * 0.25) +
