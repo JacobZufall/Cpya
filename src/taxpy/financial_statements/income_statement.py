@@ -3,12 +3,13 @@ income_statement.py
 """
 
 from financial_statement import FinancialStatement
+from financial_statement import DefaultBal
 
 
 class IncomeStatement(FinancialStatement):
     def __init__(self):
         """
-        Here is and example of what the balance sheet looks like.\n
+        Here is an example of what the income statement looks like.\n
         Type is dict[str:dict[str:dict[str:any]]], if needed.
 
         self.inc_stmt = {
@@ -27,7 +28,6 @@ class IncomeStatement(FinancialStatement):
             }
         }
         """
-        # Constructor method should always be the first method in a class if it has one.
         self.inc_stmt = {
             "revenue": {},
             "expense": {}
@@ -36,28 +36,11 @@ class IncomeStatement(FinancialStatement):
         super().__init__()
     
     def add_account(self, name: str, category: str, contra: bool) -> None:
-        # Simplified this function quite a bit, no need for double nested functions.  There is a
-        # time and a place for them but something like this does not require it.
-        def_bal: str = None
-        
-        # When it comes to short if elif blocks it can be better to make it more readable rather then
-        # technically faster but more complicated.  (If you are really focused on optimaizing the code
-        # then using an enum here would be much faster then having category as a string.)
-        if category == "expense" and contra:
-            def_bal = "credit"
-        elif category == "expense":
-            def_bal = "debit"
-        elif category == "revenue" and contra:
-            def_bal = "debit"
-        elif category == "revenue":
-            def_bal = "credit"
-        
-        # Raising a value error would be the more exspected way of handling a situation such as this, the
-        # problem with just running a print statement is that it cannot be caught by the programmer easily
-        # with a try except statement.  If you really do not want to raise an exception then returning a 
-        # boolean value for true or false would also work rather well.
+
+        if not category == "revenue" or not category == "expense":
+            raise ValueError
         else:
-            raise ValueError("Invalid category type.")
+            def_bal: DefaultBal = DefaultBal(category, contra)
         
         self.inc_stmt[category][name] = {
             "d/c": def_bal,

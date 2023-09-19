@@ -64,3 +64,29 @@ class FinancialStatement:
     #     :param validate: Checks if the file being loaded is the correct financial statement.
     #     :return: Nothing.
     #     """
+
+
+class DefaultBal:
+    def __init__(self, category: str, contra: bool = False):
+        # Balance sheet accounts.
+        self.def_bal = None
+        self.asset = "debit"
+        self.contra_asset = "credit"
+        self.liability = "credit"
+        self.contra_liability = "debit"
+        self.equity = "credit"
+        self.contra_equity = "debit"
+
+        # Income statement accounts.
+        self.revenue = "credit"
+        self.contra_revenue = "debit"
+        self.expense = "debit"
+        self.contra_expense = "credit"
+
+        self.find_account(category, contra)
+
+    def find_account(self, category: str, contra: bool = False):
+        if not contra:
+            self.def_bal = self.__getattribute__(category)
+        else:
+            self.def_bal = self.__getattribute__(f"contra_{category}")

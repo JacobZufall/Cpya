@@ -4,12 +4,13 @@ balance_sheet.py
 
 import json
 from financial_statement import FinancialStatement
+from financial_statement import DefaultBal
 
 
 class BalanceSheet(FinancialStatement):
     def __init__(self) -> None:
         """
-        Here is and example of what the balance sheet looks like.\n
+        Here is an example of what the balance sheet looks like.\n
         Type is dict[str:dict[str:dict[str:any]]], if needed.
 
         self.bs = {
@@ -35,7 +36,6 @@ class BalanceSheet(FinancialStatement):
             }
         }
         """
-        # Put constructor method at top!
         self.bal_sht = {
             "asset": {},
             "liability": {},

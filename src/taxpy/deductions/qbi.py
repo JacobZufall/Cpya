@@ -69,6 +69,7 @@ class Qbi(QbiRange, StandardDeduction):
         """
         :return: The QBI deduction.
         """
+        # Why am I using __getattribute__ on self again? I had a reason for it, need to record reason.
         self.tax_inc = self.agi - self.__getattribute__(self.filing_status)
         self.phase_in = (self.tax_inc - self.__getattribute__(f"{self.qbi_status}_lower") /
                          self.__getattribute__(f"{self.qbi_status}_phase_in"))
