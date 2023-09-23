@@ -2,8 +2,11 @@
 income_statement.py
 """
 
+from typing import TypeAlias
 from financial_statement import FinancialStatement
 from financial_statement import DefaultBal
+
+fnstmt: TypeAlias = dict[str:dict[str:dict[str:any]]]
 
 
 class IncomeStatement(FinancialStatement):

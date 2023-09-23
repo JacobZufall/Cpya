@@ -1,19 +1,11 @@
 """
 qbi.py
-
-Tax note: QBI deductions are only allowed for a QTB or SSTB. If it is neither of those, then a QBI deduction is not
-allowed. This module only asks IF your business is a QTB OR an SSTB, not if it's one of the two. It is assumed that
-you, as the user, know not to take a QBI deduction if your business is not a QTB or an SSTB.
-
-DO NOT INCLUDE NET CAPITAL GAINS IN ORDINARY INCOME.
 """
 
 from src.taxpy.deductions.qbi_range import QbiRange
 from src.taxpy.deductions.standard_deduction import StandardDeduction
 
 
-# Would it be better to combine QbiRange into Qbi, or is it better that Qbi inherits QbiRange. I don't think any other
-# class would need to inherit from QbiRange, so it doesn't make much sense for it to be its own class in its own file.
 class Qbi(QbiRange, StandardDeduction):
     def __init__(self, tax_year: int, filing_status: str, ord_inc: float, agi: float, w2_wages: float,
                  ubia: float = 0.0, net_cap_gain: float = 0.0, sstb: bool = False):
@@ -69,7 +61,8 @@ class Qbi(QbiRange, StandardDeduction):
         """
         :return: The QBI deduction.
         """
-        # Why am I using __getattribute__ on self again? I had a reason for it, need to record reason.
+        # It looks weird to use __getattribute__ on self. I have two reasons for doing so in the next two lines.
+        # The reason for the line below is because
         self.tax_inc = self.agi - self.__getattribute__(self.filing_status)
         self.phase_in = (self.tax_inc - self.__getattribute__(f"{self.qbi_status}_lower") /
                          self.__getattribute__(f"{self.qbi_status}_phase_in"))

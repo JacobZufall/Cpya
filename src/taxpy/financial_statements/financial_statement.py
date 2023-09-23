@@ -2,6 +2,9 @@
 financial_statement.py
 """
 from abc import abstractmethod
+from typing import TypeAlias
+
+fnstmt: TypeAlias = dict[str:dict[str:dict[str:any]]]
 
 
 class FinancialStatement:
@@ -16,7 +19,7 @@ class FinancialStatement:
             return "credit"
 
     @classmethod
-    def calc_true_value(cls, fs: dict[str:dict[str:dict[str:any]]], category: str, account: str, ) -> float:
+    def calc_true_value(cls, fs: fnstmt, category: str, account: str) -> float:
         if fs[category][account]["d/c"] == "debit":
             return abs(fs[category][account]["balance"])
         else:
@@ -47,23 +50,6 @@ class FinancialStatement:
         :param name: The name of the account.
         :return: Nothing.
         """
-
-    # @abstractmethod
-    # def save_fs(self, file_name: str, path: str = "data/bal_sht/"):
-    #     """
-    #     :param file_name: The name of the JSON file to be created.
-    #     :param path: The folder the file should be saved to.
-    #     :return: Nothing.
-    #     """
-    #
-    # @abstractmethod
-    # def load_fs(self, file: str, validate: bool = True):
-    #     """
-    #     Loads said file and validates that it is the correct financial statement.
-    #     :param file: The name of the JSON file to open.
-    #     :param validate: Checks if the file being loaded is the correct financial statement.
-    #     :return: Nothing.
-    #     """
 
 
 class DefaultBal:

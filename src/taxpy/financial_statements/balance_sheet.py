@@ -2,9 +2,10 @@
 balance_sheet.py
 """
 
-import json
 from financial_statement import FinancialStatement
-from financial_statement import DefaultBal
+from typing import TypeAlias
+
+fnstmt: TypeAlias = dict[str:dict[str:dict[str:any]]]
 
 
 class BalanceSheet(FinancialStatement):
@@ -42,25 +43,25 @@ class BalanceSheet(FinancialStatement):
             "equity": {}
         }
         super().__init__()
-    
-    def add_account(self, name: str, category: str, contra: bool) -> dict[str:dict[str:dict[str:any]]]:
+
+    def add_account(self, name: str, category: str, contra: bool = False, start_bal: float = 0.0) -> fnstmt:
+
         if category not in ["asset", "liability", "equity"]:
             raise ValueError("Invalid category type.")
-        
-        def_bal: str = None
+
         if category == "asset":
-            def_bal = "credit" if contra else "debit"
-        # We can assume if not asset then it is either a liability or equity.
+            # Only reason I'm doing it with "not" is because it reads easier to an accountant.
+            def_bal = "debit" if not contra else "credit"
         else:
-            def_bal = "debit" if contra else "credit"
+            def_bal = "credit" if not contra else "debit"
 
         self.bal_sht[category][name] = {
+            # Scope issue? I'm so bad about these.
             "d/c": def_bal,
-            "bal": 0.0
+            "bal": start_bal
         }
-        
+
         return self.bal_sht[category][name]
-        
 
     def del_account(self, name: str) -> None:
         for k in ["asset", "liability", "equity"]:
@@ -101,39 +102,3 @@ class BalanceSheet(FinancialStatement):
 
         # More readable
         return totals["asset"] == (totals["liability"] + totals["equity"])
-        
-
-    # def save_fs(self, file_name: str, path: str = "data/bal_sht/") -> None:
-    #     data = json.dumps(self.bal_sht, indent=4)
-    #     with open(f"{path}{file_name}.json", "w") as outfile:
-    #         outfile.write(data)
-    
-    # def load_fs(self, file: str, validate: bool = True) -> None:
-    #     data = open(f"{file}.json")
-    #     self.bal_sht = json.load(data)
-    
-    #     if validate:
-    #         try:
-    #             self.bal_sht["asset"]
-    #         except KeyError:
-    #             print(f"{file} is not a valid balance sheet!")
-    
-    #         while True:
-    #             answer: str = input("Would you like to load the file anyway? (y/n)")
-    #             if answer == "n":
-    #                 self.bal_sht = {
-    #                     "asset": {},
-    #                     "liability": {},
-    #                     "equity": {}
-    #                 }
-    #                 break
-    #             elif answer == "y":
-    #                 break
-    #             else:
-    #                 print(f"{answer} is not a valid answer.")
-
-
-if __name__ == "__main__":
-    balance_sheet: BalanceSheet = BalanceSheet()
-    balance_sheet.add_account("cash", "asset", True)
-    print(balance_sheet.bal_sht)
