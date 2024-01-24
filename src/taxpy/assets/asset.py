@@ -10,7 +10,7 @@ class Asset:
         :param life: The life of the asset (months).
         :param value: The value of the asset ($).
         """
-        self.name = name
-        self._life = life
+        self.name: str = name
+        self._life: int = life
+        self.value: float = value
         self._default_value: float = value
-        self.value: float = self._default_value

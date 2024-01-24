@@ -6,79 +6,59 @@ from asset import Asset
 
 
 class TangibleAsset(Asset):
-    def __init__(self, name: str, life: int, value: float, s_value: float = 0.0):
+    def __init__(self, name: str, life: int, value: float, slvg_value: float = 0.0):
         """
         :param name: The name of the asset.
         :param life: The life of the asset (months).
         :param value: The value of the asset ($).
-        :param s_value: The salvage value of the asset ($).
+        :param slvg_value: The salvage value of the asset ($).
         """
         super().__init__(name=name, life=life, value=value)
-        self.S_VALUE = s_value
+        self.slvg_value: float = slvg_value
 
-        self.depr_value = None
-        self.rem_life = None
-        self.prev_depr = 0
+        self.depr_value: float = self.value - self.slvg_value
+        self.rem_life: int = self._life
+        # Used to store the previous amount depreciated for non-linear methods.
+        self._prev_depr: int = 0
 
-        self.define_asset()
-    
-    def define_asset(self) -> None:
-        """
-        Defines the asset or resets it to its original state.
-        :return: Nothing.
-        """
-        self.value = self._default_value
-        # The depreciable value.
-        self.depr_value = self.value - self.S_VALUE
-
-        # The remaining life of the asset.
-        self.rem_life = self._life
-
-    def depreciate(self, method: int, periods: int = 1) -> None:
+    def depreciate(self, method: int, periods: int = 1, decline: float = 1.0) -> None:
         """
         [Supported Depreciation Methods] \n
-        1: Straight Line Method \n
-        2: Declining Balance Method \n
-        3: Double Declining Balance Method \n
-        4: Sum of the Years' Digits Method \n
-        5: Units of Production Method \n
-        It is recommended that you only use one type of depreciation method to avoid weird results.
+        0: Straight Line Method \n
+        1: Declining Balance Method \n
+        2: Sum of the Years' Digits Method \n
+        3: Units of Production Method \n
         :param method: The depreciation method.
         :param periods: The number of periods (months) to depreciate.
         :return: Nothing.
         """
         if self.depr_value > 0:
+            match method:
+                # Straight Line
+                case 0:
+                    self.value -= periods * (self.depr_value / self._life)
+                    self.rem_life -= periods
 
-            # Straight Line
-            if method == 1:
-                self.value -= periods * (self.depr_value / self._life)
-                self.rem_life -= periods
+                    self.depr_value = self.value - self.slvg_value
 
-                self.depr_value = self.value - self.S_VALUE
+                # Declining Balance
+                case 1:
+                    pass
 
-            # Declining Balance
-            elif method == 2:
-                self.prev_depr = 2 * ((self.depr_value - self.prev_depr) / self._life)
-                self.value -= self.prev_depr
+                # Sum of the Years' Digits
+                case 2:
+                    pass
 
-                self.depr_value = self.value - self.S_VALUE
-
-            # Double Declining Balance
-            elif method == 3:
-                self.value -= (((self._default_value - self.S_VALUE) / self._life) * 2) * self.value
-
-            # Sum of the Years' Digits
-            elif method == 4:
-                pass
-
-            # Units of Production
-            elif method == 5:
-                pass
-
-            else:
-                print(f"{method} is not a valid option. Options for depreciation range from 1 - 5.")
+                # Units of Production
+                case 3:
+                    pass
 
         else:
+            # The amount of value that can be depreciated cannot be negative.
+            if self.depr_value < 0:
+                self.depr_value = 0
+
             print(f"Asset \"{self.name}\" is fully depreciated! Current value = {self.value}.")
 
-
+    def change_life(self, new_life: int) -> None:
+        self.rem_life += new_life - self._life

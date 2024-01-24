@@ -1,5 +1,3 @@
-# Something like this is standard for implementing constant variables like this in a package.
-# this makes it easier to change values throughout the program.
 CREDIT = "credit"
 DEBIT = "debit"
 BALANCE_TYPES = [
@@ -10,9 +8,8 @@ BALANCE_TYPES = [
 ASSET = "asset"
 LIABILITY = "liability"
 EQUITY = "equity"
-BAL_CATEGORYS = [
+BAL_CATEGORIES = [
     ASSET,
     LIABILITY,
     EQUITY,
 ]
-
