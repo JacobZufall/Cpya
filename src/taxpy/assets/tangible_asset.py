@@ -17,11 +17,11 @@ class TangibleAsset(Asset):
         self.slvg_value: float = slvg_value
 
         self.depr_value: float = self.value - self.slvg_value
-        self.rem_life: int = self._life
         # Used to store the previous amount depreciated for non-linear methods.
         self._prev_depr: int = 0
+        self.amount_depreciated: float = 0.0
 
-    def depreciate(self, method: int, periods: int = 1, decline: float = 1.0) -> None:
+    def depreciate(self, method: int, periods: int = 1, decline: float = 1.0) -> float:
         """
         [Supported Depreciation Methods] \n
         0: Straight Line Method \n
@@ -30,24 +30,36 @@ class TangibleAsset(Asset):
         3: Units of Production Method \n
         :param method: The depreciation method.
         :param periods: The number of periods (months) to depreciate.
+        :param decline: The factor used in the declining balance method (2.0 = 200%).
         :return: Nothing.
         """
         if self.depr_value > 0:
+            # I'm not sure if this works properly yet. It's hard to think about depreciation in this way and I have A
+            # LOT of attributes flying around, which is making it hard to keep track of.
             match method:
                 # Straight Line
                 case 0:
-                    self.value -= periods * (self.depr_value / self._life)
+                    self.amount_depreciated: float = periods * (self.depr_value / self.life)
+                    self.value -= self.amount_depreciated
                     self.rem_life -= periods
 
                     self.depr_value = self.value - self.slvg_value
 
                 # Declining Balance
                 case 1:
-                    pass
+                    self.amount_depreciated = self.value * ((self.default_value / self.life) * decline)
+
+                    # Salvage value isn't calculated into declining balance, so this checks to make sure the value of
+                    # the asset doesn't turn negative.
+                    if self.amount_depreciated > self.depr_value:
+                        self.amount_depreciated = self.depr_value
+
+                    self.value -= self.amount_depreciated
+                    self.rem_life -= periods
 
                 # Sum of the Years' Digits
                 case 2:
-                    pass
+                    self.amount_depreciated = self.default_value * (self.rem_life / self.syd)
 
                 # Units of Production
                 case 3:
@@ -59,6 +71,6 @@ class TangibleAsset(Asset):
                 self.depr_value = 0
 
             print(f"Asset \"{self.name}\" is fully depreciated! Current value = {self.value}.")
+            self.amount_depreciated = 0.0
 
-    def change_life(self, new_life: int) -> None:
-        self.rem_life += new_life - self._life
+        return self.amount_depreciated
