@@ -8,7 +8,7 @@ fnstmt: TypeAlias = dict[str:dict[str:dict[str:any]]]
 
 
 class FinancialStatement:
-    def __init__(self):
+    def __init__(self) -> None:
         pass
     
     @classmethod

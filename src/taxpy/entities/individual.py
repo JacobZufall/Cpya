@@ -11,5 +11,4 @@ class Individual(Entity, StandardDeduction):
         """
         :param year: The relevant tax year.
         """
-        StandardDeduction.__init__(self, year=year)
-        Entity.__init__(self)
+        super().__init__(year=year)

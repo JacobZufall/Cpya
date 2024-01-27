@@ -4,5 +4,5 @@ entity.py
 
 
 class Entity:
-    def __init__(self):
-        pass
+    def __init__(self, name: str):
+        self.name: str = name

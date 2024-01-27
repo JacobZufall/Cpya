@@ -4,7 +4,7 @@ asset.py
 
 
 class Asset:
-    def __init__(self, name: str, life: int, value: float):
+    def __init__(self, name: str, life: int, value: float) -> None:
         """
         :param name: The name of the asset.
         :param life: The life of the asset (months).
@@ -27,6 +27,7 @@ class Asset:
         self.rem_life += new_life - self.life
         self.life = new_life
 
+    # Me when I write a function just to use it once.
     @staticmethod
     def _calc_syd() -> int:
         """

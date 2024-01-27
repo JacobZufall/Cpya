@@ -6,7 +6,7 @@ from asset import Asset
 
 
 class TangibleAsset(Asset):
-    def __init__(self, name: str, life: int, value: float, slvg_value: float = 0.0):
+    def __init__(self, name: str, life: int, value: float, slvg_value: float = 0.0, prod_cap: int = 0) -> None:
         """
         :param name: The name of the asset.
         :param life: The life of the asset (months).
@@ -15,13 +15,23 @@ class TangibleAsset(Asset):
         """
         super().__init__(name=name, life=life, value=value)
         self.slvg_value: float = slvg_value
+        self.prod_cap: int = prod_cap
 
         self.depr_value: float = self.value - self.slvg_value
-        # Used to store the previous amount depreciated for non-linear methods.
-        self._prev_depr: int = 0
         self.amount_depreciated: float = 0.0
 
-    def depreciate(self, method: int, periods: int = 1, decline: float = 1.0) -> float:
+    # I'm not sure if this should be moved to the parent class or not.
+    def _update_values(self, periods: int) -> None:
+        """
+        Re-runs all values to make sure they're consistent with each other. Used after depreciating.
+        :param periods:
+        :return: Nothing.
+        """
+        self.value -= self.amount_depreciated
+        self.depr_value = self.value - self.slvg_value
+        self.rem_life -= periods
+
+    def depreciate(self, method: int, periods: int = 1, decline: float = 1.0, units_prod: int = 0) -> float:
         """
         [Supported Depreciation Methods] \n
         0: Straight Line Method \n
@@ -31,7 +41,8 @@ class TangibleAsset(Asset):
         :param method: The depreciation method.
         :param periods: The number of periods (months) to depreciate.
         :param decline: The factor used in the declining balance method (2.0 = 200%).
-        :return: Nothing.
+        :param units_prod: How many units produced, if using method 3.
+        :return: The dollar value depreciated.
         """
         if self.depr_value > 0:
             # I'm not sure if this works properly yet. It's hard to think about depreciation in this way and I have A
@@ -40,30 +51,26 @@ class TangibleAsset(Asset):
                 # Straight Line
                 case 0:
                     self.amount_depreciated: float = periods * (self.depr_value / self.life)
-                    self.value -= self.amount_depreciated
-                    self.rem_life -= periods
-
-                    self.depr_value = self.value - self.slvg_value
+                    self._update_values(periods)
 
                 # Declining Balance
                 case 1:
                     self.amount_depreciated = self.value * ((self.default_value / self.life) * decline)
-
                     # Salvage value isn't calculated into declining balance, so this checks to make sure the value of
                     # the asset doesn't turn negative.
                     if self.amount_depreciated > self.depr_value:
                         self.amount_depreciated = self.depr_value
-
-                    self.value -= self.amount_depreciated
-                    self.rem_life -= periods
+                    self._update_values(periods)
 
                 # Sum of the Years' Digits
                 case 2:
                     self.amount_depreciated = self.default_value * (self.rem_life / self.syd)
+                    self._update_values(periods)
 
                 # Units of Production
                 case 3:
-                    pass
+                    self.amount_depreciated = (self.depr_value / self.prod_cap) * units_prod
+                    self._update_values(periods)
 
         else:
             # The amount of value that can be depreciated cannot be negative.
