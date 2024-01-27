@@ -2,7 +2,7 @@
 tangible_assets.py
 """
 
-from asset import Asset
+from src.taxpy.assets.asset import Asset
 
 
 class TangibleAsset(Asset):
@@ -18,7 +18,7 @@ class TangibleAsset(Asset):
         self.prod_cap: int = prod_cap
 
         self.depr_value: float = self.value - self.slvg_value
-        self.amount_depreciated: float = 0.0
+        self.amt_depr: float = 0.0
 
     # I'm not sure if this should be moved to the parent class or not.
     def _update_values(self, periods: int) -> None:
@@ -27,7 +27,7 @@ class TangibleAsset(Asset):
         :param periods:
         :return: Nothing.
         """
-        self.value -= self.amount_depreciated
+        self.value -= self.amt_depr
         self.depr_value = self.value - self.slvg_value
         self.rem_life -= periods
 
@@ -50,26 +50,26 @@ class TangibleAsset(Asset):
             match method:
                 # Straight Line
                 case 0:
-                    self.amount_depreciated: float = periods * (self.depr_value / self.life)
+                    self.amt_depr: float = periods * (self.depr_value / self.life)
                     self._update_values(periods)
 
                 # Declining Balance
                 case 1:
-                    self.amount_depreciated = self.value * ((self.default_value / self.life) * decline)
+                    self.amt_depr = self.value * ((self.default_value / self.life) * decline)
                     # Salvage value isn't calculated into declining balance, so this checks to make sure the value of
                     # the asset doesn't turn negative.
-                    if self.amount_depreciated > self.depr_value:
-                        self.amount_depreciated = self.depr_value
+                    if self.amt_depr > self.depr_value:
+                        self.amt_depr = self.depr_value
                     self._update_values(periods)
 
                 # Sum of the Years' Digits
                 case 2:
-                    self.amount_depreciated = self.default_value * (self.rem_life / self.syd)
+                    self.amt_depr = self.default_value * (self.rem_life / self.syd)
                     self._update_values(periods)
 
                 # Units of Production
                 case 3:
-                    self.amount_depreciated = (self.depr_value / self.prod_cap) * units_prod
+                    self.amt_depr = (self.depr_value / self.prod_cap) * units_prod
                     self._update_values(periods)
 
         else:
@@ -78,6 +78,6 @@ class TangibleAsset(Asset):
                 self.depr_value = 0
 
             print(f"Asset \"{self.name}\" is fully depreciated! Current value = {self.value}.")
-            self.amount_depreciated = 0.0
+            self.amt_depr = 0.0
 
-        return self.amount_depreciated
+        return self.amt_depr

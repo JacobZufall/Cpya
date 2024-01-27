@@ -37,7 +37,6 @@ class Asset:
         running_total: int = 0
 
         for i in range(1, 6):
-            print(i)
             running_total += i
 
         return running_total

@@ -19,8 +19,7 @@ class Qbi(QbiRange, StandardDeduction):
         :param net_cap_gain: The net capital gain.
         :param sstb: Is the business a specified service or trade business?
         """
-        QbiRange.__init__(self, tax_year)
-        StandardDeduction.__init__(self, tax_year)
+        super().__init__(year=tax_year)
 
         # Checks to make sure that the tax year is eligible for a QBI and supported by standard_deduction.py.
         if tax_year in QbiRange.qbi_years and tax_year in StandardDeduction.std_ded_years:
