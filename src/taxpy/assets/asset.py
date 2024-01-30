@@ -13,10 +13,20 @@ class Asset:
         self.name: str = name
         self.life: int = life
         self.value: float = value
-        self.default_value: float = value
+
+        self.def_life: int = self.life
+        self.def_value: float = self.value
 
         self.rem_life: int = self.life
         self.syd: int = self._calc_syd()
+
+    def reset(self) -> None:
+        """
+        Returns an asset to its original state. Designed to be used for testing.
+        :return: Nothing.
+        """
+        self.life = self.def_life
+        self.value = self.def_value
 
     def change_life(self, new_life: int) -> None:
         """

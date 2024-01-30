@@ -20,6 +20,10 @@ class TangibleAsset(Asset):
         self.depr_value: float = self.value - self.slvg_value
         self.amt_depr: float = 0.0
 
+    def reset(self) -> None:
+        self.depr_value = self.value - self.slvg_value
+        self.amt_depr = 0.0
+
     # I'm not sure if this should be moved to the parent class or not.
     def _update_values(self, periods: int) -> None:
         """
@@ -55,7 +59,7 @@ class TangibleAsset(Asset):
 
                 # Declining Balance
                 case 1:
-                    self.amt_depr = self.value * ((self.default_value / self.life) * decline)
+                    self.amt_depr = self.value * ((self.def_value / self.life) * decline)
                     # Salvage value isn't calculated into declining balance, so this checks to make sure the value of
                     # the asset doesn't turn negative.
                     if self.amt_depr > self.depr_value:
@@ -64,7 +68,7 @@ class TangibleAsset(Asset):
 
                 # Sum of the Years' Digits
                 case 2:
-                    self.amt_depr = self.default_value * (self.rem_life / self.syd)
+                    self.amt_depr = self.def_value * (self.rem_life / self.syd)
                     self._update_values(periods)
 
                 # Units of Production

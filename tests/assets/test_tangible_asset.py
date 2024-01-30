@@ -1,42 +1,58 @@
 from src.taxpy.assets.tangible_asset import TangibleAsset
 
 
-def assert_depr_value(asset: TangibleAsset) -> None:
+def reset_scenarios(scenario_table: dict[str:any]) -> None:
     """
-    Asserts that self.depr_value is calculated correctly.
-    :param asset: The asset to test.
-    :return:Nothing.
-    """
-    assert asset.depr_value == asset.value - asset.slvg_value
-
-
-def assert_sl_amt_depr(asset: TangibleAsset, periods: int) -> None:
-    """
-    Asserts that straight-line depreciation is calculated correctly.
-    :param asset: The asset to test.
-    :param periods: The amount of periods the asset was depreciated most recently.
+    Resets all test cases in a given table.
     :return: Nothing.
     """
-    assert asset.amt_depr == (asset.default_value / asset.life) * periods
+    for j, w in scenario_table.items():
+        w.reset()
 
 
-# Define assets here.
-asset_one: TangibleAsset = TangibleAsset("Computer", (5 * 12), 1_000, 100)
-asset_two: TangibleAsset = TangibleAsset("Furniture", (7 * 12), 50_000, 2_000)
-asset_three: TangibleAsset = TangibleAsset("Truck", (10 * 12), 100_000, 0)
+# Define test cases here.
+scenarios: dict[str:TangibleAsset] = {
+    "scenario_01": TangibleAsset("Computer", (5 * 12), 1_000, 100),
+    "scenario_02": TangibleAsset("Furniture", (7 * 12), 50_000, 2_000),
+    "scenario_03": TangibleAsset("Truck", (10 * 12), 100_000, 0)
+}
 
-# Straight-line depreciation.
-sl_test_periods: int = 12
+conditions: dict[str:any] = {
+    "test_periods": 12,
+    "db_decline": 1.5,
+    "units_prod": 5_000
+}
 
-asset_one.depreciate(0, sl_test_periods)
-asset_two.depreciate(0, sl_test_periods)
-asset_three.depreciate(0, sl_test_periods)
 
-assert_depr_value(asset_one)
-assert_sl_amt_depr(asset_one, sl_test_periods)
+# Straight-line depreciation test.
+for i, v in scenarios.items():
+    v.depreciate(0, conditions["test_periods"])
 
-assert_depr_value(asset_two)
-assert_sl_amt_depr(asset_two, sl_test_periods)
+    assert v.depr_value == v.value - v.slvg_value
+    assert v.amt_depr == ((v.def_value - v.slvg_value) / v.life) * conditions["test_periods"]
 
-assert_depr_value(asset_three)
-assert_sl_amt_depr(asset_three, sl_test_periods)
+reset_scenarios(scenarios)
+
+# Declining balance depreciation test.
+for i, v in scenarios.items():
+    v.depreciate(1, conditions["test_periods"], decline=conditions["db_decline"])
+
+    # Write assertions here.
+
+reset_scenarios(scenarios)
+
+# Sum of the years' digits depreciation test.
+for i, v in scenarios.items():
+    v.depreciate(2, conditions["test_periods"])
+
+    # Write assertions here.
+
+reset_scenarios(scenarios)
+
+# Units of production depreciation test.
+for i, v in scenarios.items():
+    v.depreciate(3, conditions["test_periods"], units_prod=conditions["units_prod"])
+
+    # Write assertions here.
+
+reset_scenarios(scenarios)
