@@ -2,7 +2,7 @@
 tangible_assets.py
 """
 
-from src.taxpy.assets.asset import Asset
+from src.taxpy.assets.Asset import Asset
 
 
 class TangibleAsset(Asset):

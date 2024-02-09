@@ -1,4 +1,4 @@
-from src.taxpy.assets.tangible_asset import TangibleAsset
+from src.taxpy.assets.TangibleAsset import TangibleAsset
 
 
 def reset_scenarios(scenario_table: dict[str:any]) -> None:

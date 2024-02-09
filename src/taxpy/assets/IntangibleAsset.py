@@ -1,8 +1,8 @@
 """
-intangible_asset.py
+IntangibleAsset.py
 """
 
-from asset import Asset
+from Asset import Asset
 
 
 class IntangibleAsset(Asset):

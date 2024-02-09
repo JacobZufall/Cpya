@@ -1,8 +1,8 @@
 """
-balance_sheet.py
+BalanceSheet.py
 """
 
-from financial_statement import FinancialStatement
+from FinancialStatement import FinancialStatement
 from typing import TypeAlias
 
 fnstmt: TypeAlias = dict[str:dict[str:dict[str:any]]]

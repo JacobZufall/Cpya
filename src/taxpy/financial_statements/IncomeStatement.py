@@ -1,10 +1,10 @@
 """
-income_statement.py
+IncomeStatement.py
 """
 
 from typing import TypeAlias
-from financial_statement import FinancialStatement
-from financial_statement import DefaultBal
+from FinancialStatement import FinancialStatement
+from FinancialStatement import DefaultBal
 
 fnstmt: TypeAlias = dict[str:dict[str:dict[str:any]]]
 

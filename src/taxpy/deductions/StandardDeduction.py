@@ -1,5 +1,5 @@
 """
-standard_deduction.py
+StandardDeduction.py
 
 Need to consider how many years to include.
 Does the IRS have an API?

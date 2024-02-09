@@ -1,5 +1,5 @@
 """
-qbi_range.py
+QbiRange.py
 
 Supports tax years 2018 - present.
 The QBI deduction cannot be claimed in tax years ending on or before 12/31/2025.

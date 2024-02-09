@@ -1,5 +1,5 @@
 """
-financial_statement.py
+FinancialStatement.py
 """
 from abc import abstractmethod
 from typing import TypeAlias
