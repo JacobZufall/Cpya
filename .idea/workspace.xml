@@ -6,6 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="a49b14fc-a951-47dd-bd19-77c5a467b5c2" name="Changes" comment="Continued writing tests">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/taxpy/assets/Asset.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/assets/Asset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/taxpy/assets/IntangibleAsset.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/assets/IntangibleAsset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/taxpy/assets/TangibleAsset.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/assets/TangibleAsset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/taxpy/assets/gaap_assets/Computer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/assets/gaap_assets/Computer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/taxpy/financial_statements/BalanceSheet.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/financial_statements/BalanceSheet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/taxpy/financial_statements/FinancialStatement.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/financial_statements/FinancialStatement.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/taxpy/financial_statements/IncomeStatement.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/financial_statements/IncomeStatement.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/assets/test_tangible_asset.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/assets/test_tangible_asset.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,24 +71,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Python.tangible_asset.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test_tangible_asset.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;wip/depreciation&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.tangible_asset.executor": "Run",
+    "Python.test_tangible_asset.executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "wip/depreciation",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "inlay.hints",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/taxpy/entities" />

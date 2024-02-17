@@ -6,7 +6,7 @@ def reset_scenarios(scenario_table: dict[str:any]) -> None:
     Resets all test cases in a given table.
     :return: Nothing.
     """
-    for j, w in scenario_table.items():
+    for _, w in scenario_table.items():
         w.reset()
 
 
@@ -28,27 +28,27 @@ calc_conditions: dict[str:any] = {
 }
 
 # Straight-line depreciation test.
-for i, v in scenarios.items():
+for _, v in scenarios.items():
     v.depreciate(0, calc_conditions["test_periods"])
 
-    assert v.depr_value == v.value - v.slvg_value
-    assert v.last_depr == ((v.def_value - v.slvg_value) / v.life) * calc_conditions["test_periods"]
+    assert v.depreciable_value == v.value - v.SLVG_VALUE
+    assert v.last_depr == ((v.DEF_VALUE - v.SLVG_VALUE) / v.LIFE) * calc_conditions["test_periods"]
 
 reset_scenarios(scenarios)
 
 # Declining balance depreciation test.
-for i, v in scenarios.items():
+for _, v in scenarios.items():
     py_total_depr: float = v.total_depr
     v.depreciate(1, periods=calc_conditions["test_periods"], decline=calc_conditions["db_decline"])
 
-    assert (v.last_depr == (((v.def_value - py_total_depr) / v.life) * calc_conditions["db_decline"]) *
+    assert v.depreciable_value == v.value - v.SLVG_VALUE
+    assert (v.last_depr == (((v.DEF_VALUE - py_total_depr) / v.LIFE) * calc_conditions["db_decline"]) *
             calc_conditions["test_periods"])
-    # Need another assertion right here.
 
 reset_scenarios(scenarios)
 
 # Sum of the years' digits depreciation test.
-for i, v in scenarios.items():
+for _, v in scenarios.items():
     v.depreciate(2, calc_conditions["test_periods"])
 
     # Write assertions here.
@@ -56,7 +56,7 @@ for i, v in scenarios.items():
 reset_scenarios(scenarios)
 
 # Units of production depreciation test.
-for i, v in scenarios.items():
+for _, v in scenarios.items():
     v.depreciate(3, calc_conditions["test_periods"], units_prod=calc_conditions["units_prod"])
 
     # Write assertions here.
@@ -73,7 +73,7 @@ result_conditions: dict[str:any] = {
     "units_prod": 5_000
 }
 
-for i, v in scenarios.items():
+for _, v in scenarios.items():
     v.depreciate(0, result_conditions["test_periods"])
 
 assert scenarios["scenario_01"].last_depr == 180

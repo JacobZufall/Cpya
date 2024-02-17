@@ -12,7 +12,7 @@ class IntangibleAsset(Asset):
         :param life: The life of the asset (months)).
         :param value: The value of the asset.
         """
-        super().__init__(name=name, life=life, value=value)
+        super().__init__(name, life, value)
     
     def amortize(self, periods: int = 1, decline: float = 1.0) -> None:
         """

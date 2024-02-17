@@ -14,29 +14,33 @@ class TangibleAsset(Asset):
         :param slvg_value: The salvage value of the asset, if any ($).
         :param prod_cap: The production capacity of the asset (if applicable).
         """
-        super().__init__(name=name, life=life, value=value)
-        self.slvg_value: float = slvg_value
+        super().__init__(name, life, value)
+        self.SLVG_VALUE: float = slvg_value
         self.prod_cap: int = prod_cap
 
-        self.depr_value: float = self.value - self.slvg_value
+        # This is the $ amount that can be depreciated.
+        self.depreciable_value: float = self.value - self.SLVG_VALUE
         self.last_depr: float = 0.0
         self.total_depr: float = 0.0
 
     def reset(self) -> None:
         super().reset()
-        self.depr_value = self.value - self.slvg_value
+        self.depreciable_value = self.value - self.SLVG_VALUE
         self.last_depr = 0.0
         self.total_depr = 0.0
 
-    # I'm not sure if this should be moved to the parent class or not.
-    def _update_values(self, periods: int) -> None:
+    def change_value(self, new_value: float) -> None:
+        super().change_value(new_value)
+        self.depreciable_value = self.value - self.SLVG_VALUE
+
+    def _update_attribs(self, periods: int) -> None:
         """
         Re-runs all values to make sure they're consistent with each other. Used after depreciating.
         :param periods:
         :return: Nothing.
         """
         self.value -= self.last_depr
-        self.depr_value = self.value - self.slvg_value
+        self.depreciable_value = self.value - self.SLVG_VALUE
         self.rem_life -= periods
         self.total_depr += self.last_depr
 
@@ -53,34 +57,33 @@ class TangibleAsset(Asset):
         :param units_prod: How many units produced, if using method 3.
         :return: The dollar value depreciated.
         """
-        if self.depr_value > 0:
-            # I'm not sure if this works properly yet. It's hard to think about depreciation in this way and I have A
-            # LOT of attributes flying around, which is making it hard to keep track of.
+        # The only time I can foresee this conditional being necessary is for the declining balance method,
+        # since it ignores salvage value in its calculation of depreciation while not depreciating below salvage value.
+        if self.depreciable_value > 0:
             match method:
                 # Straight Line
                 case 0:
-                    self.last_depr = ((self.def_value - self.slvg_value) / self.life) * periods
-                    self._update_values(periods)
+                    self.last_depr = ((self.DEF_VALUE - self.SLVG_VALUE) / self.LIFE) * periods
+                    self._update_attribs(periods)
 
                 # Declining Balance
                 case 1:
-                    self.last_depr = (((self.def_value - self.total_depr) / self.life) * decline) * periods
-                    self._update_values(periods)
+                    self.last_depr = (((self.DEF_VALUE - self.total_depr) / self.LIFE) * decline) * periods
+                    self._update_attribs(periods)
 
                 # Sum of the Years' Digits
                 case 2:
-                    self.last_depr = self.def_value * (self.rem_life / self.syd)
-                    self._update_values(periods)
+                    self.last_depr = self.DEF_VALUE * (self.rem_life / self.syd)
+                    self._update_attribs(periods)
 
                 # Units of Production
                 case 3:
-                    self.last_depr = (self.depr_value / self.prod_cap) * units_prod
-                    self._update_values(periods)
+                    self.last_depr = (self.depreciable_value / self.prod_cap) * units_prod
+                    self._update_attribs(periods)
 
         else:
-            # The amount of value that can be depreciated cannot be negative.
-            if self.depr_value < 0:
-                self.depr_value = 0
+            if self.depreciable_value < 0:
+                self.depreciable_value = 0
 
             print(f"Asset \"{self.name}\" is fully depreciated! Current value = {self.value}.")
             self.last_depr = 0.0

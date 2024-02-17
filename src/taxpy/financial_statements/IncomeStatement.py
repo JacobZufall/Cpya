@@ -31,12 +31,11 @@ class IncomeStatement(FinancialStatement):
             }
         }
         """
+        super().__init__()
         self.inc_stmt = {
             "revenue": {},
             "expense": {}
         }
-
-        super().__init__()
     
     def add_account(self, name: str, category: str, contra: bool) -> None:
 

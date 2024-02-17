@@ -12,7 +12,6 @@ class BalanceSheet(FinancialStatement):
     def __init__(self) -> None:
         """
         Here is an example of what the balance sheet looks like.\n
-        Type is dict[str:dict[str:dict[str:any]]], if needed.
 
         self.bs = {
             "asset": {
@@ -37,12 +36,12 @@ class BalanceSheet(FinancialStatement):
             }
         }
         """
+        super().__init__()
         self.bal_sht = {
             "asset": {},
             "liability": {},
             "equity": {}
         }
-        super().__init__()
 
     def add_account(self, name: str, category: str, contra: bool = False, start_bal: float = 0.0) -> fnstmt:
 
@@ -56,7 +55,6 @@ class BalanceSheet(FinancialStatement):
             def_bal = "credit" if not contra else "debit"
 
         self.bal_sht[category][name] = {
-            # Scope issue? I'm so bad about these.
             "d/c": def_bal,
             "bal": start_bal
         }
