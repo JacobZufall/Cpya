@@ -1,10 +1,10 @@
 """
-income_statement.py
+IncomeStatement.py
 """
 
 from typing import TypeAlias
-from financial_statement import FinancialStatement
-from financial_statement import DefaultBal
+from FinancialStatement import FinancialStatement
+from FinancialStatement import DefaultBal
 
 fnstmt: TypeAlias = dict[str:dict[str:dict[str:any]]]
 
@@ -31,12 +31,11 @@ class IncomeStatement(FinancialStatement):
             }
         }
         """
+        super().__init__()
         self.inc_stmt = {
             "revenue": {},
             "expense": {}
         }
-
-        super().__init__()
     
     def add_account(self, name: str, category: str, contra: bool) -> None:
 

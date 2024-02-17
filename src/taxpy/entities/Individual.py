@@ -1,9 +1,9 @@
 """
-individual.py
+Individual.py
 """
 
-from entity import Entity
-from src.taxpy.deductions.standard_deduction import StandardDeduction
+from Entity import Entity
+from src.taxpy.deductions.StandardDeduction import StandardDeduction
 
 
 class Individual(Entity, StandardDeduction):

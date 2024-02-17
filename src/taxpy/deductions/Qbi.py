@@ -1,9 +1,9 @@
 """
-qbi.py
+Qbi.py
 """
 
-from src.taxpy.deductions.qbi_range import QbiRange
-from src.taxpy.deductions.standard_deduction import StandardDeduction
+from src.taxpy.deductions.QbiRange import QbiRange
+from src.taxpy.deductions.StandardDeduction import StandardDeduction
 
 
 class Qbi(QbiRange, StandardDeduction):
@@ -21,7 +21,7 @@ class Qbi(QbiRange, StandardDeduction):
         """
         super().__init__(year=tax_year)
 
-        # Checks to make sure that the tax year is eligible for a QBI and supported by standard_deduction.py.
+        # Checks to make sure that the tax year is eligible for a QBI and supported by StandardDeduction.py.
         if tax_year in QbiRange.qbi_years and tax_year in StandardDeduction.std_ded_years:
             self.tax_year: int = tax_year
 
@@ -69,12 +69,12 @@ class Qbi(QbiRange, StandardDeduction):
         :return: The QBI deduction.
         """
         # It looks weird to use __getattribute__ on self. I have two reasons for doing so in the next two lines. The
-        # line below uses the filing_status to get the proper attribute inherited from standard_deduction.py. It's a
+        # line below uses the filing_status to get the proper attribute inherited from StandardDeduction.py. It's a
         # string, and I'm not sure if there's a better way to get it than this.
         self.tax_inc = self.agi - self.__getattribute__(self.filing_status)
 
         # The line below uses qbi_status and combines it with the proper suffix to obtain the correct attribute from
-        # qbi_range.py.
+        # QbiRange.py.
         self.phase_in = (self.tax_inc - self.__getattribute__(f"{self.qbi_status}_lower") /
                          self.__getattribute__(f"{self.qbi_status}_phase_in"))
 
