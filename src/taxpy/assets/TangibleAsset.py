@@ -47,6 +47,9 @@ class TangibleAsset(Asset):
         self.depreciable_value.append(self.value - self.SLVG_VALUE)
         self.rem_life -= periods
 
+    def _validate_depreciation(self, depr_amt: float) -> bool:
+        return depr_amt < self.depreciable_value[-1]
+
     def depreciate(self, method: int, periods: int = 1, decline: float = 1.0, units_prod: int = 0) -> float:
         """
         [Supported Depreciation Methods] \n
@@ -66,22 +69,46 @@ class TangibleAsset(Asset):
             match method:
                 # Straight Line
                 case 0:
-                    self.last_depr.append(((self.DEF_VALUE - self.SLVG_VALUE) / self.LIFE) * periods)
+                    depr_amt: float = ((self.DEF_VALUE - self.SLVG_VALUE) / self.LIFE) * periods
+
+                    if self._validate_depreciation(depr_amt):
+                        self.last_depr.append(depr_amt)
+                    else:
+                        self.last_depr.append(self.depreciable_value[-1])
+
                     self._update_attribs(periods)
 
                 # Declining Balance
                 case 1:
-                    self.last_depr.append((((self.DEF_VALUE - self.total_depr[-1]) / self.LIFE) * decline) * periods)
+                    depr_amt: float = (((self.DEF_VALUE - self.total_depr[-1]) / self.LIFE) * decline) * periods
+
+                    if self._validate_depreciation(depr_amt):
+                        self.last_depr.append(depr_amt)
+                    else:
+                        self.last_depr.append(self.depreciable_value[-1])
+
                     self._update_attribs(periods)
 
                 # Sum of the Years' Digits
                 case 2:
-                    self.last_depr.append(self.DEF_VALUE * (self.rem_life / self.syd))
+                    depr_amt: float = (self.DEF_VALUE - self.SLVG_VALUE) * ((self.rem_life / 12) / self.syd)
+
+                    if self._validate_depreciation(depr_amt):
+                        self.last_depr.append(depr_amt)
+                    else:
+                        self.last_depr.append(self.depreciable_value[-1])
+
                     self._update_attribs(periods)
 
                 # Units of Production
                 case 3:
-                    self.last_depr.append((self.depreciable_value[-1] / self.prod_cap) * units_prod)
+                    depr_amt: float = (self.depreciable_value[-1] / self.prod_cap) * units_prod
+
+                    if self._validate_depreciation(depr_amt):
+                        self.last_depr.append(depr_amt)
+                    else:
+                        self.last_depr.append(self.depreciable_value[-1])
+
                     self._update_attribs(periods)
 
         else:
