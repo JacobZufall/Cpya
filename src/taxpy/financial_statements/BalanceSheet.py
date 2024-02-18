@@ -43,13 +43,11 @@ class BalanceSheet(FinancialStatement):
             "equity": {}
         }
 
-    def add_account(self, name: str, category: str, contra: bool = False, start_bal: float = 0.0) -> fnstmt:
-
+    def add_account(self, name: str, category: str, contra: bool = False, start_bal: float = 0.0) -> None:
         if category not in ["asset", "liability", "equity"]:
             raise ValueError("Invalid category type.")
 
         if category == "asset":
-            # Only reason I'm doing it with "not" is because it reads easier to an accountant.
             def_bal = "debit" if not contra else "credit"
         else:
             def_bal = "credit" if not contra else "debit"
@@ -59,12 +57,10 @@ class BalanceSheet(FinancialStatement):
             "bal": start_bal
         }
 
-        return self.bal_sht[category][name]
-
     def del_account(self, name: str) -> None:
-        for k in ["asset", "liability", "equity"]:
+        for category in ["asset", "liability", "equity"]:
             try:
-                self.bal_sht[k].pop(name)
+                self.bal_sht[category].pop(name)
                 break
             except KeyError:
                 pass
@@ -72,10 +68,9 @@ class BalanceSheet(FinancialStatement):
             raise KeyError("Account not found!")
 
     def true_value(self, account: str) -> float:
-        for k in ["asset", "liability", "equity"]:
+        for category in ["asset", "liability", "equity"]:
             try:
-                self.bal_sht[k][account]
-                return self.calc_true_value(self.bal_sht, k, account)
+                return self.calc_true_value(self.bal_sht, category, account)
             except KeyError:
                 continue
         else:

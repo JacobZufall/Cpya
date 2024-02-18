@@ -4,7 +4,7 @@ IncomeStatement.py
 
 from typing import TypeAlias
 from FinancialStatement import FinancialStatement
-from FinancialStatement import DefaultBal
+from src.taxpy.financial_statements.DefaultBalance import DefaultBalance
 
 fnstmt: TypeAlias = dict[str:dict[str:dict[str:any]]]
 
@@ -42,7 +42,7 @@ class IncomeStatement(FinancialStatement):
         if not category == "revenue" or not category == "expense":
             raise ValueError
         else:
-            def_bal: DefaultBal = DefaultBal(category, contra)
+            def_bal: DefaultBalance = DefaultBalance(category, contra)
         
         self.inc_stmt[category][name] = {
             "d/c": def_bal,
