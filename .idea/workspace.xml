@@ -7,13 +7,8 @@
     <list default="true" id="a49b14fc-a951-47dd-bd19-77c5a467b5c2" name="Changes" comment="Continued writing tests">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/taxpy/assets/Asset.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/assets/Asset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/taxpy/assets/IntangibleAsset.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/assets/IntangibleAsset.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/taxpy/assets/TangibleAsset.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/assets/TangibleAsset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/taxpy/assets/gaap_assets/Computer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/assets/gaap_assets/Computer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/taxpy/financial_statements/BalanceSheet.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/financial_statements/BalanceSheet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/taxpy/financial_statements/FinancialStatement.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/financial_statements/FinancialStatement.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/taxpy/financial_statements/IncomeStatement.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/financial_statements/IncomeStatement.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/assets/test_tangible_asset.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/assets/test_tangible_asset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/assets/test_TangibleAsset.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/assets/test_TangibleAsset.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +26,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="test/megan" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -73,12 +68,15 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python.Asset.executor": "Run",
+    "Python.TangibleAsset.executor": "Run",
     "Python.tangible_asset.executor": "Run",
+    "Python.test_TangibleAsset.executor": "Run",
     "Python.test_tangible_asset.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "wip/depreciation",
+    "git-widget-placeholder": "dev/depreciation__tests",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -145,6 +143,7 @@
       <workItem from="1706752754165" duration="27000" />
       <workItem from="1706753165229" duration="36000" />
       <workItem from="1707081187834" duration="445000" />
+      <workItem from="1708222547621" duration="5713000" />
     </task>
     <task id="LOCAL-00001" summary="Added balance_sheet.py, and other things">
       <created>1686756190237</created>
@@ -224,7 +223,23 @@
       <option name="project" value="LOCAL" />
       <updated>1706587939418</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Reformatted files for clarity">
+      <option name="closed" value="true" />
+      <created>1708205880325</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1708205880325</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Continued writing tests">
+      <option name="closed" value="true" />
+      <created>1708213558064</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1708213558064</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -262,14 +277,18 @@
     <MESSAGE value="Updated depreciation methods" />
     <MESSAGE value="Finished depreciation methods, need to write tests." />
     <MESSAGE value="Started writing tests" />
+    <MESSAGE value="Reformatted files for clarity" />
     <MESSAGE value="Continued writing tests" />
     <option name="LAST_COMMIT_MESSAGE" value="Continued writing tests" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/taxpy$income_statement.coverage" NAME="income_statement Coverage Results" MODIFIED="1686765210559" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy/financial_statements" />
+    <SUITE FILE_PATH="coverage/TaxPy$test_TangibleAsset.coverage" NAME="test_TangibleAsset Coverage Results" MODIFIED="1708227872225" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/assets" />
     <SUITE FILE_PATH="coverage/taxpy$balance_sheet.coverage" NAME="balance_sheet Coverage Results" MODIFIED="1687041057825" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy/financial_statements" />
     <SUITE FILE_PATH="coverage/TaxPy$test_tangible_asset.coverage" NAME="test_tangible_asset Coverage Results" MODIFIED="1706587856749" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/assets" />
     <SUITE FILE_PATH="coverage/TaxPy$tangible_asset.coverage" NAME="tangible_asset Coverage Results" MODIFIED="1706586974142" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy/assets" />
+    <SUITE FILE_PATH="coverage/TaxPy$Asset.coverage" NAME="Asset Coverage Results" MODIFIED="1708227382907" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy/assets" />
+    <SUITE FILE_PATH="coverage/TaxPy$TangibleAsset.coverage" NAME="TangibleAsset Coverage Results" MODIFIED="1708227656471" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy/assets" />
     <SUITE FILE_PATH="coverage/taxpy$qbi.coverage" NAME="qbi Coverage Results" MODIFIED="1686667289055" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy" />
     <SUITE FILE_PATH="coverage/taxpy$financial_statement.coverage" NAME="financial_statement Coverage Results" MODIFIED="1686840690906" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy/financial_statements" />
   </component>

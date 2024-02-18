@@ -1,5 +1,5 @@
 """
-tangible_assets.py
+TangibleAsset.py
 """
 
 from src.taxpy.assets.Asset import Asset
@@ -18,20 +18,23 @@ class TangibleAsset(Asset):
         self.SLVG_VALUE: float = slvg_value
         self.prod_cap: int = prod_cap
 
+        # The reason these are lists is so that someone can easily recall what the depreciation or total depreciation
+        # was n amount of years ago. For example, you can write "self.last_depr[-1]" to get the depreciation from the
+        # most recent period.
         # This is the $ amount that can be depreciated.
-        self.depreciable_value: float = self.value - self.SLVG_VALUE
-        self.last_depr: float = 0.0
-        self.total_depr: float = 0.0
+        self.depreciable_value: list[float] = [self.value - self.SLVG_VALUE]
+        self.last_depr: list[float] = [0.0]
+        self.total_depr: list[float] = [0.0]
 
     def reset(self) -> None:
         super().reset()
-        self.depreciable_value = self.value - self.SLVG_VALUE
-        self.last_depr = 0.0
-        self.total_depr = 0.0
+        self.depreciable_value = [self.value - self.SLVG_VALUE]
+        self.last_depr = [0.0]
+        self.total_depr = [0.0]
 
     def change_value(self, new_value: float) -> None:
         super().change_value(new_value)
-        self.depreciable_value = self.value - self.SLVG_VALUE
+        self.depreciable_value.append(self.value - self.SLVG_VALUE)
 
     def _update_attribs(self, periods: int) -> None:
         """
@@ -39,10 +42,13 @@ class TangibleAsset(Asset):
         :param periods:
         :return: Nothing.
         """
-        self.value -= self.last_depr
-        self.depreciable_value = self.value - self.SLVG_VALUE
+        self.value -= self.last_depr[-1]
+        self.total_depr.append(self.total_depr[-1] + self.last_depr[-1])
+        self.depreciable_value.append(self.value - self.SLVG_VALUE)
         self.rem_life -= periods
-        self.total_depr += self.last_depr
+
+    def _validate_depreciation(self, depr_amt: float) -> bool:
+        return depr_amt < self.depreciable_value[-1]
 
     def depreciate(self, method: int, periods: int = 1, decline: float = 1.0, units_prod: int = 0) -> float:
         """
@@ -59,33 +65,56 @@ class TangibleAsset(Asset):
         """
         # The only time I can foresee this conditional being necessary is for the declining balance method,
         # since it ignores salvage value in its calculation of depreciation while not depreciating below salvage value.
-        if self.depreciable_value > 0:
+        if self.depreciable_value[-1] > 0:
             match method:
                 # Straight Line
                 case 0:
-                    self.last_depr = ((self.DEF_VALUE - self.SLVG_VALUE) / self.LIFE) * periods
+                    depr_amt: float = ((self.DEF_VALUE - self.SLVG_VALUE) / self.LIFE) * periods
+
+                    if self._validate_depreciation(depr_amt):
+                        self.last_depr.append(depr_amt)
+                    else:
+                        self.last_depr.append(self.depreciable_value[-1])
+
                     self._update_attribs(periods)
 
                 # Declining Balance
                 case 1:
-                    self.last_depr = (((self.DEF_VALUE - self.total_depr) / self.LIFE) * decline) * periods
+                    depr_amt: float = (((self.DEF_VALUE - self.total_depr[-1]) / self.LIFE) * decline) * periods
+
+                    if self._validate_depreciation(depr_amt):
+                        self.last_depr.append(depr_amt)
+                    else:
+                        self.last_depr.append(self.depreciable_value[-1])
+
                     self._update_attribs(periods)
 
                 # Sum of the Years' Digits
                 case 2:
-                    self.last_depr = self.DEF_VALUE * (self.rem_life / self.syd)
+                    depr_amt: float = (self.DEF_VALUE - self.SLVG_VALUE) * ((self.rem_life / 12) / self.syd)
+
+                    if self._validate_depreciation(depr_amt):
+                        self.last_depr.append(depr_amt)
+                    else:
+                        self.last_depr.append(self.depreciable_value[-1])
+
                     self._update_attribs(periods)
 
                 # Units of Production
                 case 3:
-                    self.last_depr = (self.depreciable_value / self.prod_cap) * units_prod
+                    depr_amt: float = (self.depreciable_value[-1] / self.prod_cap) * units_prod
+
+                    if self._validate_depreciation(depr_amt):
+                        self.last_depr.append(depr_amt)
+                    else:
+                        self.last_depr.append(self.depreciable_value[-1])
+
                     self._update_attribs(periods)
 
         else:
-            if self.depreciable_value < 0:
-                self.depreciable_value = 0
+            if self.depreciable_value[-1] < 0:
+                self.depreciable_value[-1] = 0
 
             print(f"Asset \"{self.name}\" is fully depreciated! Current value = {self.value}.")
-            self.last_depr = 0.0
 
-        return self.last_depr
+        return self.last_depr[-1]
