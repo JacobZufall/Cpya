@@ -12,8 +12,18 @@ class FinancialStatement:
     def __init__(self) -> None:
         pass
 
+    # This method is terrible and could be vastly improved. It should be considered adding an attribute named
+    # "self.fnstmt" to this class which is used by its children instead of each child having its own unique name for
+    # their financial statement. This method would be a lot better if it weren't static as well.
     @staticmethod
     def calc_true_value(fs: fnstmt, category: str, account: str) -> float:
+        """
+
+        :param fs: The financial statement the category is in.
+        :param category: The category the account is in.
+        :param account: The account to find the true value of.
+        :return: The true value of the account.
+        """
         if fs[category][account]["d/c"] == "debit":
             return abs(fs[category][account]["balance"])
         else:

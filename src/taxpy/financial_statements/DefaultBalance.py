@@ -6,11 +6,11 @@ DefaultBalance.py
 class DefaultBalance:
     def __init__(self, category: str, contra: bool = False):
         """
-        :param category:
-        :param contra:
+        Contains the default balance (debit or credit) for all accounts and finds the default balance of a specified
+        account.
+        :param category: The category of the account (asset, liability, equity, revenue, and expense).
+        :param contra: Is the account a contra-account?
         """
-        self.def_bal: str | None = None
-
         # Balance sheet accounts
         self.asset: str = "debit"
         self.contra_asset: str = "credit"
@@ -25,15 +25,16 @@ class DefaultBalance:
         self.expense: str = "debit"
         self.contra_expense: str = "credit"
 
-        self.find_account(category, contra)
+        self.def_bal: str = self.find_account(category, contra)
 
-    def find_account(self, category: str, contra: bool = False) -> None:
+    def find_account(self, category: str, contra: bool = False) -> str:
         """
-        :param category:
-        :param contra:
-        :return:
+        Finds a certain account and finds its default balance.
+        :param category: The category of the account (asset, liability, equity, revenue, and expense).
+        :param contra: Is the account a contra-account?
+        :return: The default balance, which is "debit" or "credit" depending on the category.
         """
         if not contra:
-            self.def_bal = self.__getattribute__(category)
+            return self.__getattribute__(category)
         else:
-            self.def_bal = self.__getattribute__(f"contra_{category}")
+            return self.__getattribute__(f"contra_{category}")

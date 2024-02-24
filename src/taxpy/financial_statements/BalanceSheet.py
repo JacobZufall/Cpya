@@ -43,6 +43,15 @@ class BalanceSheet(FinancialStatement):
             "equity": {}
         }
 
+    def true_value(self, account: str) -> float:
+        for category in ["asset", "liability", "equity"]:
+            try:
+                return self.calc_true_value(self.bal_sht, category, account)
+            except KeyError:
+                continue
+        else:
+            raise KeyError("Account not found!")
+
     def add_account(self, name: str, category: str, contra: bool = False, start_bal: float = 0.0) -> None:
         if category not in ["asset", "liability", "equity"]:
             raise ValueError("Invalid category type.")
@@ -64,15 +73,6 @@ class BalanceSheet(FinancialStatement):
                 break
             except KeyError:
                 pass
-        else:
-            raise KeyError("Account not found!")
-
-    def true_value(self, account: str) -> float:
-        for category in ["asset", "liability", "equity"]:
-            try:
-                return self.calc_true_value(self.bal_sht, category, account)
-            except KeyError:
-                continue
         else:
             raise KeyError("Account not found!")
 
