@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a49b14fc-a951-47dd-bd19-77c5a467b5c2" name="Changes" comment="Refined FinancialStatement.py">
+    <list default="true" id="a49b14fc-a951-47dd-bd19-77c5a467b5c2" name="Changes" comment="Updated DefaultBalance.py">
+      <change afterPath="$PROJECT_DIR$/tests/financial_statements/test_BalanceSheet.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/financial_statements/test_DefaultBalance.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/financial_statements/test_FinancialStatement.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/financial_statements/test_IncomeStatement.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/taxpy/financial_statements/DefaultBalance.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/financial_statements/DefaultBalance.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/taxpy/financial_statements/FinancialStatement.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/financial_statements/FinancialStatement.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -53,6 +56,9 @@
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
@@ -148,7 +154,7 @@
       <workItem from="1707081187834" duration="445000" />
       <workItem from="1708222547621" duration="5713000" />
       <workItem from="1708381047163" duration="5000" />
-      <workItem from="1708751574286" duration="318000" />
+      <workItem from="1708751574286" duration="1006000" />
     </task>
     <task id="LOCAL-00001" summary="Added balance_sheet.py, and other things">
       <created>1686756190237</created>
@@ -252,7 +258,15 @@
       <option name="project" value="LOCAL" />
       <updated>1708229541785</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Updated DefaultBalance.py">
+      <option name="closed" value="true" />
+      <created>1708752187241</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1708752187241</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -269,7 +283,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/wip/depreciation" />
+                        <option value="origin/dev/financial-statements" />
                       </list>
                     </value>
                   </entry>
@@ -293,7 +307,8 @@
     <MESSAGE value="Reformatted files for clarity" />
     <MESSAGE value="Continued writing tests" />
     <MESSAGE value="Refined FinancialStatement.py" />
-    <option name="LAST_COMMIT_MESSAGE" value="Refined FinancialStatement.py" />
+    <MESSAGE value="Updated DefaultBalance.py" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated DefaultBalance.py" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/taxpy$income_statement.coverage" NAME="income_statement Coverage Results" MODIFIED="1686765210559" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy/financial_statements" />

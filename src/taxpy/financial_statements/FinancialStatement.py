@@ -1,6 +1,10 @@
 """
 FinancialStatement.py
+
+This class is mostly abstract because each financial statement is extremely unique. However, many of them require
+similar functions, which is why this class exists and is inherited from.
 """
+
 from abc import abstractmethod
 from typing import TypeAlias
 
@@ -38,7 +42,7 @@ class FinancialStatement:
         """
 
     @abstractmethod
-    def add_account(self, name: str, category: str, contra: bool):
+    def add_account(self, name: str, category: str, contra: bool) -> None:
         """
         Creates a new account with a default balance of $0.
         :param name: The name of the account.

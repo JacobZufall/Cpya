@@ -10,7 +10,7 @@ fnstmt: TypeAlias = dict[str:dict[str:dict[str:any]]]
 
 
 class IncomeStatement(FinancialStatement):
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Here is an example of what the income statement looks like.\n
         Type is dict[str:dict[str:dict[str:any]]], if needed.
@@ -81,11 +81,3 @@ class IncomeStatement(FinancialStatement):
         
         # Returning earlier in the function stops this from being called.
         raise KeyError("Account not found!")
-
-
-if __name__ == "__main__":
-    income_statement: IncomeStatement = IncomeStatement()
-    income_statement.add_account("general revenue", "revenue", False)
-    print(income_statement.inc_stmt)
-    income_statement.del_account("general revenue")
-    print(income_statement.inc_stmt)
