@@ -40,7 +40,7 @@ class FinancialStatement:
                 continue
         else:
             raise KeyError("Account not found!")
-
+        # Make two return statements.
         return return_value
                 
     @abstractmethod
