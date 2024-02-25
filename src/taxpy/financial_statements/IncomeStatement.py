@@ -69,13 +69,13 @@ class IncomeStatement(FinancialStatement):
         # if a key error occurs.
         try:
             self.inc_stmt["revenue"][account]
-            return self.calc_true_value(self.inc_stmt, "revenue", account)
+            return self.true_value(self.inc_stmt, "revenue", account)
         except KeyError:
             pass
         
         try:
             self.inc_stmt["expense"][account]
-            return self.calc_true_value(self.inc_stmt, "expense", account)
+            return self.true_value(self.inc_stmt, "expense", account)
         except KeyError:
             pass
         

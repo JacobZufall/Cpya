@@ -3,6 +3,7 @@ BalanceSheet.py
 """
 
 from FinancialStatement import FinancialStatement
+from src.taxpy.constants import BS_CATEGORIES
 from typing import TypeAlias
 
 fnstmt: TypeAlias = dict[str:dict[str:dict[str:any]]]
@@ -37,23 +38,14 @@ class BalanceSheet(FinancialStatement):
         }
         """
         super().__init__()
-        self.bal_sht = {
+        self.fs: fnstmt = {
             "asset": {},
             "liability": {},
             "equity": {}
         }
 
-    def true_value(self, account: str) -> float:
-        for category in ["asset", "liability", "equity"]:
-            try:
-                return self.calc_true_value(self.bal_sht, category, account)
-            except KeyError:
-                continue
-        else:
-            raise KeyError("Account not found!")
-
-    def add_account(self, name: str, category: str, contra: bool = False, start_bal: float = 0.0) -> None:
-        if category not in ["asset", "liability", "equity"]:
+    def add_account(self, name: str, category: str, start_bal: float = 0.0, contra: bool = False) -> None:
+        if category not in BS_CATEGORIES:
             raise ValueError("Invalid category type.")
 
         if category == "asset":
@@ -61,15 +53,15 @@ class BalanceSheet(FinancialStatement):
         else:
             def_bal = "credit" if not contra else "debit"
 
-        self.bal_sht[category][name] = {
+        self.fs[category][name] = {
             "d/c": def_bal,
             "bal": start_bal
         }
 
     def del_account(self, name: str) -> None:
-        for category in ["asset", "liability", "equity"]:
+        for category in BS_CATEGORIES:
             try:
-                self.bal_sht[category].pop(name)
+                self.fs[category].pop(name)
                 break
             except KeyError:
                 pass
@@ -87,11 +79,9 @@ class BalanceSheet(FinancialStatement):
             "equity": 0.0
         }
 
-        # Variable names could be improved :(
-        for i, v in self.bal_sht.items():
-            for j, w in v.items():
-                if j == "bal":
-                    totals[i] += w
+        for category, account in self.fs.items():
+            for component, value in account.items():
+                if component == "bal":
+                    totals[category] += value
 
-        # More readable
         return totals["asset"] == (totals["liability"] + totals["equity"])

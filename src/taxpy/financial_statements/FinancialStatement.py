@@ -5,6 +5,7 @@ This class is mostly abstract because each financial statement is extremely uniq
 similar functions, which is why this class exists and is inherited from.
 """
 
+from src.taxpy.constants import ALL_CATEGORIES
 from abc import abstractmethod
 from typing import TypeAlias
 
@@ -14,39 +15,41 @@ fnstmt: TypeAlias = dict[str:dict[str:dict[str:any]]]
 
 class FinancialStatement:
     def __init__(self) -> None:
-        pass
+        self.fs: fnstmt = {}
 
-    # This method is terrible and could be vastly improved. It should be considered adding an attribute named
-    # "self.fnstmt" to this class which is used by its children instead of each child having its own unique name for
-    # their financial statement. This method would be a lot better if it weren't static as well.
-    @staticmethod
-    def calc_true_value(fs: fnstmt, category: str, account: str) -> float:
+    def true_value(self, account: str) -> float:
         """
-
-        :param fs: The financial statement the category is in.
-        :param category: The category the account is in.
+        Finds the true value of an account, which is a positive float if the normal balance of the account is a
+        debit, and a negative float if the normal balance of the account is a credit.
         :param account: The account to find the true value of.
         :return: The true value of the account.
         """
-        if fs[category][account]["d/c"] == "debit":
-            return abs(fs[category][account]["balance"])
+        # Looping through ALL_CATEGORIES allows this method to work with any financial statement saving the work of
+        # having to override the method for each child class.
+        for category in ALL_CATEGORIES:
+            try:
+                if self.fs[category][account]["d/c"] == "debit":
+                    # All values should be stored as positive floats, but this is just in case they aren't for some
+                    # reason. Accounts have no reason to be negative.
+                    return_value = abs(self.fs[category][account]["balance"])
+                    break
+                else:
+                    return_value = self.fs[category][account]["balance"] * -1.0
+                    break
+            except KeyError:
+                continue
         else:
-            return fs[category][account]["balance"] * -1
+            raise KeyError("Account not found!")
 
+        return return_value
+                
     @abstractmethod
-    def true_value(self, account: str) -> float:
-        """
-        Returns a debit account as a positive float and a credit account as a negative float.
-        :param account: The name of the account.
-        :return: The true value of an account.
-        """
-
-    @abstractmethod
-    def add_account(self, name: str, category: str, contra: bool) -> None:
+    def add_account(self, name: str, category: str, start_bal: float = 0.0, contra: bool = False) -> None:
         """
         Creates a new account with a default balance of $0.
         :param name: The name of the account.
         :param category: The category of the account (asset/liability/equity/revenue/expense).
+        :param start_bal: The beginning balance of the account.
         :param contra: If the account is a contra account.
         :return: Nothing.
         """
@@ -54,7 +57,7 @@ class FinancialStatement:
     @abstractmethod
     def del_account(self, name: str) -> None:
         """
-        Deletes a specified account from the financial statement..
+        Deletes a specified account from the financial statement.
         :param name: The name of the account.
         :return: Nothing.
         """
