@@ -2,8 +2,8 @@
 Qbi.py
 """
 
-from src.taxpy.deductions.QbiRange import QbiRange
-from src.taxpy.deductions.StandardDeduction import StandardDeduction
+from src.pyacty.deductions.QbiRange import QbiRange
+from src.pyacty.deductions.StandardDeduction import StandardDeduction
 
 
 class Qbi(QbiRange, StandardDeduction):

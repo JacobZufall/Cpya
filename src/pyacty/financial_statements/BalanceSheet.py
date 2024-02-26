@@ -3,7 +3,7 @@ BalanceSheet.py
 """
 
 from FinancialStatement import FinancialStatement
-from src.taxpy.constants import BS_CATEGORIES
+from src.pyacty.constants import BS_CATEGORIES
 from typing import TypeAlias
 
 fnstmt: TypeAlias = dict[str:dict[str:dict[str:any]]]

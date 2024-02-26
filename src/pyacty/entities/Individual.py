@@ -3,7 +3,7 @@ Individual.py
 """
 
 from Entity import Entity
-from src.taxpy.deductions.StandardDeduction import StandardDeduction
+from src.pyacty.deductions.StandardDeduction import StandardDeduction
 
 
 class Individual(Entity, StandardDeduction):

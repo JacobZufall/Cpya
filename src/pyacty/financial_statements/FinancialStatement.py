@@ -5,7 +5,7 @@ This class is mostly abstract because each financial statement is extremely uniq
 similar functions, which is why this class exists and is inherited from.
 """
 
-from src.taxpy.constants import ALL_CATEGORIES
+from src.pyacty.constants import ALL_CATEGORIES
 from abc import abstractmethod
 from typing import TypeAlias
 

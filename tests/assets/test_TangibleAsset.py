@@ -1,7 +1,7 @@
 """
 test_TangibleAsset.py
 """
-from src.taxpy.assets.TangibleAsset import TangibleAsset
+from src.pyacty.assets.TangibleAsset import TangibleAsset
 
 # Define test scenarios here.
 scenarios: dict[str:TangibleAsset] = {

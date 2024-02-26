@@ -6,7 +6,7 @@ LONG_DESCRIPTION: str = "TaxPy is a useful Python package that allows you utiliz
                         "functions with ease!"
 
 setup(
-    name="taxpy",
+    name="pyacty",
     version=VERSION,
     author="Jacob Zufall",
     author_email="jacobzufall@gmail.com",

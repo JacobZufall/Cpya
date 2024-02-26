@@ -4,7 +4,7 @@ IncomeStatement.py
 
 from typing import TypeAlias
 from FinancialStatement import FinancialStatement
-from src.taxpy.financial_statements.DefaultBalance import DefaultBalance
+from src.pyacty.financial_statements.DefaultBalance import DefaultBalance
 
 fnstmt: TypeAlias = dict[str:dict[str:dict[str:any]]]
 
