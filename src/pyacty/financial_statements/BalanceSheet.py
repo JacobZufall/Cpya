@@ -16,21 +16,21 @@ class BalanceSheet(FinancialStatement):
 
         self.fs = {
             "asset": {
-                "cash": {
+                "Cash": {
                     "d/c": "debit",\n
                     "bal": 0.0
                 }
             },
 
             "liability": {
-                "accounts payable": {
+                "Accounts Payable": {
                     "d/c": "credit",\n
                     "bal": 0.0
                 }
             },
 
             "equity": {
-                "common stock": {
+                "Common Stock": {
                     "d/c": "credit",\n
                     "bal": 0.0
                 }
@@ -47,6 +47,8 @@ class BalanceSheet(FinancialStatement):
     def add_account(self, name: str, category: str, start_bal: float = 0.0, contra: bool = False) -> None:
         if category not in BS_CATEGORIES:
             raise ValueError("Invalid category type.")
+
+        def_bal: str
 
         if category == "asset":
             def_bal = "debit" if not contra else "credit"
@@ -88,8 +90,15 @@ class BalanceSheet(FinancialStatement):
 
 
 if __name__ == "__main__":
-    test_bs: BalanceSheet = BalanceSheet()
-    test_bs.add_account("Cash", "asset")
-    test_bs.add_account("Accounts Receivable", "asset")
+    bal_sht: BalanceSheet = BalanceSheet()
 
-    test_bs.save_fs("C:\\Users\\jacob\\OneDrive\\Desktop\\output", "test")
+    bal_sht.add_account("Cash", "asset", 1_000_000)
+    bal_sht.add_account("Accounts Receivable (net)", "asset", 500_000)
+
+    bal_sht.add_account("Accounts Payable", "liability", 5_000)
+    bal_sht.add_account("Bonds Payable", "liability", 500)
+
+    bal_sht.add_account("Retained Earnings", "equity", 765_000)
+
+    bal_sht.save_fs("C:\\Users\\jacob\\OneDrive\\Desktop\\output", "test", "csv")
+    bal_sht.save_fs("C:\\Users\\jacob\\OneDrive\\Desktop\\output", "test", "json")

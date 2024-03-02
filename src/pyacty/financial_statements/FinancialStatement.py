@@ -51,19 +51,27 @@ class FinancialStatement:
         :return: Nothing.
         """
         valid_file_types: list[str] = ["csv", "json"]
+        outfile: TextIO
 
         if file_type not in valid_file_types:
             raise ValueError("Invalid valid type.")
 
+        def make_file(extension: str) -> TextIO:
+            """
+            Makes the file the data is saved to.
+            :param extension: The type of file to save to.
+            :return: The file to save the data to.
+            """
+            return open(f"{directory}\\{file_name}.{extension}", "w", newline="")
+
         # CSV file
         if file_type.lower() == valid_file_types[0]:
-            outfile: TextIO
-
             try:
-                outfile = open(f"{directory}\\{file_name}.csv", "w", newline="")
+                outfile = make_file("csv")
+
             except FileNotFoundError:
                 os.mkdir(directory)
-                outfile = open(f"{directory}\\{file_name}.csv", "w", newline="")
+                outfile = make_file("csv")
 
             csv_writer: writer = csv.writer(outfile)
 
@@ -79,14 +87,19 @@ class FinancialStatement:
 
                     csv_writer.writerow(["", account, value])
 
-            else:
-                # Inserts a blank row to separate the categories.
-                csv_writer.writerow("")
+            outfile.close()
 
         # JSON file
         elif file_type.lower() == valid_file_types[1]:
-            with open(f"{directory}.{file_name}.json", "w") as outfile:
-                outfile.write(self.fs)
+            try:
+                outfile = make_file("json")
+
+            except FileNotFoundError:
+                os.mkdir(directory)
+                outfile = make_file("json")
+
+            outfile.write(json.dumps(self.fs, indent=4))
+            outfile.close()
 
     @abstractmethod
     def add_account(self, name: str, category: str, start_bal: float = 0.0, contra: bool = False) -> None:

@@ -2,9 +2,9 @@
 IncomeStatement.py
 """
 
-from typing import TypeAlias
 from FinancialStatement import FinancialStatement
-from src.pyacty.financial_statements.DefaultBalance import DefaultBalance
+from src.pyacty.constants import IS_CATEGORIES
+from typing import TypeAlias
 
 fnstmt: TypeAlias = dict[str:dict[str:dict[str:any]]]
 
@@ -17,14 +17,14 @@ class IncomeStatement(FinancialStatement):
 
         self.fs = {
             "revenue": {
-                "general revenue": {
+                "Revenue": {
                     "d/c": "credit",\n
                     "bal": 0.0
                 }
             },
 
             "expense": {
-                "interest expense": {
+                "Interest Expense": {
                     "d/c": "debit",\n
                     "bal": 0.0
                 }
@@ -32,50 +32,46 @@ class IncomeStatement(FinancialStatement):
         }
         """
         super().__init__()
-        self.inc_stmt = {
+        self.fs = {
             "revenue": {},
             "expense": {}
         }
-    
-    def add_account(self, name: str, category: str, contra: bool) -> None:
 
-        if not category == "revenue" or not category == "expense":
-            raise ValueError
+    def add_account(self, name: str, category: str, start_bal: float = 0.0, contra: bool = False) -> None:
+        if category not in IS_CATEGORIES:
+            raise ValueError("Invalid category type.")
+
+        def_bal: str
+
+        if category == "revenue":
+            def_bal = "credit" if not contra else "debit"
         else:
-            def_bal: DefaultBalance = DefaultBalance(category, contra)
-        
-        self.inc_stmt[category][name] = {
+            def_bal = "debit" if not contra else "credit"
+
+        self.fs[category][name] = {
             "d/c": def_bal,
-            "bal": 0.0
+            "bal": start_bal
         }
 
     def del_account(self, name: str) -> None:
-        # Looping try except statements creates a lot of code that is very hard to read and tell
-        # what the program is doing, I find it much better to either pass on the exception or use
-        # a for loop.
-        for k in ["revenue", "expense"]:
+        for is_category in IS_CATEGORIES:
             try:
-                self.inc_stmt[k].pop(name)
+                self.fs[is_category].pop(name)
                 break
             except KeyError:
                 pass
         else:
             raise KeyError("Account not found!")
 
-    def true_value(self, account: str) -> float:
-        # This would be the other method to approaching this type of problem where you just pass
-        # if a key error occurs.
-        try:
-            self.inc_stmt["revenue"][account]
-            return self.true_value(self.inc_stmt, "revenue", account)
-        except KeyError:
-            pass
-        
-        try:
-            self.inc_stmt["expense"][account]
-            return self.true_value(self.inc_stmt, "expense", account)
-        except KeyError:
-            pass
-        
-        # Returning earlier in the function stops this from being called.
-        raise KeyError("Account not found!")
+
+if __name__ == "__main__":
+    inc_stmt: IncomeStatement = IncomeStatement()
+
+    inc_stmt.add_account("Revenue", "revenue", 1_000_000)
+    inc_stmt.add_account("Interest Revenue", "revenue", 500_000)
+
+    inc_stmt.add_account("Interest Expense", "expense", 5_000)
+    inc_stmt.add_account("Depreciation Expense", "expense", 500)
+
+    inc_stmt.save_fs("C:\\Users\\jacob\\OneDrive\\Desktop\\output", "test_is", "csv")
+    inc_stmt.save_fs("C:\\Users\\jacob\\OneDrive\\Desktop\\output", "test_is", "json")
