@@ -4,10 +4,13 @@ FinancialStatement.py
 This class is mostly abstract because each financial statement is extremely unique. However, many of them require
 similar functions, which is why this class exists and is inherited from.
 """
-
+import os
+import csv
+from csv import writer
+import json
 from src.pyacty.constants import ALL_CATEGORIES
 from abc import abstractmethod
-from typing import TypeAlias
+from typing import TypeAlias, TextIO
 
 # Is there a way to tie this to the class?
 fnstmt: TypeAlias = dict[str:dict[str:dict[str:any]]]
@@ -31,18 +34,60 @@ class FinancialStatement:
                 if self.fs[category][account]["d/c"] == "debit":
                     # All values should be stored as positive floats, but this is just in case they aren't for some
                     # reason. Accounts have no reason to be negative.
-                    return_value = abs(self.fs[category][account]["balance"])
-                    break
+                    return abs(self.fs[category][account]["balance"])
                 else:
-                    return_value = self.fs[category][account]["balance"] * -1.0
-                    break
+                    return self.fs[category][account]["balance"] * -1.0
             except KeyError:
                 continue
         else:
             raise KeyError("Account not found!")
-        # Make two return statements.
-        return return_value
-                
+
+    def save_fs(self, directory: str, file_name: str, file_type: str = "csv") -> None:
+        """
+        Saves the financial statement to the given directory.
+        :param directory: The directory to save the financial statement to.
+        :param file_name: The name of the file.
+        :param file_type: The type of file to save to (CSV or JSON).
+        :return: Nothing.
+        """
+        valid_file_types: list[str] = ["csv", "json"]
+
+        if file_type not in valid_file_types:
+            raise ValueError("Invalid valid type.")
+
+        # CSV file
+        if file_type.lower() == valid_file_types[0]:
+            outfile: TextIO
+
+            try:
+                outfile = open(f"{directory}\\{file_name}.csv", "w", newline="")
+            except FileNotFoundError:
+                os.mkdir(directory)
+                outfile = open(f"{directory}\\{file_name}.csv", "w", newline="")
+
+            csv_writer: writer = csv.writer(outfile)
+
+            for fs_category, fs_accounts in self.fs.items():
+                csv_writer.writerow([fs_category.capitalize()])
+
+                for account, attributes in fs_accounts.items():
+                    value: float = 0.0
+
+                    for attribute, info in attributes.items():
+                        if attribute == "bal":
+                            value = info
+
+                    csv_writer.writerow(["", account, value])
+
+            else:
+                # Inserts a blank row to separate the categories.
+                csv_writer.writerow("")
+
+        # JSON file
+        elif file_type.lower() == valid_file_types[1]:
+            with open(f"{directory}.{file_name}.json", "w") as outfile:
+                outfile.write(self.fs)
+
     @abstractmethod
     def add_account(self, name: str, category: str, start_bal: float = 0.0, contra: bool = False) -> None:
         """

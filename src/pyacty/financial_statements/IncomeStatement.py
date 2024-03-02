@@ -15,7 +15,7 @@ class IncomeStatement(FinancialStatement):
         Here is an example of what the income statement looks like.\n
         Type is dict[str:dict[str:dict[str:any]]], if needed.
 
-        self.inc_stmt = {
+        self.fs = {
             "revenue": {
                 "general revenue": {
                     "d/c": "credit",\n
@@ -59,9 +59,7 @@ class IncomeStatement(FinancialStatement):
                 break
             except KeyError:
                 pass
-        # Else statement called when for loop completes itteration without breaking.
         else:
-            # Calling an exception here will be more exspected and easier for the programmer to catch.
             raise KeyError("Account not found!")
 
     def true_value(self, account: str) -> float:

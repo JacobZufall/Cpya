@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/taxpy.iml" filepath="$PROJECT_DIR$/.idea/taxpy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/pyacty.iml" filepath="$PROJECT_DIR$/.idea/pyacty.iml" />
     </modules>
   </component>
 </project>

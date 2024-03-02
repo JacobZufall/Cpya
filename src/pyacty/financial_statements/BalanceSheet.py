@@ -14,7 +14,7 @@ class BalanceSheet(FinancialStatement):
         """
         Here is an example of what the balance sheet looks like.\n
 
-        self.bs = {
+        self.fs = {
             "asset": {
                 "cash": {
                     "d/c": "debit",\n
@@ -59,9 +59,9 @@ class BalanceSheet(FinancialStatement):
         }
 
     def del_account(self, name: str) -> None:
-        for category in BS_CATEGORIES:
+        for bs_category in BS_CATEGORIES:
             try:
-                self.fs[category].pop(name)
+                self.fs[bs_category].pop(name)
                 break
             except KeyError:
                 pass
@@ -79,9 +79,17 @@ class BalanceSheet(FinancialStatement):
             "equity": 0.0
         }
 
-        for category, account in self.fs.items():
-            for component, value in account.items():
-                if component == "bal":
-                    totals[category] += value
+        for bs_category, bs_account in self.fs.items():
+            for attribute, value in bs_account.items():
+                if attribute == "bal":
+                    totals[bs_category] += value
 
         return totals["asset"] == (totals["liability"] + totals["equity"])
+
+
+if __name__ == "__main__":
+    test_bs: BalanceSheet = BalanceSheet()
+    test_bs.add_account("Cash", "asset")
+    test_bs.add_account("Accounts Receivable", "asset")
+
+    test_bs.save_fs("C:\\Users\\jacob\\OneDrive\\Desktop\\output", "test")

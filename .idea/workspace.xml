@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a49b14fc-a951-47dd-bd19-77c5a467b5c2" name="Changes" comment="Removed bad test">
+    <list default="true" id="a49b14fc-a951-47dd-bd19-77c5a467b5c2" name="Changes" comment="Continued updating name">
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/taxpy/constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/constants.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/taxpy/financial_statements/BalanceSheet.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/financial_statements/BalanceSheet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/taxpy/financial_statements/FinancialStatement.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/financial_statements/FinancialStatement.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/taxpy/financial_statements/IncomeStatement.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/taxpy/financial_statements/IncomeStatement.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/BalanceSheet.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/BalanceSheet.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/FinancialStatement.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/FinancialStatement.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/IncomeStatement.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/IncomeStatement.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,6 +73,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Python.Asset.executor": "Run",
+    "Python.BalanceSheet.executor": "Run",
     "Python.TangibleAsset.executor": "Run",
     "Python.constants.executor": "Run",
     "Python.tangible_asset.executor": "Run",
@@ -156,6 +157,8 @@
       <workItem from="1708381047163" duration="5000" />
       <workItem from="1708751574286" duration="1964000" />
       <workItem from="1708888434450" duration="1364000" />
+      <workItem from="1709038983653" duration="626000" />
+      <workItem from="1709338570793" duration="4053000" />
     </task>
     <task id="LOCAL-00001" summary="Added balance_sheet.py, and other things">
       <created>1686756190237</created>
@@ -275,7 +278,23 @@
       <option name="project" value="LOCAL" />
       <updated>1708752887347</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Updated name">
+      <option name="closed" value="true" />
+      <created>1708967496012</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1708967496012</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Continued updating name">
+      <option name="closed" value="true" />
+      <created>1708967520544</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1708967520544</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -318,7 +337,9 @@
     <MESSAGE value="Refined FinancialStatement.py" />
     <MESSAGE value="Updated DefaultBalance.py" />
     <MESSAGE value="Removed bad test" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed bad test" />
+    <MESSAGE value="Updated name" />
+    <MESSAGE value="Continued updating name" />
+    <option name="LAST_COMMIT_MESSAGE" value="Continued updating name" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/taxpy$income_statement.coverage" NAME="income_statement Coverage Results" MODIFIED="1686765210559" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy/financial_statements" />
@@ -331,5 +352,6 @@
     <SUITE FILE_PATH="coverage/TaxPy$TangibleAsset.coverage" NAME="TangibleAsset Coverage Results" MODIFIED="1708227656471" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy/assets" />
     <SUITE FILE_PATH="coverage/taxpy$qbi.coverage" NAME="qbi Coverage Results" MODIFIED="1686667289055" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy" />
     <SUITE FILE_PATH="coverage/taxpy$financial_statement.coverage" NAME="financial_statement Coverage Results" MODIFIED="1686840690906" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy/financial_statements" />
+    <SUITE FILE_PATH="coverage/pyacty$BalanceSheet.coverage" NAME="BalanceSheet Coverage Results" MODIFIED="1709344308105" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/pyacty/financial_statements" />
   </component>
 </project>
