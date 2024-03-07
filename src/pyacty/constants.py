@@ -2,34 +2,36 @@
 constants.py
 """
 
+from typing import Final
+
 # Balance types
-CREDIT: str = "credit"
-DEBIT: str = "debit"
-BAL_TYPES: list[str] = [
+CREDIT: Final[str] = "credit"
+DEBIT: Final[str] = "debit"
+BAL_TYPES: Final[list[str]] = [
     CREDIT,
     DEBIT,
 ]
 
 # Balance sheet account categories
-ASSET: str = "asset"
-LIABILITY: str = "liability"
-EQUITY: str = "equity"
-BS_CATEGORIES: list[str] = [
+ASSET: Final[str] = "asset"
+LIABILITY: Final[str] = "liability"
+EQUITY: Final[str] = "equity"
+BS_CATEGORIES: Final[list[str]] = [
     ASSET,
     LIABILITY,
     EQUITY,
 ]
 
 # Income statement account categories
-REVENUE: str = "revenue"
-EXPENSE: str = "expense"
-IS_CATEGORIES: list[str] = [
+REVENUE: Final[str] = "revenue"
+EXPENSE: Final[str] = "expense"
+IS_CATEGORIES: Final[list[str]] = [
     REVENUE,
     EXPENSE
 ]
 
 # Comprehensive list of all categories
-ALL_CATEGORIES: list[str] = []
+ALL_CATEGORIES: Final[list[str]] = []
 
 for category in BS_CATEGORIES or IS_CATEGORIES:
     ALL_CATEGORIES.append(category)

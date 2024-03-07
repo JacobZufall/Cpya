@@ -3,6 +3,7 @@ TangibleAsset.py
 """
 
 from src.pyacty.assets.Asset import Asset
+from typing import override
 
 
 class TangibleAsset(Asset):
@@ -15,26 +16,38 @@ class TangibleAsset(Asset):
         :param prod_cap: The production capacity of the asset (if applicable).
         """
         super().__init__(name, life, value)
-        self.SLVG_VALUE: float = slvg_value
+        self.slvg_value: float = slvg_value
         self.prod_cap: int = prod_cap
 
         # The reason these are lists is so that someone can easily recall what the depreciation or total depreciation
         # was n amount of years ago. For example, you can write "self.last_depr[-1]" to get the depreciation from the
         # most recent period.
         # This is the $ amount that can be depreciated.
-        self.depreciable_value: list[float] = [self.value - self.SLVG_VALUE]
+        self.depreciable_value: list[float] = [self.value - self.slvg_value]
         self.last_depr: list[float] = [0.0]
         self.total_depr: list[float] = [0.0]
 
+    @override
     def reset(self) -> None:
         super().reset()
-        self.depreciable_value = [self.value - self.SLVG_VALUE]
+        self.depreciable_value = [self.value - self.slvg_value]
         self.last_depr = [0.0]
         self.total_depr = [0.0]
 
+    @override
     def change_value(self, new_value: float) -> None:
         super().change_value(new_value)
-        self.depreciable_value.append(self.value - self.SLVG_VALUE)
+        self.depreciable_value.append(self.value - self.slvg_value)
+
+    def update_slvg(self, new_slvg: float) -> None:
+        """
+        Updates the salvage value of the asset.
+        :param new_slvg: The new salvage value of the asset.
+        :return: Nothing
+        """
+        self.slvg_value = new_slvg
+        # Need to update self.depreciable_value, so we just run change_value but use the current value as the new value.
+        self.change_value(self.value)
 
     def _update_attribs(self, periods: int) -> None:
         """
@@ -44,7 +57,7 @@ class TangibleAsset(Asset):
         """
         self.value -= self.last_depr[-1]
         self.total_depr.append(self.total_depr[-1] + self.last_depr[-1])
-        self.depreciable_value.append(self.value - self.SLVG_VALUE)
+        self.depreciable_value.append(self.value - self.slvg_value)
         self.rem_life -= periods
 
     def _validate_depreciation(self, depr_amt: float) -> bool:
@@ -69,7 +82,7 @@ class TangibleAsset(Asset):
             match method:
                 # Straight Line
                 case 0:
-                    depr_amt: float = ((self.DEF_VALUE - self.SLVG_VALUE) / self.LIFE) * periods
+                    depr_amt: float = ((self.def_value - self.slvg_value) / self.life) * periods
 
                     if self._validate_depreciation(depr_amt):
                         self.last_depr.append(depr_amt)
@@ -80,7 +93,7 @@ class TangibleAsset(Asset):
 
                 # Declining Balance
                 case 1:
-                    depr_amt: float = (((self.DEF_VALUE - self.total_depr[-1]) / self.LIFE) * decline) * periods
+                    depr_amt: float = (((self.def_value - self.total_depr[-1]) / self.life) * decline) * periods
 
                     if self._validate_depreciation(depr_amt):
                         self.last_depr.append(depr_amt)
@@ -91,7 +104,7 @@ class TangibleAsset(Asset):
 
                 # Sum of the Years' Digits
                 case 2:
-                    depr_amt: float = (self.DEF_VALUE - self.SLVG_VALUE) * ((self.rem_life / 12) / self.syd)
+                    depr_amt: float = (self.def_value - self.slvg_value) * ((self.rem_life / 12) / self.syd)
 
                     if self._validate_depreciation(depr_amt):
                         self.last_depr.append(depr_amt)

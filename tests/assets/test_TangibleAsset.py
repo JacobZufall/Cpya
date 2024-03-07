@@ -62,8 +62,8 @@ def calc_assertions() -> None:
     # Straight-line depreciation test
     depreciate_scenarios(0, scenarios, conditions)
     for _, asset in scenarios.items():
-        assert asset.depreciable_value[-1] == asset.value - asset.SLVG_VALUE
-        assert asset.last_depr[-1] == ((asset.DEF_VALUE - asset.SLVG_VALUE) / asset.LIFE) * conditions[
+        assert asset.depreciable_value[-1] == asset.value - asset.slvg_value
+        assert asset.last_depr[-1] == ((asset.def_value - asset.slvg_value) / asset.life) * conditions[
             "test_periods"] or asset.depreciable_value[-2]
 
     reset_scenarios(scenarios)
@@ -71,11 +71,11 @@ def calc_assertions() -> None:
     # Declining balance depreciation test
     depreciate_scenarios(1, scenarios, conditions)
     for _, asset in scenarios.items():
-        assert asset.depreciable_value[-1] == asset.value - asset.SLVG_VALUE
+        assert asset.depreciable_value[-1] == asset.value - asset.slvg_value
         # asset.total_depr[-2] retrieves the total depreciation prior to asset.depreciate() being called on the first
         # line of this loop.
         # Also, I have no idea why PyCharm wants to format it this way, but I'll leave it for now.
-        assert (asset.last_depr[-1] == (((asset.DEF_VALUE - (asset.total_depr[-2] or 0)) / asset.LIFE) *
+        assert (asset.last_depr[-1] == (((asset.def_value - (asset.total_depr[-2] or 0)) / asset.life) *
                                         conditions["db_decline"]) * conditions["test_periods"] or
                 asset.depreciable_value[-2])
 
@@ -84,8 +84,8 @@ def calc_assertions() -> None:
     # Sum of the years' digits depreciation test
     depreciate_scenarios(2, scenarios, conditions)
     for _, asset in scenarios.items():
-        assert asset.depreciable_value[-1] == asset.value - asset.SLVG_VALUE
-        assert (asset.last_depr[-1] == asset.DEF_VALUE * (asset.rem_life + conditions["test_periods"]) / asset.syd or
+        assert asset.depreciable_value[-1] == asset.value - asset.slvg_value
+        assert (asset.last_depr[-1] == asset.def_value * (asset.rem_life + conditions["test_periods"]) / asset.syd or
                 asset.depreciable_value[-2])
 
     reset_scenarios(scenarios)
@@ -93,7 +93,7 @@ def calc_assertions() -> None:
     # Units of production depreciation test
     depreciate_scenarios(3, scenarios, conditions)
     for _, asset in scenarios.items():
-        assert asset.depreciable_value[-1] == asset.value - asset.SLVG_VALUE
+        assert asset.depreciable_value[-1] == asset.value - asset.slvg_value
         assert (asset.last_depr[-1] == (asset.depreciable_value[-2] / asset.prod_cap) * conditions["units_prod"] or
                 asset.depreciable_value[-2])
 

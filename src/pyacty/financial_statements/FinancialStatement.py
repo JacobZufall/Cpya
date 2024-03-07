@@ -10,7 +10,7 @@ from csv import writer
 import json
 from src.pyacty.constants import ALL_CATEGORIES
 from abc import abstractmethod
-from typing import TypeAlias, TextIO
+from typing import TypeAlias, TextIO, final
 
 # Is there a way to tie this to the class?
 fnstmt: TypeAlias = dict[str:dict[str:dict[str:any]]]
@@ -20,6 +20,7 @@ class FinancialStatement:
     def __init__(self) -> None:
         self.fs: fnstmt = {}
 
+    @final
     def true_value(self, account: str) -> float:
         """
         Finds the true value of an account, which is a positive float if the normal balance of the account is a
@@ -42,6 +43,8 @@ class FinancialStatement:
         else:
             raise KeyError("Account not found!")
 
+    # This method should be changed so that it saves both by default.
+    @final
     def save_fs(self, directory: str, file_name: str, file_type: str = "csv") -> None:
         """
         Saves the financial statement to the given directory.

@@ -2,6 +2,8 @@
 Asset.py
 """
 
+from typing import final
+
 
 class Asset:
     def __init__(self, name: str, life: int, value: float) -> None:
@@ -12,31 +14,32 @@ class Asset:
         """
         self.name: str = name
 
-        self.LIFE: int = life
+        self.life: int = life
         self.rem_life: int = life
 
-        self.DEF_VALUE: float = value
+        self.def_value: float = value
         self.value: float = value
 
-        self.syd: int = self._calc_syd(self.LIFE)
+        self.syd: int = self._calc_syd(self.life)
 
     def reset(self) -> None:
         """
         Returns an asset to its original state. Designed to be used for testing.
         :return: Nothing.
         """
-        self.value = self.DEF_VALUE
-        self.rem_life = self.LIFE
+        self.value = self.def_value
+        self.rem_life = self.life
 
+    @final
     def change_life(self, new_life: int) -> None:
         """
         Changes the base-life of the asset and appropriately updates other attributes.
         :param new_life: The new life of the asset.
         :return: Nothing.
         """
-        self.rem_life += new_life - self.LIFE
-        self.LIFE = new_life
-        self.syd = self._calc_syd(self.LIFE)
+        self.rem_life += new_life - self.life
+        self.life = new_life
+        self.syd = self._calc_syd(self.life)
 
     def change_value(self, new_value: float) -> None:
         """
@@ -44,8 +47,8 @@ class Asset:
         :param new_value: The new value of the asset.
         :return: Nothing.
         """
-        self.value += new_value - self.DEF_VALUE
-        self.DEF_VALUE = new_value
+        self.value += new_value - self.def_value
+        self.def_value = new_value
 
     @staticmethod
     def _calc_syd(life: int) -> int:

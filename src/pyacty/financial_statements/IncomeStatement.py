@@ -4,7 +4,7 @@ IncomeStatement.py
 
 from FinancialStatement import FinancialStatement
 from src.pyacty.constants import IS_CATEGORIES
-from typing import TypeAlias
+from typing import TypeAlias, override
 
 fnstmt: TypeAlias = dict[str:dict[str:dict[str:any]]]
 
@@ -37,6 +37,7 @@ class IncomeStatement(FinancialStatement):
             "expense": {}
         }
 
+    @override
     def add_account(self, name: str, category: str, start_bal: float = 0.0, contra: bool = False) -> None:
         if category not in IS_CATEGORIES:
             raise ValueError("Invalid category type.")
@@ -53,6 +54,7 @@ class IncomeStatement(FinancialStatement):
             "bal": start_bal
         }
 
+    @override
     def del_account(self, name: str) -> None:
         for is_category in IS_CATEGORIES:
             try:

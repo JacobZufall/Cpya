@@ -4,7 +4,7 @@ BalanceSheet.py
 
 from FinancialStatement import FinancialStatement
 from src.pyacty.constants import BS_CATEGORIES
-from typing import TypeAlias
+from typing import TypeAlias, override
 
 fnstmt: TypeAlias = dict[str:dict[str:dict[str:any]]]
 
@@ -44,6 +44,7 @@ class BalanceSheet(FinancialStatement):
             "equity": {}
         }
 
+    @override
     def add_account(self, name: str, category: str, start_bal: float = 0.0, contra: bool = False) -> None:
         if category not in BS_CATEGORIES:
             raise ValueError("Invalid category type.")
@@ -60,6 +61,7 @@ class BalanceSheet(FinancialStatement):
             "bal": start_bal
         }
 
+    @override
     def del_account(self, name: str) -> None:
         for bs_category in BS_CATEGORIES:
             try:
