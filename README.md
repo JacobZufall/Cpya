@@ -9,7 +9,7 @@ still in its infancy, so most potential uses are yet to emerge.
 
 ![Alt](https://repobeats.axiom.co/api/embed/f31d1c5c736b02981b1ad482843044ed315ce5e1.svg "Repobeats analytics image")
 
-## Verizon Format
+## Version Format
 
 All releases will be tagged as v[YYYY].[MM].[DD]-rV.
 
