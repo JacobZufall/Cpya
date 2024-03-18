@@ -10,10 +10,8 @@ from csv import writer
 import json
 from src.pyacty.constants import ALL_CATEGORIES
 from abc import abstractmethod
-from typing import TypeAlias, TextIO, final
-
-# Is there a way to tie this to the class?
-fnstmt: TypeAlias = dict[str:dict[str:dict[str:any]]]
+from typing import TextIO, final
+from src.pyacty.custom_types import fnstmt
 
 
 class FinancialStatement:
@@ -43,9 +41,9 @@ class FinancialStatement:
         else:
             raise KeyError("Account not found!")
 
-    # This method should be changed so that it saves both by default.
+    # I'm sorry.
     @final
-    def save_fs(self, directory: str, file_name: str, file_type: str = "csv") -> None:
+    def save_fs(self, directory: str, file_name: str, file_type: str = "all") -> None:
         """
         Saves the financial statement to the given directory.
         :param directory: The directory to save the financial statement to.
@@ -54,10 +52,6 @@ class FinancialStatement:
         :return: Nothing.
         """
         valid_file_types: list[str] = ["csv", "json"]
-        outfile: TextIO
-
-        if file_type not in valid_file_types:
-            raise ValueError("Invalid valid type.")
 
         def make_file(extension: str) -> TextIO:
             """
@@ -67,42 +61,77 @@ class FinancialStatement:
             """
             return open(f"{directory}\\{file_name}.{extension}", "w", newline="")
 
-        # CSV file
-        if file_type.lower() == valid_file_types[0]:
-            try:
-                outfile = make_file("csv")
+        def save_files(option: int) -> None:
+            """
+            Saves files specified by the argument.\n
+            0: Saves all files.
+            1: Saves CSV file only.
+            2: Saves JSON file only.
+            :param option: What files to save to.
+            :return: Nothing
+            """
+            outfile: TextIO
 
-            except FileNotFoundError:
-                os.mkdir(directory)
-                outfile = make_file("csv")
+            # Having "or option == 0" included in each conditional makes it possible to save each file. It's also why
+            # these are separate conditional statements and aren't chained.
 
-            csv_writer: writer = csv.writer(outfile)
+            # CSV file
+            if option == 1 or option == 0:
+                try:
+                    outfile = make_file("csv")
 
-            for fs_category, fs_accounts in self.fs.items():
-                csv_writer.writerow([fs_category.capitalize()])
+                except FileNotFoundError:
+                    os.mkdir(directory)
+                    outfile = make_file("csv")
 
-                for account, attributes in fs_accounts.items():
-                    value: float = 0.0
+                csv_writer: writer = csv.writer(outfile)
 
-                    for attribute, info in attributes.items():
-                        if attribute == "bal":
-                            value = info
+                for fs_category, fs_accounts in self.fs.items():
+                    csv_writer.writerow([fs_category.capitalize()])
 
-                    csv_writer.writerow(["", account, value])
+                    for account, attributes in fs_accounts.items():
+                        value: float = 0.0
 
-            outfile.close()
+                        for attribute, info in attributes.items():
+                            if attribute == "bal":
+                                value = info
 
-        # JSON file
-        elif file_type.lower() == valid_file_types[1]:
-            try:
-                outfile = make_file("json")
+                        csv_writer.writerow(["", account, value])
 
-            except FileNotFoundError:
-                os.mkdir(directory)
-                outfile = make_file("json")
+                outfile.close()
 
-            outfile.write(json.dumps(self.fs, indent=4))
-            outfile.close()
+            # JSON file
+            if option == 2 or option == 0:
+                try:
+                    outfile = make_file("json")
+
+                except FileNotFoundError:
+                    os.mkdir(directory)
+                    outfile = make_file("json")
+
+                outfile.write(json.dumps(self.fs, indent=4))
+                outfile.close()
+
+        if file_type == "all":
+            save_files(0)
+
+        else:
+            if file_type not in valid_file_types:
+                raise ValueError("Invalid valid type.")
+
+            if file_type.lower() == "csv":
+                save_files(1)
+            else:
+                save_files(2)
+
+    def load_fs(self):
+        """
+        Considerations for this method:
+        - Should it be overridden or final?
+        - Should it return the loaded file or modify self.fs directly?
+        - Should we only load JSON files or CSV files too?
+        """
+        pass
 
     @abstractmethod
     def add_account(self, name: str, category: str, start_bal: float = 0.0, contra: bool = False) -> None:

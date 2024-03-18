@@ -4,9 +4,8 @@ IncomeStatement.py
 
 from FinancialStatement import FinancialStatement
 from src.pyacty.constants import IS_CATEGORIES
-from typing import TypeAlias, override
-
-fnstmt: TypeAlias = dict[str:dict[str:dict[str:any]]]
+from typing import override
+from src.pyacty.custom_types import fnstmt
 
 
 class IncomeStatement(FinancialStatement):
@@ -32,7 +31,7 @@ class IncomeStatement(FinancialStatement):
         }
         """
         super().__init__()
-        self.fs = {
+        self.fs: fnstmt = {
             "revenue": {},
             "expense": {}
         }

@@ -4,9 +4,8 @@ BalanceSheet.py
 
 from FinancialStatement import FinancialStatement
 from src.pyacty.constants import BS_CATEGORIES
-from typing import TypeAlias, override
-
-fnstmt: TypeAlias = dict[str:dict[str:dict[str:any]]]
+from typing import override
+from src.pyacty.custom_types import fnstmt
 
 
 class BalanceSheet(FinancialStatement):
