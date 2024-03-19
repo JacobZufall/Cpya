@@ -2,6 +2,8 @@
 DefaultBalance.py
 """
 
+from src.pyacty.constants import ALL_CATEGORIES
+
 
 class DefaultBalance:
     def __init__(self, category: str, contra: bool = False):
@@ -34,6 +36,10 @@ class DefaultBalance:
         :param contra: Is the account a contra-account?
         :return: The default balance, which is "debit" or "credit" depending on the category.
         """
+        if category not in ALL_CATEGORIES:
+            # I don't think this will ever be raised because other files check this first, but it's a good failsafe.
+            raise ValueError("Invalid category type.")
+
         if not contra:
             return self.__getattribute__(category)
         else:

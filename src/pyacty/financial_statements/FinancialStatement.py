@@ -3,19 +3,27 @@ FinancialStatement.py
 
 This class is mostly abstract because each financial statement is extremely unique. However, many of them require
 similar functions, which is why this class exists and is inherited from.
+
+This class also allows flexibility if someone wants to create their own financial statement from scratch.
 """
+
 import os
 import csv
 from csv import writer
 import json
-from src.pyacty.constants import ALL_CATEGORIES
 from abc import abstractmethod
 from typing import TextIO, final
+
+from src.pyacty.constants import ALL_CATEGORIES
 from src.pyacty.custom_types import fnstmt
+from src.pyacty.custom_exceptions import SupportError
 
 
 class FinancialStatement:
     def __init__(self) -> None:
+        """
+        A blank financial statement.
+        """
         self.fs: fnstmt = {}
 
     @final
@@ -67,7 +75,7 @@ class FinancialStatement:
             0: Saves all files.
             1: Saves CSV file only.
             2: Saves JSON file only.
-            :param option: What files to save to.
+            :param option: What types of files to save.
             :return: Nothing
             """
             outfile: TextIO
@@ -124,14 +132,17 @@ class FinancialStatement:
             else:
                 save_files(2)
 
-    def load_fs(self):
+    def load_fs(self, directory: str):
         """
         Considerations for this method:
         - Should it be overridden or final?
         - Should it return the loaded file or modify self.fs directly?
         - Should we only load JSON files or CSV files too?
         """
-        pass
+        if not directory.lower().endswith(".json"):
+            raise SupportError("PyActy only supports loading .JSON files!")
+
+        self.fs = json.load(open(directory))
 
     @abstractmethod
     def add_account(self, name: str, category: str, start_bal: float = 0.0, contra: bool = False) -> None:

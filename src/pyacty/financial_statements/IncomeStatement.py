@@ -2,9 +2,11 @@
 IncomeStatement.py
 """
 
-from FinancialStatement import FinancialStatement
-from src.pyacty.constants import IS_CATEGORIES
 from typing import override
+
+from src.pyacty.financial_statements.FinancialStatement import FinancialStatement
+from src.pyacty.financial_statements.DefaultBalance import DefaultBalance
+from src.pyacty.constants import IS_CATEGORIES
 from src.pyacty.custom_types import fnstmt
 
 
@@ -41,38 +43,20 @@ class IncomeStatement(FinancialStatement):
         if category not in IS_CATEGORIES:
             raise ValueError("Invalid category type.")
 
-        def_bal: str
-
-        if category == "revenue":
-            def_bal = "credit" if not contra else "debit"
-        else:
-            def_bal = "debit" if not contra else "credit"
+        db: DefaultBalance = DefaultBalance(category, contra)
 
         self.fs[category][name] = {
-            "d/c": def_bal,
+            "d/c": db.def_bal,
             "bal": start_bal
         }
 
     @override
     def del_account(self, name: str) -> None:
-        for is_category in IS_CATEGORIES:
+        for category in IS_CATEGORIES:
             try:
-                self.fs[is_category].pop(name)
+                self.fs[category].pop(name)
                 break
             except KeyError:
                 pass
         else:
             raise KeyError("Account not found!")
-
-
-if __name__ == "__main__":
-    inc_stmt: IncomeStatement = IncomeStatement()
-
-    inc_stmt.add_account("Revenue", "revenue", 1_000_000)
-    inc_stmt.add_account("Interest Revenue", "revenue", 500_000)
-
-    inc_stmt.add_account("Interest Expense", "expense", 5_000)
-    inc_stmt.add_account("Depreciation Expense", "expense", 500)
-
-    inc_stmt.save_fs("C:\\Users\\jacob\\OneDrive\\Desktop\\output", "test_is", "csv")
-    inc_stmt.save_fs("C:\\Users\\jacob\\OneDrive\\Desktop\\output", "test_is", "json")

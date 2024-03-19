@@ -1,6 +1,7 @@
 """
 test_TangibleAsset.py
 """
+
 from src.pyacty.assets.TangibleAsset import TangibleAsset
 
 # Define test scenarios here.

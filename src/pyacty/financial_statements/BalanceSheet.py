@@ -2,9 +2,11 @@
 BalanceSheet.py
 """
 
-from FinancialStatement import FinancialStatement
-from src.pyacty.constants import BS_CATEGORIES
 from typing import override
+
+from src.pyacty.financial_statements.FinancialStatement import FinancialStatement
+from src.pyacty.financial_statements.DefaultBalance import DefaultBalance
+from src.pyacty.constants import BS_CATEGORIES
 from src.pyacty.custom_types import fnstmt
 
 
@@ -48,23 +50,18 @@ class BalanceSheet(FinancialStatement):
         if category not in BS_CATEGORIES:
             raise ValueError("Invalid category type.")
 
-        def_bal: str
-
-        if category == "asset":
-            def_bal = "debit" if not contra else "credit"
-        else:
-            def_bal = "credit" if not contra else "debit"
+        db: DefaultBalance = DefaultBalance(category, contra)
 
         self.fs[category][name] = {
-            "d/c": def_bal,
+            "d/c": db.def_bal,
             "bal": start_bal
         }
 
     @override
     def del_account(self, name: str) -> None:
-        for bs_category in BS_CATEGORIES:
+        for category in BS_CATEGORIES:
             try:
-                self.fs[bs_category].pop(name)
+                self.fs[category].pop(name)
                 break
             except KeyError:
                 pass
@@ -88,18 +85,3 @@ class BalanceSheet(FinancialStatement):
                     totals[bs_category] += value
 
         return totals["asset"] == (totals["liability"] + totals["equity"])
-
-
-if __name__ == "__main__":
-    bal_sht: BalanceSheet = BalanceSheet()
-
-    bal_sht.add_account("Cash", "asset", 1_000_000)
-    bal_sht.add_account("Accounts Receivable (net)", "asset", 500_000)
-
-    bal_sht.add_account("Accounts Payable", "liability", 5_000)
-    bal_sht.add_account("Bonds Payable", "liability", 500)
-
-    bal_sht.add_account("Retained Earnings", "equity", 765_000)
-
-    bal_sht.save_fs("C:\\Users\\jacob\\OneDrive\\Desktop\\output", "test", "csv")
-    bal_sht.save_fs("C:\\Users\\jacob\\OneDrive\\Desktop\\output", "test", "json")
