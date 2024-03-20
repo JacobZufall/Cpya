@@ -31,7 +31,7 @@ class Asset:
         self.rem_life = self.life
 
     @final
-    def change_life(self, new_life: int) -> None:
+    def update_life(self, new_life: int) -> None:
         """
         Changes the base-life of the asset and appropriately updates other attributes.
         :param new_life: The new life of the asset.
@@ -41,7 +41,7 @@ class Asset:
         self.life = new_life
         self.syd = self._calc_syd(self.life)
 
-    def change_value(self, new_value: float) -> None:
+    def update_value(self, new_value: float) -> None:
         """
         Changes the base-value of the asset and appropriately updates other attributes.
         :param new_value: The new value of the asset.
