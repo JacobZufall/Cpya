@@ -12,7 +12,7 @@ import csv
 from csv import writer
 import json
 from abc import abstractmethod
-from typing import TextIO, final
+from typing import TextIO, final, override
 
 from src.pyacty.constants import ALL_CATEGORIES
 from src.pyacty.custom_types import fnstmt
@@ -25,6 +25,14 @@ class FinancialStatement:
         A blank financial statement.
         """
         self.fs: fnstmt = {}
+
+    @override
+    def __str__(self):
+        return f"{self.fs}"
+
+    @override
+    def __repr__(self):
+        return f"{self.__class__.__name__}: {self.__dict__}"
 
     @final
     def true_value(self, account: str) -> float:

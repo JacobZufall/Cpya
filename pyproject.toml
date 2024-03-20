@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyacty"
+version = "2023.12.31-r1"
+authors = [
+    {name="Jacob Zufall", email="jacobzufall@gmail.com"}
+]
+description = "The Python package for accounting."
+readme = "README.md"
+requires-python= ">3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/JacobZufall/pyacty"
+Issues = "https://github.com/JacobZufall/pyacty/issues"

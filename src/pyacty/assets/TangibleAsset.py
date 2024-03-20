@@ -2,8 +2,10 @@
 TangibleAsset.py
 """
 
-from src.pyacty.assets.Asset import Asset
 from typing import override
+from vardelta import Delta
+
+from src.pyacty.assets.Asset import Asset
 
 
 class TangibleAsset(Asset):
@@ -26,6 +28,15 @@ class TangibleAsset(Asset):
         self.depreciable_value: list[float] = [self.value - self.slvg_value]
         self.last_depr: list[float] = [0.0]
         self.total_depr: list[float] = [0.0]
+
+    @override
+    def __str__(self):
+        return (f"{self.name} has a life of {self.life:,} months, a value of ${self.value:,}, a salvage value of "
+                f"${self.slvg_value:,}, and a production capacity of {self.prod_cap:,} units.")
+
+    @override
+    def __repr__(self):
+        return f"{self.__class__.__name__}: {self.__dict__}"
 
     @override
     def reset(self) -> None:
