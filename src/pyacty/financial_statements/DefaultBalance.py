@@ -13,6 +13,10 @@ class DefaultBalance:
         :param category: The category of the account (asset, liability, equity, revenue, and expense).
         :param contra: Is the account a contra-account?
         """
+        # Store these incase someone needs to recall them later for some reason.
+        self.category: str = category.lower()
+        self.contra: bool = contra
+
         # Balance sheet accounts
         self.asset: str = "debit"
         self.contra_asset: str = "credit"
@@ -27,7 +31,7 @@ class DefaultBalance:
         self.expense: str = "debit"
         self.contra_expense: str = "credit"
 
-        self.def_bal: str = self.find_account(category, contra)
+        self.def_bal: str = self.find_account(self.category, self.contra)
 
     def find_account(self, category: str, contra: bool = False) -> str:
         """

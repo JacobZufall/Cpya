@@ -84,6 +84,9 @@ class FinancialStatement:
             # these are separate conditional statements and aren't chained.
 
             # CSV file
+            # TODO: When saving to a CSV file, we need to make contra-accounts negative/positive depending on what the
+            #  non-contra equivalent is. For example, treasury stock should be stored in the CSV file as a negative
+            #  number. Expenses should be negative as well. The true_value() function should be useful for this.
             if option == 1 or option == 0:
                 try:
                     outfile = make_file("csv")

@@ -40,12 +40,12 @@ class IncomeStatement(FinancialStatement):
 
     @override
     def add_account(self, name: str, category: str, start_bal: float = 0.0, contra: bool = False) -> None:
-        if category not in IS_CATEGORIES:
+        if category.lower() not in IS_CATEGORIES:
             raise ValueError("Invalid category type.")
 
-        db: DefaultBalance = DefaultBalance(category, contra)
+        db: DefaultBalance = DefaultBalance(category.lower(), contra)
 
-        self.fs[category][name] = {
+        self.fs[category.lower()][name] = {
             "d/c": db.def_bal,
             "bal": start_bal
         }

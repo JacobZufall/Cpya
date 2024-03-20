@@ -19,14 +19,16 @@ class BalanceSheet(FinancialStatement):
             "asset": {
                 "Cash": {
                     "d/c": "debit",\n
-                    "bal": 0.0
+                    "bal": 0.0,\n
+                    "term": "current"
                 }
             },
 
             "liability": {
                 "Accounts Payable": {
                     "d/c": "credit",\n
-                    "bal": 0.0
+                    "bal": 0.0,\n
+                    "term": "current"
                 }
             },
 
@@ -45,17 +47,33 @@ class BalanceSheet(FinancialStatement):
             "equity": {}
         }
 
+    # Contra should always be the last parameter because it's the least likely to be used, especially in balance sheet
+    # accounts.
     @override
-    def add_account(self, name: str, category: str, start_bal: float = 0.0, contra: bool = False) -> None:
-        if category not in BS_CATEGORIES:
+    def add_account(self, name: str, category: str, start_bal: float = 0.0, term: str = "current",
+                    contra: bool = False) -> None:
+
+        if category.lower() not in BS_CATEGORIES:
             raise ValueError("Invalid category type.")
 
-        db: DefaultBalance = DefaultBalance(category, contra)
+        if term.lower() not in ["current", "non-current"]:
+            raise ValueError("Invalid term.")
 
-        self.fs[category][name] = {
-            "d/c": db.def_bal,
-            "bal": start_bal
-        }
+        db: DefaultBalance = DefaultBalance(category.lower(), contra)
+
+        # Equity doesn't have separate sections for current and non-current, so we ignore it.
+        if category.lower() == "equity":
+            self.fs[category.lower()][name] = {
+                "d/c": db.def_bal,
+                "bal": start_bal
+            }
+
+        else:
+            self.fs[category.lower()][name] = {
+                "d/c": db.def_bal,
+                "bal": start_bal,
+                "term": term.lower()
+            }
 
     @override
     def del_account(self, name: str) -> None:
@@ -63,15 +81,18 @@ class BalanceSheet(FinancialStatement):
             try:
                 self.fs[category].pop(name)
                 break
+
             except KeyError:
                 pass
+
         else:
             raise KeyError("Account not found!")
 
-    def check_bs(self) -> bool:
+    def check_bs(self) -> (bool, str):
         """
         Checks if the balance sheet balances.
-        :return: Returns True if assets = liabilities + equity.
+        :return: Returns if the balance sheet balances (as a boolean) and the reason why it doesn't balance, if
+        applicable.
         """
         totals: dict[str:float] = {
             "asset": 0.0,
@@ -79,9 +100,21 @@ class BalanceSheet(FinancialStatement):
             "equity": 0.0
         }
 
-        for bs_category, bs_account in self.fs.items():
-            for attribute, value in bs_account.items():
-                if attribute == "bal":
-                    totals[bs_category] += value
+        for bs_category, bs_accounts in self.fs.items():
+            for account, attributes in bs_accounts.items():
+                for attribute, value in attributes.items():
+                    if attribute == "bal":
+                        totals[bs_category] += value
 
-        return totals["asset"] == (totals["liability"] + totals["equity"])
+        balances: bool = totals["asset"] == (totals["liability"] + totals["equity"])
+        reason: str = "Balance sheet is balanced, no reason applicable."
+
+        if not balances:
+            if totals["asset"] > (totals["liability"] + totals["equity"]):
+                reason = f"Assets exceeds liabilities and equity by {totals["asset"] - (totals["liability"] +
+                                                                                        totals["equity"])}"
+            else:
+                reason = f"Liabilities and equity exceeds assets by {(totals["liability"] + totals["equity"]) -
+                                                                     totals["asset"]}"
+
+        return balances, reason
