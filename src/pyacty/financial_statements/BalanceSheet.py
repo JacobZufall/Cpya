@@ -102,17 +102,7 @@ class BalanceSheet(FinancialStatement):
         :return: Returns if the balance sheet balances (as a boolean) and the reason why it doesn't balance, if
         applicable.
         """
-        totals: dict[str:float] = {
-            "asset": 0.0,
-            "liability": 0.0,
-            "equity": 0.0
-        }
-
-        for bs_category, bs_accounts in self.fs.items():
-            for account, attributes in bs_accounts.items():
-                for attribute, value in attributes.items():
-                    if attribute == "bal":
-                        totals[bs_category] += value
+        totals: dict[str:float] = self.total_accounts()
 
         balances: bool = totals["asset"] == (totals["liability"] + totals["equity"])
         reason: str = "Balance sheet is balanced, no reason applicable."

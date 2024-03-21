@@ -162,6 +162,17 @@ class FinancialStatement:
 
         self.fs = json.load(open(directory))
 
+    def total_accounts(self) -> dict[str:float]:
+        totals: dict[str:float] = {}
+
+        for category, accounts in self.fs.items():
+            for account, attributes in accounts.items():
+                for attribute, value in attributes.items():
+                    if attribute == "bal":
+                        totals[category] += value
+
+        return totals
+
     @abstractmethod
     def add_account(self, name: str, category: str, start_bal: float = 0.0, contra: bool = False) -> None:
         """

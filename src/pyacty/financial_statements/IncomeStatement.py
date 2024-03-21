@@ -39,6 +39,13 @@ class IncomeStatement(FinancialStatement):
         }
 
     @override
+    def reset(self) -> None:
+        self.fs = {
+            "revenue": {},
+            "expense": {}
+        }
+
+    @override
     def add_account(self, name: str, category: str, start_bal: float = 0.0, contra: bool = False) -> None:
         if category.lower() not in IS_CATEGORIES:
             raise ValueError("Invalid category type.")
@@ -56,7 +63,18 @@ class IncomeStatement(FinancialStatement):
             try:
                 self.fs[category].pop(name)
                 break
+
             except KeyError:
                 pass
+
         else:
             raise KeyError("Account not found!")
+
+    def net_income(self) -> float:
+        """
+        Calculates net income based on the current state of te income statement.
+        :return: Calculated net income.
+        """
+        totals: dict[str:float] = self.total_accounts()
+
+        return totals["revenue"] - totals["expense"]
