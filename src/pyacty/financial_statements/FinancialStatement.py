@@ -34,6 +34,13 @@ class FinancialStatement:
     def __repr__(self):
         return f"{self.__class__.__name__}: {self.__dict__}"
 
+    def reset(self) -> None:
+        """
+        Returns the financial statement to its default state.
+        :return: Nothing.
+        """
+        self.fs = {}
+
     @final
     def true_value(self, account: str) -> float:
         """

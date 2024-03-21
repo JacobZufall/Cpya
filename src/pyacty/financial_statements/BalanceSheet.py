@@ -47,6 +47,14 @@ class BalanceSheet(FinancialStatement):
             "equity": {}
         }
 
+    @override
+    def reset(self) -> None:
+        self.fs = {
+            "asset": {},
+            "liability": {},
+            "equity": {}
+        }
+
     # Contra should always be the last parameter because it's the least likely to be used, especially in balance sheet
     # accounts.
     @override
@@ -109,6 +117,7 @@ class BalanceSheet(FinancialStatement):
         balances: bool = totals["asset"] == (totals["liability"] + totals["equity"])
         reason: str = "Balance sheet is balanced, no reason applicable."
 
+        # If the balance sheet doesn't balance, this provides the reason why it doesn't balance.
         if not balances:
             if totals["asset"] > (totals["liability"] + totals["equity"]):
                 reason = f"Assets exceeds liabilities and equity by {totals["asset"] - (totals["liability"] +

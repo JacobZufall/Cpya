@@ -43,7 +43,7 @@ def depreciate_scenarios(method: int, scenario_dict: dict[str:any], cond_dict: d
         asset.last_depr[-1] = round(asset.last_depr.get_value(), 2)
 
 
-def calc_assertions() -> None:
+def calculation_test() -> None:
     """
     These assertions just re-do what was already done and aren't static. However, these are good for making sure you
     don't accidentally change how depreciation is calculated.
@@ -101,7 +101,7 @@ def calc_assertions() -> None:
     reset_scenarios(scenarios)
 
 
-def result_assertions() -> None:
+def result_test() -> None:
     """
     These assertions make sure we're getting the expected value, or the same value we get calculating it by hand or with
     another program that's reliable. I think the only thing that needs to be asserted is self.last_depr[-1]
@@ -174,5 +174,5 @@ def result_assertions() -> None:
 
 
 if __name__ == "__main__":
-    calc_assertions()
-    result_assertions()
+    calculation_test()
+    result_test()
