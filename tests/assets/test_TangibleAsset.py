@@ -40,7 +40,7 @@ def depreciate_scenarios(method: int, scenario_dict: dict[str:any], cond_dict: d
     for _, asset in scenario_dict.items():
         asset.depreciate(method, cond_dict["test_periods"], cond_dict["db_decline"], cond_dict["units_prod"])
         # Rounded to two decimal places, or pennies.
-        asset.last_depr[-1] = round(asset.last_depr[-1], 2)
+        asset.last_depr[-1] = round(asset.last_depr.get_value(), 2)
 
 
 def calc_assertions() -> None:

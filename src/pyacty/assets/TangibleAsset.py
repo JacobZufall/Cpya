@@ -66,7 +66,7 @@ class TangibleAsset(Asset):
         :param periods:
         :return: Nothing.
         """
-        self.value -= self.last_depr[-1]
+        self.value -= self.last_depr.get_value()
         self.total_depr.change_value(self.total_depr.get_value() + self.last_depr.get_value())
         self.depreciable_value.change_value(self.value - self.slvg_value)
         self.rem_life -= periods
