@@ -2,7 +2,7 @@
 Individual.py
 """
 
-from Entity import Entity
+from .Entity import Entity
 from src.pyacty.deductions.StandardDeduction import StandardDeduction
 
 

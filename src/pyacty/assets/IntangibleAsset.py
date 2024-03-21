@@ -2,7 +2,7 @@
 IntangibleAsset.py
 """
 
-from Asset import Asset
+from .Asset import Asset
 
 
 class IntangibleAsset(Asset):

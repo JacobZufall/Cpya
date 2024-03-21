@@ -4,8 +4,8 @@ BalanceSheet.py
 
 from typing import override
 
-from src.pyacty.financial_statements.FinancialStatement import FinancialStatement
-from src.pyacty.financial_statements.DefaultBalance import DefaultBalance
+from .FinancialStatement import FinancialStatement
+from .DefaultBalance import DefaultBalance
 from src.pyacty.constants import BS_CATEGORIES
 from src.pyacty.custom_types import fnstmt
 
