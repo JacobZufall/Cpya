@@ -40,7 +40,7 @@ def depreciate_scenarios(method: int, scenario_dict: dict[str:any], cond_dict: d
     for _, asset in scenario_dict.items():
         asset.depreciate(method, cond_dict["test_periods"], cond_dict["db_decline"], cond_dict["units_prod"])
         # Rounded to two decimal places, or pennies.
-        asset.last_depr[-1] = round(asset.last_depr.get_value(), 2)
+        asset.last_depr.change_value(round(asset.last_depr.get_value(), 2))
 
 
 def calculation_test() -> None:
@@ -63,40 +63,40 @@ def calculation_test() -> None:
     # Straight-line depreciation test
     depreciate_scenarios(0, scenarios, conditions)
     for _, asset in scenarios.items():
-        assert asset.depreciable_value[-1] == asset.value - asset.slvg_value
-        assert asset.last_depr[-1] == ((asset.def_value - asset.slvg_value) / asset.life) * conditions[
-            "test_periods"] or asset.depreciable_value[-2]
+        assert asset.depreciable_value.get_value() == asset.value - asset.slvg_value
+        assert asset.last_depr.get_value() == ((asset.def_value - asset.slvg_value) / asset.life) * conditions[
+            "test_periods"] or asset.depreciable_value.get_value(1)
 
     reset_scenarios(scenarios)
 
     # Declining balance depreciation test
     depreciate_scenarios(1, scenarios, conditions)
     for _, asset in scenarios.items():
-        assert asset.depreciable_value[-1] == asset.value - asset.slvg_value
+        assert asset.depreciable_value.get_value() == asset.value - asset.slvg_value
         # asset.total_depr[-2] retrieves the total depreciation prior to asset.depreciate() being called on the first
         # line of this loop.
         # Also, I have no idea why PyCharm wants to format it this way, but I'll leave it for now.
-        assert (asset.last_depr[-1] == (((asset.def_value - (asset.total_depr[-2] or 0)) / asset.life) *
-                                        conditions["db_decline"]) * conditions["test_periods"] or
-                asset.depreciable_value[-2])
+        assert (asset.last_depr.get_value() == (((asset.def_value - (asset.total_depr.get_value(1) or 0)) / asset.life)
+                                                * conditions["db_decline"]) * conditions["test_periods"] or
+                asset.depreciable_value.get_value(1))
 
     reset_scenarios(scenarios)
 
     # Sum of the years' digits depreciation test
     depreciate_scenarios(2, scenarios, conditions)
     for _, asset in scenarios.items():
-        assert asset.depreciable_value[-1] == asset.value - asset.slvg_value
-        assert (asset.last_depr[-1] == asset.def_value * (asset.rem_life + conditions["test_periods"]) / asset.syd or
-                asset.depreciable_value[-2])
+        assert asset.depreciable_value.get_value() == asset.value - asset.slvg_value
+        assert (asset.last_depr.get_value() == asset.def_value * (asset.rem_life + conditions["test_periods"]) /
+                asset.syd or asset.depreciable_value.get_value(1))
 
     reset_scenarios(scenarios)
 
     # Units of production depreciation test
     depreciate_scenarios(3, scenarios, conditions)
     for _, asset in scenarios.items():
-        assert asset.depreciable_value[-1] == asset.value - asset.slvg_value
-        assert (asset.last_depr[-1] == (asset.depreciable_value[-2] / asset.prod_cap) * conditions["units_prod"] or
-                asset.depreciable_value[-2])
+        assert asset.depreciable_value.get_value() == asset.value - asset.slvg_value
+        assert (asset.last_depr.get_value() == (asset.depreciable_value.get_value(1) / asset.prod_cap) *
+                conditions["units_prod"] or asset.depreciable_value.get_value(1))
 
     reset_scenarios(scenarios)
 
@@ -116,11 +116,11 @@ def result_test() -> None:
     # Straight-line depreciation test
     depreciate_scenarios(0, scenarios, conditions)
 
-    assert scenarios["scenario_01"].last_depr[-1] == 180.0
-    assert scenarios["scenario_02"].last_depr[-1] == 6_857.14
-    assert scenarios["scenario_03"].last_depr[-1] == 10_000.0
-    assert scenarios["scenario_04"].last_depr[-1] == 160_000.0
-    assert scenarios["scenario_05"].last_depr[-1] == 100_000.0
+    assert scenarios["scenario_01"].last_depr.get_value() == 180.0
+    assert scenarios["scenario_02"].last_depr.get_value() == 6_857.14
+    assert scenarios["scenario_03"].last_depr.get_value() == 10_000.0
+    assert scenarios["scenario_04"].last_depr.get_value() == 160_000.0
+    assert scenarios["scenario_05"].last_depr.get_value() == 100_000.0
 
     reset_scenarios(scenarios)
 
@@ -129,12 +129,12 @@ def result_test() -> None:
     conditions["db_decline"] = 1.5
     depreciate_scenarios(1, scenarios, conditions)
 
-    assert scenarios["scenario_01"].last_depr[-1] == 300.0
-    assert scenarios["scenario_02"].last_depr[-1] == 10_714.29
-    assert scenarios["scenario_03"].last_depr[-1] == 15_000.0
-    assert scenarios["scenario_04"].last_depr[-1] == 300_000.0
+    assert scenarios["scenario_01"].last_depr.get_value() == 300.0
+    assert scenarios["scenario_02"].last_depr.get_value() == 10_714.29
+    assert scenarios["scenario_03"].last_depr.get_value() == 15_000.0
+    assert scenarios["scenario_04"].last_depr.get_value() == 300_000.0
     # scenario_05 is unique because it should depreciate $150,000, but the asset is only worth $100,000.
-    assert scenarios["scenario_05"].last_depr[-1] == 100_000.0
+    assert scenarios["scenario_05"].last_depr.get_value() == 100_000.0
 
     reset_scenarios(scenarios)
 
@@ -142,33 +142,33 @@ def result_test() -> None:
     conditions["db_decline"] = 2.0
     depreciate_scenarios(1, scenarios, conditions)
 
-    assert scenarios["scenario_01"].last_depr[-1] == 400.0
-    assert scenarios["scenario_02"].last_depr[-1] == 14_285.71
-    assert scenarios["scenario_03"].last_depr[-1] == 20_000.0
-    assert scenarios["scenario_04"].last_depr[-1] == 400_000.0
-    assert scenarios["scenario_05"].last_depr[-1] == 100_000.0
+    assert scenarios["scenario_01"].last_depr.get_value() == 400.0
+    assert scenarios["scenario_02"].last_depr.get_value() == 14_285.71
+    assert scenarios["scenario_03"].last_depr.get_value() == 20_000.0
+    assert scenarios["scenario_04"].last_depr.get_value() == 400_000.0
+    assert scenarios["scenario_05"].last_depr.get_value() == 100_000.0
 
     reset_scenarios(scenarios)
 
     # Sum of the years' digits depreciation test
     depreciate_scenarios(2, scenarios, conditions)
 
-    assert scenarios["scenario_01"].last_depr[-1] == 300.0
-    assert scenarios["scenario_02"].last_depr[-1] == 12_000.0
-    assert scenarios["scenario_03"].last_depr[-1] == 18_181.82
-    assert scenarios["scenario_04"].last_depr[-1] == 307_692.31
-    assert scenarios["scenario_05"].last_depr[-1] == 100_000.0
+    assert scenarios["scenario_01"].last_depr.get_value() == 300.0
+    assert scenarios["scenario_02"].last_depr.get_value() == 12_000.0
+    assert scenarios["scenario_03"].last_depr.get_value() == 18_181.82
+    assert scenarios["scenario_04"].last_depr.get_value() == 307_692.31
+    assert scenarios["scenario_05"].last_depr.get_value() == 100_000.0
 
     reset_scenarios(scenarios)
 
     # Units of production depreciation test
     depreciate_scenarios(3, scenarios, conditions)
 
-    assert scenarios["scenario_01"].last_depr[-1] == 180.0
-    assert scenarios["scenario_02"].last_depr[-1] == 8_000.0
-    assert scenarios["scenario_03"].last_depr[-1] == 5_555.56
-    assert scenarios["scenario_04"].last_depr[-1] == 400_000.0
-    assert scenarios["scenario_05"].last_depr[-1] == 10_526.32
+    assert scenarios["scenario_01"].last_depr.get_value() == 180.0
+    assert scenarios["scenario_02"].last_depr.get_value() == 8_000.0
+    assert scenarios["scenario_03"].last_depr.get_value() == 5_555.56
+    assert scenarios["scenario_04"].last_depr.get_value() == 400_000.0
+    assert scenarios["scenario_05"].last_depr.get_value() == 10_526.32
 
     reset_scenarios(scenarios)
 

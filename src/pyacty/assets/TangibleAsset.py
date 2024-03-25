@@ -41,7 +41,7 @@ class TangibleAsset(Asset):
     @override
     def reset(self) -> None:
         super().reset()
-        self.depreciable_value = [self.value - self.slvg_value]
+        self.depreciable_value = Delta(self.value - self.slvg_value)
         self.last_depr.reset()
         self.total_depr.reset()
 
