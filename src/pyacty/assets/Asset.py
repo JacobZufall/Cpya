@@ -54,7 +54,7 @@ class Asset:
     def _calc_syd(life: int) -> int:
         """
         Calculates the sum of the years' digits to be used in calculating depreciation under the applicable method.
-        :param life: The life of the asset in months, usually self.LIFE when used internally.
+        :param life: The life of the asset in months, usually self.life when used internally.
         :return: Sum of the years' digits.
         """
         running_total: int = 0

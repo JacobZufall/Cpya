@@ -11,7 +11,7 @@ from src.pyacty.custom_types import fnstmt
 
 
 class BalanceSheet(FinancialStatement):
-    def __init__(self) -> None:
+    def __init__(self, **info) -> None:
         """
         Here is an example of what the balance sheet looks like.\n
 
@@ -40,12 +40,13 @@ class BalanceSheet(FinancialStatement):
             }
         }
         """
-        super().__init__()
+        super().__init__(**info)
         self.fs: fnstmt = {
             "asset": {},
             "liability": {},
             "equity": {}
         }
+        self.fs_name: str = "Balance Sheet"
 
     @override
     def reset(self) -> None:

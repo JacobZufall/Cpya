@@ -20,11 +20,16 @@ from src.pyacty.custom_exceptions import SupportError
 
 
 class FinancialStatement:
-    def __init__(self) -> None:
+    def __init__(self, **info) -> None:
         """
         A blank financial statement.
+        :param info: Information about the company.
         """
         self.fs: fnstmt = {}
+        # This is more of a place-holder name. If someone is making a custom financial statement they can change it.
+        self.fs_name: str = "Financial Statement"
+        self.company_name: str | None = info.get("company_name", None)
+        self.fiscal_year: str | None = info.get("fiscal_year", None)
 
     @override
     def __str__(self):

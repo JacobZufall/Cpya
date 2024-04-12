@@ -11,7 +11,7 @@ from src.pyacty.custom_types import fnstmt
 
 
 class IncomeStatement(FinancialStatement):
-    def __init__(self) -> None:
+    def __init__(self, **info) -> None:
         """
         Here is an example of what the income statement looks like.\n
         Type is dict[str:dict[str:dict[str:any]]], if needed.
@@ -32,11 +32,12 @@ class IncomeStatement(FinancialStatement):
             }
         }
         """
-        super().__init__()
+        super().__init__(**info)
         self.fs: fnstmt = {
             "revenue": {},
             "expense": {}
         }
+        self.fs_name: str = "Income Statement"
 
     @override
     def reset(self) -> None:
