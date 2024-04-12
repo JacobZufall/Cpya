@@ -8,9 +8,9 @@ from src.pyacty.financial_statements.BalanceSheet import BalanceSheet
 
 
 class BsTable(FsTable):
-    def __init__(self, company: str, financial_stmt: str, date: str,
+    def __init__(self, company: str, fs_name: str, date: str,
                  pyacty_fs: None | BalanceSheet = None) -> None:
-        super().__init__(company, financial_stmt, date, pyacty_fs)
+        super().__init__(company, fs_name, date, pyacty_fs)
 
     @override
     def __str__(self):
