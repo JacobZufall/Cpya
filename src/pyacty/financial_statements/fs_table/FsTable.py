@@ -2,43 +2,41 @@
 FsTable.py
 """
 
-from typing import override
-from src.pyacty.financial_statements.FinancialStatement import FinancialStatement
-from src.pyacty.financial_statements.BalanceSheet import BalanceSheet
-from src.pyacty.financial_statements.IncomeStatement import IncomeStatement
+from typing import override, Any
 
 
 class FsTable:
-    months: dict[int:str] = {
-        1: "January",
-        2: "February",
-        3: "March",
-        4: "April",
-        5: "May",
-        6: "June",
-        7: "July",
-        8: "August",
-        9: "September",
-        10: "October",
-        11: "November",
-        12: "December"
+    months: dict[str:str] = {
+        "01": "January",
+        "02": "February",
+        "03": "March",
+        "04": "April",
+        "05": "May",
+        "06": "June",
+        "07": "July",
+        "08": "August",
+        "09": "September",
+        "10": "October",
+        "11": "November",
+        "12": "December"
     }
 
     def __init__(self, company: str, fs_name: str, date: str,
-                 pyacty_fs: None | FinancialStatement = None) -> None:
+                 pyacty_fs: Any, min_width: int = 50) -> None:
         """
 
         :param company:
         :param fs_name:
         :param date:
         :param pyacty_fs:
+        :param min_width: The minimum width of the financial statement.
         """
         self.company: str = company
         self.fs_name: str = fs_name
         self.date: str = date
-        self.pyacty_fs: None | FinancialStatement | BalanceSheet | IncomeStatement = pyacty_fs
-
-        # self.formatted_date
+        self.f_date: str = self.date_to_header(date)
+        self.pyacty_fs: Any = pyacty_fs
+        self.min_width: int = min_width
 
     @override
     def __str__(self):
@@ -49,7 +47,18 @@ class FsTable:
     def __repr__(self):
         return f"{self.__class__.__name__}: {self.__dict__}"
 
-    def print_fs(self) -> None:
+    def date_to_header(self, date: str) -> str:
+        """
+        Formats a date as "For year ended December 31st, 2024", or the applicable date.\n
+        Dates should be in MM/DD/YYYY format.
+        :param date:
+        :return: The date formatted for a financial statement.
+        """
+        split_date: list[str] = date.split("/")
+        return (f"For year ended {self.months[split_date[0]]} {split_date[1]}, "
+                f"{split_date[2]}")
+
+    def format_fs(self) -> str:
         """
         Prints the financial statement.
         :return: Nothing.
@@ -65,49 +74,75 @@ class FsTable:
         if self.fs_name is not None:
             titles.append(self.fs_name)
 
+        if self.f_date is not None:
+            titles.append(self.f_date)
+
         if self.pyacty_fs is not None:
             for category, accounts in self.pyacty_fs.fs.items():
                 for account, attributes in accounts.items():
                     titles.append(account)
 
         # Find the longest string in the list.
-        max_length: int = -1
+        max_width: int = -1
         for i in titles:
-            if len(i) > max_length:
-                max_length = len(i)
+            if len(i) > max_width:
+                max_width = len(i)
+
+        if max_width < self.min_width:
+            max_width = self.min_width
 
         # How many blank spaces should be around the longest object (on each side)?
         margin: int = 2
 
-        def print_divider(border: bool = False) -> None:
+        def divider(border: bool = False) -> str:
             """
             Prints a divider on the financial statement that covers the longest title and the margin.
             :param border: Is this divider the top or bottom border?
             :return: Nothing.
             """
-            add_length: int = 0
+            output: str
 
             if border:
-                add_length = 2
+                output = f"+{"-" * (max_width + margin)}+"
+            else:
+                output = f"|{"-" * (max_width + margin)}|"
 
-            print("-" * (max_length + margin + add_length))
+            return output
 
-        def print_header(header_name: str) -> None:
-            space_needed: int = 0
+        def header(header_name: str) -> str:
+            space_needed: int = (max_width + margin - len(header_name))
+            l_space_needed: int
+            r_space_needed: int
 
-            print(f"|{" " * space_needed}{header_name}{" " * space_needed}|")
+            # This is to handle an odd amount of space, since we can't have half of a space.
+            # In the case of an odd number, the right side will have one more space than the left.
+            if space_needed % 2 != 0:
+                l_space_needed = int((space_needed / 2) - 0.5)
+                r_space_needed = int((space_needed / 2) + 0.5)
 
-        def print_account(account_name: str, show_decimals: bool = True) -> None:
+            else:
+                l_space_needed = r_space_needed = space_needed // 2
+
+            return f"|{" " * l_space_needed}{header_name}{" " * r_space_needed}|"
+
+        def title(title_name: str) -> None:
+            pass
+
+        def account(account_name: str, show_decimals: bool = True) -> str:
             space_needed: int = 0
             account_bal: float | int = 0
 
-            print(f"|{account_name}{" " * space_needed}{account_bal}|")
+            return f"|{account_name}{" " * space_needed}{account_bal}|"
 
-        # Top border of the financial statement.
-        print_divider(True)
-        print_header(self.company)
-        print_header(self.fs_name)
-        # print_header(self.fdate)
+        formatted_fs: str = (
+            f"{divider(True)}\n"
+            f"{header(self.company)}\n"
+            f"{divider(False)}\n"
+            f"{header(self.fs_name)}\n"
+            f"{divider(False)}\n"
+            f"{header(self.f_date)}\n"
+            f"{divider(False)}\n"
+            f"{divider(True)}"
+        )
 
-        # Bottom border of the financial statement.
-        print_divider(True)
+        return formatted_fs

@@ -14,6 +14,7 @@ import json
 from abc import abstractmethod
 from typing import TextIO, final, override
 
+from fs_table.FsTable import FsTable
 from src.pyacty.constants import ALL_CATEGORIES
 from src.pyacty.custom_types import fnstmt
 from src.pyacty.custom_exceptions import SupportError
@@ -32,11 +33,12 @@ class FinancialStatement:
         self.date: str | None = info.get("date", None)
 
     @override
-    def __str__(self):
-        return f"{self.fs}"
+    def __str__(self) -> str:
+        table: FsTable = FsTable(self.company, self.fs_name, self.date, self)
+        return f"{table.format_fs()}"
 
     @override
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self.__class__.__name__}: {self.__dict__}"
 
     def reset(self) -> None:
@@ -196,3 +198,8 @@ class FinancialStatement:
         :param name: The name of the account.
         :return: Nothing.
         """
+
+
+if __name__ == "__main__":
+    testFs: FinancialStatement = FinancialStatement(company="Zufall Company", date="12/31/2024")
+    print(testFs)
