@@ -93,6 +93,8 @@ class FsTable:
 
         # How many blank spaces should be around the longest object (on each side)?
         margin: int = 2
+        # How many blank spaces an account should be indented.
+        indent: int = 4
 
         def divider(border: bool = False) -> str:
             """
@@ -125,15 +127,18 @@ class FsTable:
 
             return f"|{" " * l_space_needed}{header_name}{" " * r_space_needed}|"
 
-        def title(title_name: str) -> None:
-            pass
+        def title(title_name: str) -> str:
+            space_needed: int = max_width - len(title_name) + margin
+            return f"|{title_name}{" " * space_needed}|"
 
         def account(account_name: str, show_decimals: bool = True) -> str:
-            space_needed: int = 0
-            account_bal: float | int = 0
+            account_bal: float | int = 550.52
+            space_needed: int = max_width - len(account_name) + margin - indent - len(str(account_bal))
+            r_padding: int = 1
 
-            return f"|{account_name}{" " * space_needed}{account_bal}|"
+            return f"|{" " * indent}{account_name}{" " * (space_needed - r_padding)}{account_bal}{" " * r_padding}|"
 
+        # I genuinely hate this but this the best I can personally do. Any attempt to make this better is encouraged.
         formatted_fs: str = (
             f"{divider(True)}\n"
             f"{header(self.company)}\n"
@@ -142,6 +147,8 @@ class FsTable:
             f"{divider(False)}\n"
             f"{header(self.f_date)}\n"
             f"{divider(False)}\n"
+            f"{title("Assets")}\n"
+            f"{account("Cash")}\n"
             f"{divider(True)}"
         )
 
