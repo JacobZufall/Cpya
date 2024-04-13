@@ -138,7 +138,8 @@ class FsTable:
 
             return f"|{" " * indent}{account_name}{" " * (space_needed - r_padding)}{account_bal}{" " * r_padding}|"
 
-        # I genuinely hate this but this the best I can personally do. Any attempt to make this better is encouraged.
+        # TODO: This needs to be modular. This class shouldn't require interaction from anyone, and should format
+        #   based on its corresponding class.
         formatted_fs: str = (
             f"{divider(True)}\n"
             f"{header(self.company)}\n"
