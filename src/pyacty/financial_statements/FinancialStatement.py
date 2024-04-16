@@ -1,10 +1,9 @@
 """
 FinancialStatement.py
 
-This class is mostly abstract because each financial statement is extremely unique. However, many of them require
-similar functions, which is why this class exists and is inherited from.
+FinancialStatement is a partially abstract class due to the unique nature of each financial statement.
 
-This class also allows flexibility if someone wants to create their own financial statement from scratch.
+This class also serves as a blank statement for one to make their own custom financial statement.
 """
 
 import os
@@ -14,7 +13,6 @@ import json
 from abc import abstractmethod
 from typing import TextIO, final, override
 
-from fs_table.FsTable import FsTable
 from src.pyacty.constants import ALL_CATEGORIES
 from src.pyacty.custom_types import fnstmt
 from src.pyacty.custom_exceptions import SupportError
@@ -34,8 +32,7 @@ class FinancialStatement:
 
     @override
     def __str__(self) -> str:
-        table: FsTable = FsTable(self.company, self.fs_name, self.date, self)
-        return f"{table.format_fs()}"
+        return ""
 
     @override
     def __repr__(self) -> str:

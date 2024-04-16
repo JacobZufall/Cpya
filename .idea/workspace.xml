@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a49b14fc-a951-47dd-bd19-77c5a467b5c2" name="Changes" comment="Added TODO comment">
+    <list default="true" id="a49b14fc-a951-47dd-bd19-77c5a467b5c2" name="Changes" comment="Deleted __init__.py, not sure why it keeps coming back">
+      <change afterPath="$PROJECT_DIR$/src/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/fs_table/fs_structure/Divider.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/fs_table/fs_structure/test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Examples.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Examples.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/FinancialStatement.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/FinancialStatement.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/fs_table/fs_structure/Skeleton.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/fs_table/fs_structure/Skeleton.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -18,9 +21,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Jupyter Notebook" />
-        <option value="Python Script" />
         <option value="Python Unit Test" />
         <option value="Python Stub" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -58,7 +61,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="ProjectErrors" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
@@ -78,6 +81,7 @@
     &quot;Python.FinancialStatement.executor&quot;: &quot;Run&quot;,
     &quot;Python.FsTable.executor&quot;: &quot;Run&quot;,
     &quot;Python.IncomeStatement.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Skeleton.executor&quot;: &quot;Run&quot;,
     &quot;Python.TangibleAsset.executor&quot;: &quot;Run&quot;,
     &quot;Python.constants.executor&quot;: &quot;Run&quot;,
     &quot;Python.custom_exceptions.executor&quot;: &quot;Run&quot;,
@@ -110,7 +114,7 @@
       <recent name="$PROJECT_DIR$/src/taxpy/deductions" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.FinancialStatement">
+  <component name="RunManager">
     <configuration name="FinancialStatement" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="pyacty" />
       <option name="ENV_FILES" value="" />
@@ -274,6 +278,8 @@
       <workItem from="1713150109691" duration="184000" />
       <workItem from="1713150527229" duration="42000" />
       <workItem from="1713198898651" duration="138000" />
+      <workItem from="1713199084736" duration="3696000" />
+      <workItem from="1713237121457" duration="4215000" />
     </task>
     <task id="LOCAL-00001" summary="Added balance_sheet.py, and other things">
       <created>1686756190237</created>
@@ -561,7 +567,15 @@
       <option name="project" value="LOCAL" />
       <updated>1712991864422</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="Deleted __init__.py, not sure why it keeps coming back">
+      <option name="closed" value="true" />
+      <created>1713199109700</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1713199109700</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -591,7 +605,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Updated depreciation methods" />
     <MESSAGE value="Finished depreciation methods, need to write tests." />
     <MESSAGE value="Started writing tests" />
     <MESSAGE value="Reformatted files for clarity" />
@@ -616,7 +629,19 @@
     <MESSAGE value="I don't remember updating half of the things here" />
     <MESSAGE value="Updated FsTable.py" />
     <MESSAGE value="Added TODO comment" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added TODO comment" />
+    <MESSAGE value="Deleted __init__.py, not sure why it keeps coming back" />
+    <option name="LAST_COMMIT_MESSAGE" value="Deleted __init__.py, not sure why it keeps coming back" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$USER_HOME$/AppData/Local/JetBrains/PyCharm2024.1/python_stubs/-1634379071/builtins.py</url>
+          <line>2883</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/pyacty$test_DefaultBalance.coverage" NAME="test_DefaultBalance Coverage Results" MODIFIED="1710941306563" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/financial_statements" />
@@ -636,8 +661,9 @@
     <SUITE FILE_PATH="coverage/pyacty$BalanceSheet.coverage" NAME="BalanceSheet Coverage Results" MODIFIED="1710943383060" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/pyacty/financial_statements" />
     <SUITE FILE_PATH="coverage/pyacty$custom_exceptions.coverage" NAME="custom_exceptions Coverage Results" MODIFIED="1710853296079" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/pyacty" />
     <SUITE FILE_PATH="coverage/pyacty$test_BalanceSheet.coverage" NAME="test_BalanceSheet Coverage Results" MODIFIED="1711053344818" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/financial_statements" />
-    <SUITE FILE_PATH="coverage/pyacty$test.coverage" NAME="test Coverage Results" MODIFIED="1711026566744" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/pyacty$test.coverage" NAME="test Coverage Results" MODIFIED="1713239513551" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/pyacty/financial_statements/fs_table/fs_structure" />
     <SUITE FILE_PATH="coverage/TaxPy$constants.coverage" NAME="constants Coverage Results" MODIFIED="1708889060848" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy" />
     <SUITE FILE_PATH="coverage/TaxPy$test_TangibleAsset.coverage" NAME="test_TangibleAsset Coverage Results" MODIFIED="1708228307176" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/assets" />
+    <SUITE FILE_PATH="coverage/pyacty$Skeleton.coverage" NAME="Skeleton Coverage Results" MODIFIED="1713239374175" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/pyacty/financial_statements/fs_table/fs_structure" />
   </component>
 </project>
