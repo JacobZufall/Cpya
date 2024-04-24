@@ -11,7 +11,7 @@ import csv
 from csv import writer
 import json
 import os
-from statementskeleton import Skeleton, Account
+from statementskeleton import Skeleton
 from typing import TextIO, final, override
 
 from ..constants import ALL_CATEGORIES

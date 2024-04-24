@@ -4,21 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a49b14fc-a951-47dd-bd19-77c5a467b5c2" name="Changes" comment="Changed FsTable to a more OOP approach, will eventually separate into its own library">
+    <list default="true" id="a49b14fc-a951-47dd-bd19-77c5a467b5c2" name="Changes" comment="Fixed imports">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/BalanceSheet.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/BalanceSheet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/FinancialStatement.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/FinancialStatement.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/IncomeStatement.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/IncomeStatement.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/fs_table/FsTable.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/fs_table/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/fs_table/fs_structure/Divider.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/fs_table/fs_structure/Header.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/fs_table/fs_structure/Skeleton.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/fs_table/fs_structure/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/fs_table/fs_structure/test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/financial_statements/test_FinancialStatement.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/financial_statements/test_FinancialStatement.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -243,6 +230,7 @@
       <workItem from="1713925466885" duration="523000" />
       <workItem from="1713926162474" duration="799000" />
       <workItem from="1713927089941" duration="476000" />
+      <workItem from="1713928381294" duration="647000" />
     </task>
     <task id="LOCAL-00001" summary="Added balance_sheet.py, and other things">
       <created>1686756190237</created>
@@ -546,7 +534,15 @@
       <option name="project" value="LOCAL" />
       <updated>1713241866945</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="Fixed imports">
+      <option name="closed" value="true" />
+      <created>1713928706667</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1713928706667</updated>
+    </task>
+    <option name="localTasksCounter" value="40" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -576,7 +572,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Started writing tests" />
     <MESSAGE value="Reformatted files for clarity" />
     <MESSAGE value="Continued writing tests" />
     <MESSAGE value="Refined FinancialStatement.py" />
@@ -601,7 +596,8 @@
     <MESSAGE value="Added TODO comment" />
     <MESSAGE value="Deleted __init__.py, not sure why it keeps coming back" />
     <MESSAGE value="Changed FsTable to a more OOP approach, will eventually separate into its own library" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed FsTable to a more OOP approach, will eventually separate into its own library" />
+    <MESSAGE value="Fixed imports" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed imports" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -628,7 +624,7 @@
     <SUITE FILE_PATH="coverage/TaxPy$TangibleAsset.coverage" NAME="TangibleAsset Coverage Results" MODIFIED="1708227656471" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy/assets" />
     <SUITE FILE_PATH="coverage/pyacty$FsTable.coverage" NAME="FsTable Coverage Results" MODIFIED="1712976622232" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/pyacty/financial_statements/fs_table" />
     <SUITE FILE_PATH="coverage/pyacty$TangibleAsset.coverage" NAME="TangibleAsset Coverage Results" MODIFIED="1711027942406" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/pyacty/assets" />
-    <SUITE FILE_PATH="coverage/pyacty$test_FinancialStatement.coverage" NAME="test_FinancialStatement Coverage Results" MODIFIED="1713927517667" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/financial_statements" />
+    <SUITE FILE_PATH="coverage/pyacty$test_FinancialStatement.coverage" NAME="test_FinancialStatement Coverage Results" MODIFIED="1713928411095" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/financial_statements" />
     <SUITE FILE_PATH="coverage/TaxPy$test_tangible_asset.coverage" NAME="test_tangible_asset Coverage Results" MODIFIED="1706587856749" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/assets" />
     <SUITE FILE_PATH="coverage/pyacty$FinancialStatement.coverage" NAME="FinancialStatement Coverage Results" MODIFIED="1713244995409" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/pyacty/financial_statements" />
     <SUITE FILE_PATH="coverage/TaxPy$Asset.coverage" NAME="Asset Coverage Results" MODIFIED="1708227382907" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy/assets" />

@@ -4,8 +4,9 @@ BalanceSheet.py
 
 from typing import override
 
-from .FinancialStatement import FinancialStatement
+from .skeletons.BsSkeleton import BsSkeleton
 from .DefaultBalance import DefaultBalance
+from .FinancialStatement import FinancialStatement
 from ..constants import BS_CATEGORIES
 from ..custom_types import fnstmt
 
@@ -48,6 +49,10 @@ class BalanceSheet(FinancialStatement):
             "equity": {}
         }
         self.fs_name: str = "Balance Sheet"
+
+    @override
+    def __str__(self) -> str:
+        return BsSkeleton(self.fs, self.company, self.fs_name, self.date).return_output()
 
     @override
     def reset(self) -> None:
