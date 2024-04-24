@@ -5,7 +5,7 @@ TangibleAsset.py
 from typing import override
 from vardelta import Delta
 
-from src.pyacty.assets.Asset import Asset
+from .Asset import Asset
 
 
 class TangibleAsset(Asset):

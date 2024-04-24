@@ -3,8 +3,7 @@ Computer.py
 
 The default life of a computer, per GAAP, is 5 years (60 months).
 """
-
-from src.pyacty.assets.TangibleAsset import TangibleAsset
+from ..TangibleAsset import TangibleAsset
 
 
 class Computer(TangibleAsset):

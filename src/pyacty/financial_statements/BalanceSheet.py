@@ -6,15 +6,14 @@ from typing import override
 
 from .FinancialStatement import FinancialStatement
 from .DefaultBalance import DefaultBalance
-from src.pyacty.constants import BS_CATEGORIES
-from src.pyacty.custom_types import fnstmt
+from ..constants import BS_CATEGORIES
+from ..custom_types import fnstmt
 
 
 class BalanceSheet(FinancialStatement):
-    def __init__(self, **info) -> None:
+    def __init__(self, company_name: str, date: str) -> None:
         """
         Here is an example of what the balance sheet looks like.\n
-
         self.fs = {
             "asset": {
                 "Cash": {
@@ -39,8 +38,10 @@ class BalanceSheet(FinancialStatement):
                 }
             }
         }
+        :param company_name: The name of the company.
+        :param date: The date of the financial statement.
         """
-        super().__init__(**info)
+        super().__init__(company_name, date)
         self.fs: fnstmt = {
             "asset": {},
             "liability": {},

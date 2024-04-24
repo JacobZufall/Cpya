@@ -2,7 +2,7 @@
 DefaultBalance.py
 """
 
-from src.pyacty.constants import ALL_CATEGORIES
+from ..constants import ALL_CATEGORIES
 
 
 class DefaultBalance:

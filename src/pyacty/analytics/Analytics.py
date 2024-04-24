@@ -2,8 +2,8 @@
 Analytics.py
 """
 
-from src.pyacty.financial_statements.BalanceSheet import BalanceSheet
-from src.pyacty.financial_statements.IncomeStatement import IncomeStatement
+from ..financial_statements.BalanceSheet import BalanceSheet
+from ..financial_statements.IncomeStatement import IncomeStatement
 
 
 class Analytics:

@@ -6,16 +6,14 @@ from typing import override
 
 from .FinancialStatement import FinancialStatement
 from .DefaultBalance import DefaultBalance
-from src.pyacty.constants import IS_CATEGORIES
-from src.pyacty.custom_types import fnstmt
+from ..constants import IS_CATEGORIES
+from ..custom_types import fnstmt
 
 
 class IncomeStatement(FinancialStatement):
-    def __init__(self, **info) -> None:
+    def __init__(self, company_name: str, date: str) -> None:
         """
         Here is an example of what the income statement looks like.\n
-        Type is dict[str:dict[str:dict[str:any]]], if needed.
-
         self.fs = {
             "revenue": {
                 "Revenue": {
@@ -31,8 +29,10 @@ class IncomeStatement(FinancialStatement):
                 }
             }
         }
+        :param company_name: The name of the company.
+        :param date: The date of the financial statement.
         """
-        super().__init__(**info)
+        super().__init__(company_name, date)
         self.fs: fnstmt = {
             "revenue": {},
             "expense": {}

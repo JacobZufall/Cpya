@@ -6,33 +6,35 @@ FinancialStatement is a partially abstract class due to the unique nature of eac
 This class also serves as a blank statement for one to make their own custom financial statement.
 """
 
-import os
+from abc import abstractmethod
 import csv
 from csv import writer
 import json
-from abc import abstractmethod
+import os
+from statementskeleton import Skeleton, Account
 from typing import TextIO, final, override
 
-from src.pyacty.constants import ALL_CATEGORIES
-from src.pyacty.custom_types import fnstmt
-from src.pyacty.custom_exceptions import SupportError
+from ..constants import ALL_CATEGORIES
+from ..custom_types import fnstmt
+from ..custom_exceptions import SupportError
 
 
 class FinancialStatement:
-    def __init__(self, **info) -> None:
+    def __init__(self, company_name: str, date: str) -> None:
         """
         A blank financial statement.
-        :param info: Information about the company.
+        :param company_name: The name of the company.
+        :param date: The date of the financial statement.
         """
         self.fs: fnstmt = {}
-        self.company: str | None = info.get("company", None)
+        self.company: str = company_name
         # This is more of a place-holder name. If someone is making a custom financial statement they can change it.
         self.fs_name: str = "Financial Statement"
-        self.date: str | None = info.get("date", None)
+        self.date: str = date
 
     @override
     def __str__(self) -> str:
-        return ""
+        return Skeleton(self.fs, self.company, self.fs_name, self.date).return_output()
 
     @override
     def __repr__(self) -> str:
