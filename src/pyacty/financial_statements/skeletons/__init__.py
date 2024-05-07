@@ -1,2 +1,2 @@
-from BsSkeleton import *
-from IsSkeleton import *
+from .BsSkeleton import *
+from .IsSkeleton import *
