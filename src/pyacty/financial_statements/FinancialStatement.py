@@ -71,7 +71,8 @@ class FinancialStatement:
             raise KeyError("Account not found!")
 
     # I'm sorry.
-    @final
+    # I'm not sure if this should be final or not. Overriding it may make it so that load_fs() won't work properly.
+    # @final
     def save_fs(self, directory: str, file_name: str, file_type: str = "all") -> None:
         """
         Saves the financial statement to the given directory.

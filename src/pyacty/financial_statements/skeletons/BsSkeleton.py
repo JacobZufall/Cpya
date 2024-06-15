@@ -30,6 +30,7 @@ class BsSkeleton(Skeleton):
     def define_body(self) -> None:
         next_div_num: int = 4
 
+        # A "c" prefix represents "current" while an "nc" prefix represents "non-current".
         c_assets_bal: float | int = 0.0
         nc_assets_bal: float | int = 0.0
         c_liabilities_bal: float | int = 0.0

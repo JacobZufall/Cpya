@@ -73,7 +73,8 @@ class IncomeStatement(FinancialStatement):
 
     def net_income(self) -> float:
         """
-        Calculates net income based on the current state of te income statement.
+        Calculates net income based on the current state of the income statement. This method may be too simple for some
+        purposes.
         :return: Calculated net income.
         """
         totals: dict[str:float] = self.total_accounts()

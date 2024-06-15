@@ -63,7 +63,7 @@ class BalanceSheet(FinancialStatement):
         }
 
     # Contra should always be the last parameter because it's the least likely to be used, especially in balance sheet
-    # accounts.
+    # accounts, since it's often netted with its non-contra counterpart.
     @override
     def add_account(self, name: str, category: str, start_bal: float = 0.0, term: str = "current",
                     contra: bool = False) -> None:
