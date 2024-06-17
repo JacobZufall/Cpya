@@ -83,7 +83,8 @@ class FinancialStatement:
         """
         valid_file_types: list[str] = ["csv", "json"]
 
-        def make_file(extension: str) -> TextIO:
+        # I'm not entirely sure if I want this to be private or not.
+        def __make_file(extension: str) -> TextIO:
             """
             Makes the file the data is saved to.
             :param extension: The type of file to save to.
@@ -111,11 +112,11 @@ class FinancialStatement:
             #  number. Expenses should be negative as well. The true_value() function should be useful for this.
             if option == 1 or option == 0:
                 try:
-                    outfile = make_file("csv")
+                    outfile = __make_file("csv")
 
                 except FileNotFoundError:
                     os.mkdir(directory)
-                    outfile = make_file("csv")
+                    outfile = __make_file("csv")
 
                 csv_writer: writer = csv.writer(outfile)
 
@@ -136,11 +137,11 @@ class FinancialStatement:
             # JSON file
             if option == 2 or option == 0:
                 try:
-                    outfile = make_file("json")
+                    outfile = __make_file("json")
 
                 except FileNotFoundError:
                     os.mkdir(directory)
-                    outfile = make_file("json")
+                    outfile = __make_file("json")
 
                 outfile.write(json.dumps(self.fs, indent=4))
                 outfile.close()

@@ -4,6 +4,7 @@ IncomeStatement.py
 
 from typing import override
 
+from .skeletons.IsSkeleton import IsSkeleton
 from .FinancialStatement import FinancialStatement
 from .DefaultBalance import DefaultBalance
 from ..constants import IS_CATEGORIES
@@ -38,6 +39,10 @@ class IncomeStatement(FinancialStatement):
             "expense": {}
         }
         self.fs_name: str = "Income Statement"
+
+    @override
+    def __str__(self) -> str:
+        return IsSkeleton(self.fs, self.company, self.fs_name, self.date).return_output()
 
     @override
     def reset(self) -> None:

@@ -4,14 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a49b14fc-a951-47dd-bd19-77c5a467b5c2" name="Changes" comment="Added Money class">
-      <change afterPath="$PROJECT_DIR$/tests/financial_statements/skeletons/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/financial_statements/skeletons/test_BsSkeleton.py" afterDir="false" />
+    <list default="true" id="a49b14fc-a951-47dd-bd19-77c5a467b5c2" name="Changes" comment="Continued writing tests">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/BalanceSheet.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/BalanceSheet.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/FinancialStatement.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/FinancialStatement.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/IncomeStatement.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/IncomeStatement.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/skeletons/BsSkeleton.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/skeletons/BsSkeleton.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/skeletons/IsSkeleton.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/skeletons/IsSkeleton.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +50,7 @@
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
     &quot;url&quot;: &quot;https://github.com/JacobZufall/pyacty.git&quot;,
-    &quot;accountId&quot;: &quot;f9da3383-9049-4be6-9a5f-ce0436791a36&quot;
+    &quot;accountId&quot;: &quot;a675922d-a334-473b-b545-2b37d593adfb&quot;
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
@@ -122,8 +120,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PY-241.17011.127" />
-        <option value="bundled-python-sdk-48aec45f0201-7e9c3bbb6e34-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.17011.127" />
+        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PY-241.17890.14" />
+        <option value="bundled-python-sdk-5b207ade9991-7e9c3bbb6e34-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.17890.14" />
       </set>
     </attachedChunks>
   </component>
@@ -246,6 +244,8 @@
       <workItem from="1717642010962" duration="107000" />
       <workItem from="1717861395569" duration="12000" />
       <workItem from="1718478359351" duration="602000" />
+      <workItem from="1718493887810" duration="1189000" />
+      <workItem from="1718593214843" duration="445000" />
     </task>
     <task id="LOCAL-00001" summary="Added balance_sheet.py, and other things">
       <created>1686756190237</created>

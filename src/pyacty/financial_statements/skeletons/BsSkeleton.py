@@ -37,9 +37,6 @@ class BsSkeleton(Skeleton):
         nc_liabilities_bal: float | int = 0.0
 
         for category, accounts in self.fnstmt.items():
-
-
-        for category, accounts in self.fnstmt.items():
             self.implement(Title(self, (category.lower()).capitalize()),
                            f"title_{category.lower()}")
 
@@ -51,4 +48,3 @@ class BsSkeleton(Skeleton):
 
                 else:
                     total_bal -= attributes["bal"]
-
