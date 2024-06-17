@@ -4,12 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a49b14fc-a951-47dd-bd19-77c5a467b5c2" name="Changes" comment="Continued writing tests">
+    <list default="true" id="a49b14fc-a951-47dd-bd19-77c5a467b5c2" name="Changes" comment="Adding some things to get IncomeStatement.py up to date with BalanceSheet.py">
+      <change afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/TrueBalance.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/DefaultBalance.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/DefaultBalance.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/FinancialStatement.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/FinancialStatement.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/IncomeStatement.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/IncomeStatement.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/skeletons/BsSkeleton.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/skeletons/BsSkeleton.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/skeletons/IsSkeleton.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/skeletons/IsSkeleton.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/financial_statements/test_BalanceSheet.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/financial_statements/test_BalanceSheet.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,7 +61,7 @@
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="ProjectErrors" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
@@ -245,7 +246,9 @@
       <workItem from="1717861395569" duration="12000" />
       <workItem from="1718478359351" duration="602000" />
       <workItem from="1718493887810" duration="1189000" />
-      <workItem from="1718593214843" duration="445000" />
+      <workItem from="1718593214843" duration="500000" />
+      <workItem from="1718646211464" duration="352000" />
+      <workItem from="1718646744275" duration="1348000" />
     </task>
     <task id="LOCAL-00001" summary="Added balance_sheet.py, and other things">
       <created>1686756190237</created>
@@ -573,7 +576,15 @@
       <option name="project" value="LOCAL" />
       <updated>1715051871088</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="Adding some things to get IncomeStatement.py up to date with BalanceSheet.py">
+      <option name="closed" value="true" />
+      <created>1718593713669</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1718593713669</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -603,7 +614,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Refined FinancialStatement.py" />
     <MESSAGE value="Updated DefaultBalance.py" />
     <MESSAGE value="Removed bad test" />
     <MESSAGE value="Updated name" />
@@ -628,7 +638,8 @@
     <MESSAGE value="Fixed imports" />
     <MESSAGE value="Started implementing balance sheet specific skeleton" />
     <MESSAGE value="Added Money class" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added Money class" />
+    <MESSAGE value="Adding some things to get IncomeStatement.py up to date with BalanceSheet.py" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding some things to get IncomeStatement.py up to date with BalanceSheet.py" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -647,9 +658,9 @@
     <SUITE FILE_PATH="coverage/TaxPy$TangibleAsset.coverage" NAME="TangibleAsset Coverage Results" MODIFIED="1708227656471" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy/assets" />
     <SUITE FILE_PATH="coverage/pyacty$test_FinancialStatement.coverage" NAME="test_FinancialStatement Coverage Results" MODIFIED="1713928411095" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/financial_statements" />
     <SUITE FILE_PATH="coverage/taxpy$financial_statement.coverage" NAME="financial_statement Coverage Results" MODIFIED="1686840690906" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy/financial_statements" />
-    <SUITE FILE_PATH="coverage/pyacty$BalanceSheet.coverage" NAME="BalanceSheet Coverage Results" MODIFIED="1710943383060" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/pyacty/financial_statements" />
-    <SUITE FILE_PATH="coverage/pyacty$test_BalanceSheet.coverage" NAME="test_BalanceSheet Coverage Results" MODIFIED="1711053344818" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/financial_statements" />
+    <SUITE FILE_PATH="coverage/pyacty$BalanceSheet.coverage" NAME="BalanceSheet Coverage Results" MODIFIED="1718646360760" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/pyacty/financial_statements" />
     <SUITE FILE_PATH="coverage/pyacty$test.coverage" NAME="test Coverage Results" MODIFIED="1713245005719" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/pyacty/financial_statements/fs_table/fs_structure" />
+    <SUITE FILE_PATH="coverage/pyacty$test_BalanceSheet.coverage" NAME="test_BalanceSheet Coverage Results" MODIFIED="1718647246353" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/financial_statements" />
     <SUITE FILE_PATH="coverage/TaxPy$constants.coverage" NAME="constants Coverage Results" MODIFIED="1708889060848" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/taxpy" />
     <SUITE FILE_PATH="coverage/pyacty$test_BsSkeleton.coverage" NAME="test_BsSkeleton Coverage Results" MODIFIED="1715726408107" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/financial_statements/skeletons" />
     <SUITE FILE_PATH="coverage/TaxPy$test_TangibleAsset.coverage" NAME="test_TangibleAsset Coverage Results" MODIFIED="1708228307176" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/tests/assets" />

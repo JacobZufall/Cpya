@@ -5,6 +5,8 @@ BsSkeleton.py
 from typing import override
 from statementskeleton import Skeleton, Title
 
+from ..TrueBalance import TrueBalance
+
 
 class BsSkeleton(Skeleton):
     def __init__(self, fnstmt: dict[str:dict[str:dict[str:any]]], company: str, fs_name: str, date: str,
@@ -35,16 +37,31 @@ class BsSkeleton(Skeleton):
         nc_assets_bal: float | int = 0.0
         c_liabilities_bal: float | int = 0.0
         nc_liabilities_bal: float | int = 0.0
+        equities_bal: float | int = 0.0
 
         for category, accounts in self.fnstmt.items():
             self.implement(Title(self, (category.lower()).capitalize()),
                            f"title_{category.lower()}")
 
-            total_bal: float | int = 0.0
+            if category.lower() == "asset":
+                for account, attributes in accounts.items():
+                    if attributes["term"] == "current":
+                        c_assets_bal += TrueBalance(account).true_balance
 
-            for account, attributes in accounts.items():
-                if attributes["d/c"] == "debit":
-                    total_bal += attributes["bal"]
+                    else:
+                        nc_assets_bal += TrueBalance(account).true_balance
 
-                else:
-                    total_bal -= attributes["bal"]
+                self.implement(Title(self, "Current Assets"), f"title_current_assets")
+
+            elif category.lower() == "liability":
+                for account, attributes in accounts.items():
+                    if attributes["term"] == "current":
+                        c_liabilities_bal += TrueBalance(account).true_balance
+
+                    else:
+                        nc_liabilities_bal += TrueBalance(account).true_balance
+
+            else:
+                for account, attributes in accounts.items():
+                    equities_bal += TrueBalance(account).true_balance
+

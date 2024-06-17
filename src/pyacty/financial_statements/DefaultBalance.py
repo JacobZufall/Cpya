@@ -31,9 +31,9 @@ class DefaultBalance:
         self.expense: str = "debit"
         self.contra_expense: str = "credit"
 
-        self.def_bal: str = self.find_account(self.category, self.contra)
+        self.def_bal: str = self.__find_account(self.category, self.contra)
 
-    def find_account(self, category: str, contra: bool = False) -> str:
+    def __find_account(self, category: str, contra: bool = False) -> str:
         """
         Finds a certain account and finds its default balance.
         :param category: The category of the account (asset, liability, equity, revenue, and expense).

@@ -177,7 +177,11 @@ class FinancialStatement:
             for account, attributes in accounts.items():
                 for attribute, value in attributes.items():
                     if attribute == "bal":
-                        totals[category] += value
+                        try:
+                            totals[category] += value
+
+                        except KeyError:
+                            totals[category] = value
 
         return totals
 
@@ -202,5 +206,5 @@ class FinancialStatement:
 
 
 if __name__ == "__main__":
-    testFs: FinancialStatement = FinancialStatement(company="Zufall Company", date="12/31/2024")
+    testFs: FinancialStatement = FinancialStatement("PyActy", "12/31/2024")
     print(testFs)

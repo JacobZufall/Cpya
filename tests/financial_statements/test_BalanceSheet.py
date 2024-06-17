@@ -5,7 +5,7 @@ test_BalanceSheet.py
 from src.pyacty.financial_statements.BalanceSheet import BalanceSheet
 
 #
-bal_sheet: BalanceSheet = BalanceSheet()
+bal_sheet: BalanceSheet = BalanceSheet("PyActy", "12/31/2024")
 
 # Assets
 bal_sheet.add_account("Cash", "asset", 1_000_000.0)
@@ -127,5 +127,6 @@ def test_two() -> None:
 
 
 if __name__ == "__main__":
+    print(bal_sheet)
     test_one()
     test_two()
