@@ -11,7 +11,6 @@ import csv
 from csv import writer
 import json
 import os
-from statementskeleton import Skeleton
 from typing import TextIO, final, override
 
 from ..constants import ALL_CATEGORIES
@@ -47,6 +46,7 @@ class FinancialStatement:
         """
         self.fs = {}
 
+    # Is this not already handled by the TrueBalance class?
     @final
     def true_value(self, account: str) -> float:
         """

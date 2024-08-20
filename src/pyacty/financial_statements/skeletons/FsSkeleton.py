@@ -7,6 +7,40 @@ from typing import Any
 
 
 class FsSkeleton:
+    class _Element:
+        def __init__(self, template: Template, elements: dict[str:str] = None) -> None:
+            """
+            A single line in the output of FsSkeleton. This class allows the dynamic updating of the width so that it
+            can adapt when new elements are added.
+            :param template: A string template.
+            :param elements: A dictionary of elements that will be used, in {mapping: keyword} format.
+            """
+            if elements is None:
+                elements = {}
+
+            self.template: Template = template
+            self.elements: dict[str:str] = elements
+
+            self._string: str = ""
+
+        @property
+        def width(self) -> int:
+            """
+            The current width of the fully rendered template, including spaces.
+            :return: The length of the string.
+            """
+            self.render()
+            return len(self._string)
+
+        def render(self) -> str:
+            """
+            Renders the template into a finished string based on the given elements.
+            :return: The finished line result.
+            """
+            self._string = self.template.safe_substitute(self.elements)
+            return self._string
+
+
     months: dict[str:str] = {
         "01": "January",
         "02": "February",
@@ -28,6 +62,7 @@ class FsSkeleton:
         self.fnstmt: dict[str:dict[str:dict[str:Any]]] = fnstmt
         self.company: str = company
         self.fs_name: str = fs_name
+        self.f_date: str = self._format_date(date)
 
         self.min_width: int = min_width
         self.margin: int = margin
@@ -47,15 +82,15 @@ class FsSkeleton:
             "title": Template("| $title$spacer|"),
             "total": Template("| Total $total_name$central_spacer$total_bal |")
         }
-        self.elements: dict[str:dict[str:Any]] = {}
+        self.elements: dict[str:FsSkeleton._Element] = {}
 
-    def __calc_width(self) -> None:
+    def _calc_width(self) -> None:
         longest_str_len: int = 0
 
         for element in self.elements.items():
-            longest_str_len = max(longest_str_len, len(element["string"]))
+            longest_str_len = max(longest_str_len, len(element))
 
-    def __format_date(self, date: str) -> str:
+    def _format_date(self, date: str) -> str:
         """
         Converts a date from MM/DD/YYYY format to the conventional one found commonly on most financial statements.
         :param date: The date in "MM/DD/YYYY" format.
@@ -76,14 +111,10 @@ class FsSkeleton:
 
         # By storing the template used and the elements to substitute, we can perform the substitution later after all
         # elements are added. This allows us to dynamically update the width of the output as new elements are added.
-        new_element: dict[str:Any] = {
-            "template": self.templates[template],
-            "string": "",
-            "elements": {}
-        }
+        new_element: FsSkeleton._Element = self._Element(self.templates[template])
 
         for mapping, keyword in kwargs.items():
-            new_element["elements"][mapping] = keyword
+            new_element.elements[mapping] = keyword
 
         self.elements[key] = new_element
 

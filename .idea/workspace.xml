@@ -4,12 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a49b14fc-a951-47dd-bd19-77c5a467b5c2" name="Changes" comment="Working on defining the body of BsSkeleton.py">
-      <change afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/skeletons/FsSkeleton.py" afterDir="false" />
+    <list default="true" id="a49b14fc-a951-47dd-bd19-77c5a467b5c2" name="Changes" comment="Moved some code from StatementSkeleton to here">
+      <change beforePath="$PROJECT_DIR$/.idea/pyacty.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pyacty.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/TrueBalance.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/TrueBalance.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/skeletons/BsSkeleton.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/skeletons/BsSkeleton.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/skeletons/IsSkeleton.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/skeletons/IsSkeleton.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/FinancialStatement.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/FinancialStatement.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/TrueBalance.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/fundamentals/TrueBalance.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/skeletons/FsSkeleton.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/skeletons/FsSkeleton.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pyacty/fundamentals/Money.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/fundamentals/Money.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,6 +113,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\jacob\PycharmProjects\pyacty\src\pyacty\fundamentals" />
       <recent name="C:\Users\jacob\PycharmProjects\pyacty\src\pyacty\financial_statements\fs_table\fs_structure" />
       <recent name="C:\Users\jacob\PycharmProjects\pyacty\src\pyacty\financial_statements\fs_table" />
       <recent name="$PROJECT_DIR$/src/taxpy/entities" />
@@ -121,8 +123,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-1d06a55b98c1-0b3e54e931b4-JavaScript-PY-241.18034.82" />
-        <option value="bundled-python-sdk-975db3bf15a3-2767605e8bc2-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.18034.82" />
+        <option value="bundled-js-predefined-d6986cc7102b-410509235cf1-JavaScript-PY-242.20224.347" />
+        <option value="bundled-python-sdk-c2d6afa66fbe-39cff9de6eef-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-242.20224.347" />
       </set>
     </attachedChunks>
   </component>
@@ -255,6 +257,11 @@
       <workItem from="1720887772709" duration="3000" />
       <workItem from="1722019226036" duration="726000" />
       <workItem from="1722020009424" duration="656000" />
+      <workItem from="1722020693183" duration="257000" />
+      <workItem from="1722368194661" duration="25000" />
+      <workItem from="1724180053245" duration="29000" />
+      <workItem from="1724191319130" duration="1774000" />
+      <workItem from="1724193179128" duration="449000" />
     </task>
     <task id="LOCAL-00001" summary="Added balance_sheet.py, and other things">
       <created>1686756190237</created>
@@ -598,7 +605,15 @@
       <option name="project" value="LOCAL" />
       <updated>1718648403859</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="Moved some code from StatementSkeleton to here">
+      <option name="closed" value="true" />
+      <created>1722020946602</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1722020946603</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -628,7 +643,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Removed bad test" />
     <MESSAGE value="Updated name" />
     <MESSAGE value="Continued updating name" />
     <MESSAGE value="Added method to save to CSV file" />
@@ -653,7 +667,8 @@
     <MESSAGE value="Added Money class" />
     <MESSAGE value="Adding some things to get IncomeStatement.py up to date with BalanceSheet.py" />
     <MESSAGE value="Working on defining the body of BsSkeleton.py" />
-    <option name="LAST_COMMIT_MESSAGE" value="Working on defining the body of BsSkeleton.py" />
+    <MESSAGE value="Moved some code from StatementSkeleton to here" />
+    <option name="LAST_COMMIT_MESSAGE" value="Moved some code from StatementSkeleton to here" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -1,7 +1,7 @@
 """
 Money.py
 
-# TODO: Implement this project wide after all the formatting going on in financial_statements is complete.
+TODO: Implement this project wide after all the formatting going on in financial_statements is complete.
 """
 
 from typing import override
