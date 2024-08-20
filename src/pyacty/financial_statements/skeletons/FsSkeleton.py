@@ -3,23 +3,24 @@ FsSkeleton.py
 """
 
 from string import Template
-from typing import Any
+from typing import Any, Final
 
 
 class FsSkeleton:
     class _Element:
-        def __init__(self, template: Template, elements: dict[str:str] = None) -> None:
+        # TODO: Work out how to implement spacers.
+        def __init__(self, template: Template, mappings: dict[str:str] = None) -> None:
             """
             A single line in the output of FsSkeleton. This class allows the dynamic updating of the width so that it
             can adapt when new elements are added.
             :param template: A string template.
-            :param elements: A dictionary of elements that will be used, in {mapping: keyword} format.
+            :param mappings: A dictionary of mappings that will be used, in {mapping: keyword} format.
             """
-            if elements is None:
-                elements = {}
+            if mappings is None:
+                mappings = {}
 
             self.template: Template = template
-            self.elements: dict[str:str] = elements
+            self.mappings: dict[str:str] = mappings
 
             self._string: str = ""
 
@@ -37,11 +38,11 @@ class FsSkeleton:
             Renders the template into a finished string based on the given elements.
             :return: The finished line result.
             """
-            self._string = self.template.safe_substitute(self.elements)
+            self._string = self.template.safe_substitute(self.mappings)
             return self._string
 
-
-    months: dict[str:str] = {
+    # Not sure if this should be final or not.
+    MONTHS: Final[dict[str:str]] = {
         "01": "January",
         "02": "February",
         "03": "March",
@@ -87,8 +88,8 @@ class FsSkeleton:
     def _calc_width(self) -> None:
         longest_str_len: int = 0
 
-        for element in self.elements.items():
-            longest_str_len = max(longest_str_len, len(element))
+        for key, element in self.elements.items():
+            longest_str_len = max(longest_str_len, element.width)
 
     def _format_date(self, date: str) -> str:
         """
@@ -97,7 +98,7 @@ class FsSkeleton:
         :return: The formatted date.
         """
         split_date: list[str] = date.split("/")
-        return f"For year ended {self.months[split_date[0]]} {split_date[1]}, {split_date[2]}"
+        return f"For year ended {self.MONTHS[split_date[0]]} {split_date[1]}, {split_date[2]}"
 
     def add_element(self, template: str, key: str, **kwargs) -> None:
         # Checks if the template exists.
@@ -114,7 +115,7 @@ class FsSkeleton:
         new_element: FsSkeleton._Element = self._Element(self.templates[template])
 
         for mapping, keyword in kwargs.items():
-            new_element.elements[mapping] = keyword
+            new_element.mappings[mapping] = keyword
 
         self.elements[key] = new_element
 

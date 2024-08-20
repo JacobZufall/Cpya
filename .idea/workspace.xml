@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a49b14fc-a951-47dd-bd19-77c5a467b5c2" name="Changes" comment="Moved some code from StatementSkeleton to here">
-      <change beforePath="$PROJECT_DIR$/.idea/pyacty.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pyacty.iml" afterDir="false" />
+    <list default="true" id="a49b14fc-a951-47dd-bd19-77c5a467b5c2" name="Changes" comment="Added internal class to FsSkeleton.py to help with formatting">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/FinancialStatement.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/FinancialStatement.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/TrueBalance.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/fundamentals/TrueBalance.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pyacty/financial_statements/skeletons/FsSkeleton.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/financial_statements/skeletons/FsSkeleton.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pyacty/fundamentals/Money.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/pyacty/fundamentals/Money.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -261,7 +257,7 @@
       <workItem from="1722368194661" duration="25000" />
       <workItem from="1724180053245" duration="29000" />
       <workItem from="1724191319130" duration="1774000" />
-      <workItem from="1724193179128" duration="449000" />
+      <workItem from="1724193179128" duration="686000" />
     </task>
     <task id="LOCAL-00001" summary="Added balance_sheet.py, and other things">
       <created>1686756190237</created>
@@ -613,7 +609,15 @@
       <option name="project" value="LOCAL" />
       <updated>1722020946603</updated>
     </task>
-    <option name="localTasksCounter" value="45" />
+    <task id="LOCAL-00045" summary="Added internal class to FsSkeleton.py to help with formatting">
+      <option name="closed" value="true" />
+      <created>1724193696696</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1724193696696</updated>
+    </task>
+    <option name="localTasksCounter" value="46" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -643,7 +647,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Updated name" />
     <MESSAGE value="Continued updating name" />
     <MESSAGE value="Added method to save to CSV file" />
     <MESSAGE value="Updated IncomeStatement.py to be consistent with BalanceSheet.py" />
@@ -668,7 +671,8 @@
     <MESSAGE value="Adding some things to get IncomeStatement.py up to date with BalanceSheet.py" />
     <MESSAGE value="Working on defining the body of BsSkeleton.py" />
     <MESSAGE value="Moved some code from StatementSkeleton to here" />
-    <option name="LAST_COMMIT_MESSAGE" value="Moved some code from StatementSkeleton to here" />
+    <MESSAGE value="Added internal class to FsSkeleton.py to help with formatting" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added internal class to FsSkeleton.py to help with formatting" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
