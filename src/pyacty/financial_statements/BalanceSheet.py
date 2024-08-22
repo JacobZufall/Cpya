@@ -4,7 +4,6 @@ BalanceSheet.py
 
 from typing import override
 
-from .skeletons.BsSkeleton import BsSkeleton
 from .DefaultBalance import DefaultBalance
 from .FinancialStatement import FinancialStatement
 from ..constants import BS_CATEGORIES

@@ -5,43 +5,109 @@ FsSkeleton.py
 from string import Template
 from typing import Any, Final
 
+DEFAULT_INDENT_SIZE: Final[int] = 4
+
 
 class FsSkeleton:
     class _Element:
+        auto_mappings: list[str] = ["divider", "indent", "spacer", "left_spacer", "central_spacer", "right_spacer"]
+
         # TODO: Work out how to implement dynamic spacers. I'm thinking that when the parent class calls its render
         #  function, each instance of _Element will compare their width to the highest width, and adjust their central
         #  spacer so that everything lines up.
-        def __init__(self, template: Template, mappings: dict[str:str] = None) -> None:
+        def __init__(self, template: Template, indent_level: int, indent_size: int, edge: bool,
+                     mappings: dict[str:str] = None) -> None:
             """
             A single line in the output of FsSkeleton. This class allows the dynamic updating of the width so that it
             can adapt when new elements are added.
             :param template: A string template.
             :param mappings: A dictionary of mappings that will be used, in {mapping: keyword} format.
             """
+            self.template: Template = template
+
             if mappings is None:
                 mappings = {}
 
-            self.template: Template = template
             self.mappings: dict[str:str] = mappings
 
+            # Spacers shouldn't be manually controlled by the user, so this gets rid of any they may have inserted into
+            # mappings.
+            for key, mapping in self.mappings.items():
+                if key in self.auto_mappings:
+                    self.mappings.pop(key)
+
+            self.indent_level: int = indent_level
+            self.indent_size: int = indent_size
+            self.edge: bool = edge
+
             self._string: str = ""
+
+        @property
+        def total_indent(self) -> int:
+            result: int = 0
+
+            if self.indent_level > 0:
+                result = (self.indent_level * self.indent_size) - 1
+
+            return result
 
         # self.width needs to change whenever self._string does, so this allows us to calculate it when width is called.
         @property
         def width(self) -> int:
             """
-            The current width of the fully rendered template, including spaces.
+            The smallest width an element can be.
             :return: The length of the string.
             """
-            self.render()
-            return len(self._string)
+            return len(self.template.substitute(
+                self.mappings,
+                end = "",
+                divider = "",
+                indent = " " * self.total_indent,
+                spacer = "",
+                left_spacer = "",
+                central_spacer = "",
+                right_spacer = ""
+            ))
 
-        def render(self) -> str:
+        def render(self, min_width: int) -> str:
             """
             Renders the template into a finished string based on the given elements.
+            :param min_width: The minimum width of the template to render.
             :return: The finished line result.
             """
-            self._string = self.template.safe_substitute(self.mappings)
+            width_diff: int = max(min_width - self.width, 0)
+
+            # Some elements are centered, so we need the space on either side to be equal while still being the proper
+            # width. In the case where the resulting space needed is an odd number, it'll put more space on the right
+            # side than the left, which tends to look better.
+            if width_diff % 2 == 0:
+                left_space: int = width_diff // 2
+                right_space: int = left_space
+
+            else:
+                left_space: int = int(width_diff / 2 - 0.5)
+                right_space: int = int(width_diff / 2 + 0.5)
+
+            print(min_width)
+            print(self.width)
+            print(width_diff)
+            print(left_space)
+            print(right_space)
+
+            div_end_char = "+" if self.edge else "|"
+
+            # Subtracting 2 from min_width accounts for the border.
+            self._string = self.template.substitute(
+                self.mappings,
+                end = div_end_char,
+                divider = "-" * (min_width - 2),
+                indent = " " * self.total_indent,
+                spacer = " " * (min_width - 2),
+                left_spacer = " " * left_space,
+                central_spacer = " " * width_diff,
+                right_spacer = " " * right_space
+            )
+
             return self._string
 
     # Not sure if this should be final or not.
@@ -61,14 +127,14 @@ class FsSkeleton:
     }
 
     def __init__(self, fn_stmt: dict[str:dict[str:dict[str:Any]]], company: str, fs_name: str, date: str,
-                 min_width: int = 50, margin: int = 2, indent_size: int = 4, column_space: int = 20,
+                 min_width: int = 50, margin: int = 2, indent_size: int = DEFAULT_INDENT_SIZE, column_space: int = 20,
                  decimals: bool = True) -> None:
         self.fn_stmt: dict[str:dict[str:dict[str:Any]]] = fn_stmt
         self.company: str = company
         self.fs_name: str = fs_name
         self.f_date: str = self._format_date(date)
 
-        self.min_width: int = min_width
+        self._min_width: int = min_width
         self.margin: int = margin
         self.indent_size: int = indent_size
         self.column_space: int = column_space
@@ -79,7 +145,7 @@ class FsSkeleton:
         # good practice or not, however.
         self.templates: dict[str:Template] = {
             "account": Template("| $indent$account_name$central_spacer$account_bal|"),
-            "divider": Template("|$divider|"),
+            "divider": Template("$end$divider$end"),
             "header": Template("|$left_spacer$header_name$right_spacer|"),
             "spacer": Template("|$spacer|"),
             "subtotal": Template("| $indent$subtotal_name$central_spacer$subtotal_bal |"),
@@ -88,11 +154,25 @@ class FsSkeleton:
         }
         self.elements: dict[str:FsSkeleton._Element] = {}
 
-    def _calc_width(self) -> None:
+    @property
+    def min_width(self) -> int:
         longest_str_len: int = 0
 
         for key, element in self.elements.items():
             longest_str_len = max(longest_str_len, element.width)
+
+        return longest_str_len
+
+    @min_width.setter
+    def min_width(self, width: int) -> None:
+        """
+        Used to manually set the width. You cannot use this setter to change self._min_width to less than what the
+        getter calculates as the minimum width, because it'll be overridden. This is used when you want the output to
+        be even wider.
+        :param width: The minimum width of the output.
+        :return: Nothing.
+        """
+        self._min_width = width
 
     def _format_date(self, date: str) -> str:
         """
@@ -103,18 +183,55 @@ class FsSkeleton:
         split_date: list[str] = date.split("/")
         return f"For year ended {self.MONTHS[split_date[0]]} {split_date[1]}, {split_date[2]}"
 
-    def render(self, print_output: bool = False) -> list[str]:
-        output: list[str] = []
+    def render(self, print_output: bool = False) -> str:
+        """
+        Renders all added elements.
+        :param print_output: If the output should display in console.
+        :return: A list of strings of each element.
+        """
+        output: str = ""
 
         for key, element in self.elements.items():
-            output.append(element.render())
+            output += element.render(self._min_width)
 
             if print_output:
-                print(element.render())
+                print(element.render(self._min_width))
 
         return output
 
-    def add_element(self, template: Template | str, key: str, **kwargs) -> None:
+    def auto_render(self, print_output: bool = False) -> str:
+        """
+        Unlike the render() method, this generates an output automatically based on self.fn_stmt.
+        :param print_output: If the output should display in console.
+        :return: A list of strings of each element.
+        """
+        output: str = ""
+        # Temporarily stores elements that have been manually added so that they can be restored at the end of the
+        # method.
+        auto_elements: dict[str:FsSkeleton._Element] = self.elements
+
+        # Header Elements
+        self.add_element(self.templates["divider"], "div_top", edge=True)
+        self.add_element(self.templates["header"], "header_company", header_name=self.company)
+        self.add_element(self.templates["divider"], "div_1")
+        self.add_element(self.templates["header"], "header_fs_name", header_name=self.fs_name)
+        self.add_element(self.templates["divider"], "div_2")
+        self.add_element(self.templates["header"], "header_date", header_name=self.f_date)
+        self.add_element(self.templates["divider"], "div_3")
+
+        # Body Elements
+
+        for key, element in auto_elements.items():
+            output += element.render(self._min_width) + "\n"
+
+            if print_output:
+                print(element.render(self._min_width))
+
+        self.elements = auto_elements
+        return output
+
+    def add_element(self, template: Template | str, key: str, indent_level: int = 0,
+                    indent_size: int = DEFAULT_INDENT_SIZE, edge: bool = False, **kwargs) -> None:
         if type(template) is str:
             template = Template(template)
 
@@ -129,7 +246,7 @@ class FsSkeleton:
 
         # By storing the template used and the elements to substitute, we can perform the substitution later after all
         # elements are added. This allows us to dynamically update the width of the output as new elements are added.
-        new_element: FsSkeleton._Element = self._Element(template)
+        new_element: FsSkeleton._Element = self._Element(template, indent_level, indent_size, edge)
 
         for mapping, keyword in kwargs.items():
             new_element.mappings[mapping] = keyword
@@ -175,9 +292,3 @@ class FsSkeleton:
             raise KeyError
 
         self.templates.pop(template_name)
-
-
-if __name__ == "__main__":
-    fs_skeleton: FsSkeleton = FsSkeleton({}, "company", "name", "12/31/2021")
-    fs_skeleton.add_element(fs_skeleton.templates["account"], "test_account")
-    print(fs_skeleton.elements["test_account"].width)

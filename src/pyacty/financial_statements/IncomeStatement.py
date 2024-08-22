@@ -4,7 +4,6 @@ IncomeStatement.py
 
 from typing import override
 
-from .skeletons.IsSkeleton import IsSkeleton
 from .FinancialStatement import FinancialStatement
 from .DefaultBalance import DefaultBalance
 from ..constants import IS_CATEGORIES

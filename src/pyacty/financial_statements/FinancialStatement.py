@@ -13,6 +13,7 @@ import json
 import os
 from typing import TextIO, final, override
 
+from .skeletons.FsSkeleton import FsSkeleton
 from ..constants import ALL_CATEGORIES
 from ..custom_types import fnstmt
 from ..custom_exceptions import SupportError
@@ -33,7 +34,7 @@ class FinancialStatement:
 
     @override
     def __str__(self) -> str:
-        return Skeleton(self.fs, self.company, self.fs_name, self.date).return_output()
+        return FsSkeleton(self.fs, self.company, self.fs_name, self.date).auto_render()
 
     @override
     def __repr__(self) -> str:
