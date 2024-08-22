@@ -4,9 +4,9 @@ test_FinancialStatement.py
 
 from src.pyacty.financial_statements.FinancialStatement import FinancialStatement
 
-testfs: FinancialStatement = FinancialStatement("Zufall Company", "12/31/2024")
+test_fs: FinancialStatement = FinancialStatement("Zufall Company", "12/31/2024")
 
-testfs.fs = {
+test_fs.fs = {
     "Assets": {
         "Cash": {
             "d/c": "debit",
@@ -42,4 +42,4 @@ testfs.fs = {
     }
 }
 
-print(testfs)
+print(test_fs)

@@ -8,7 +8,9 @@ from typing import Any, Final
 
 class FsSkeleton:
     class _Element:
-        # TODO: Work out how to implement spacers.
+        # TODO: Work out how to implement dynamic spacers. I'm thinking that when the parent class calls its render
+        #  function, each instance of _Element will compare their width to the highest width, and adjust their central
+        #  spacer so that everything lines up.
         def __init__(self, template: Template, mappings: dict[str:str] = None) -> None:
             """
             A single line in the output of FsSkeleton. This class allows the dynamic updating of the width so that it
@@ -24,6 +26,7 @@ class FsSkeleton:
 
             self._string: str = ""
 
+        # self.width needs to change whenever self._string does, so this allows us to calculate it when width is called.
         @property
         def width(self) -> int:
             """
@@ -57,10 +60,10 @@ class FsSkeleton:
         "12": "December"
     }
 
-    def __init__(self, fnstmt: dict[str:dict[str:dict[str:Any]]], company: str, fs_name: str, date: str,
+    def __init__(self, fn_stmt: dict[str:dict[str:dict[str:Any]]], company: str, fs_name: str, date: str,
                  min_width: int = 50, margin: int = 2, indent_size: int = 4, column_space: int = 20,
                  decimals: bool = True) -> None:
-        self.fnstmt: dict[str:dict[str:dict[str:Any]]] = fnstmt
+        self.fn_stmt: dict[str:dict[str:dict[str:Any]]] = fn_stmt
         self.company: str = company
         self.fs_name: str = fs_name
         self.f_date: str = self._format_date(date)
@@ -100,9 +103,23 @@ class FsSkeleton:
         split_date: list[str] = date.split("/")
         return f"For year ended {self.MONTHS[split_date[0]]} {split_date[1]}, {split_date[2]}"
 
-    def add_element(self, template: str, key: str, **kwargs) -> None:
+    def render(self, print_output: bool = False) -> list[str]:
+        output: list[str] = []
+
+        for key, element in self.elements.items():
+            output.append(element.render())
+
+            if print_output:
+                print(element.render())
+
+        return output
+
+    def add_element(self, template: Template | str, key: str, **kwargs) -> None:
+        if type(template) is str:
+            template = Template(template)
+
         # Checks if the template exists.
-        if template not in self.templates:
+        if template not in self.templates.values():
             raise KeyError
 
         # Keys need to be unique so that we can delete them later, if needed. This checks to make sure that an element
@@ -112,7 +129,7 @@ class FsSkeleton:
 
         # By storing the template used and the elements to substitute, we can perform the substitution later after all
         # elements are added. This allows us to dynamically update the width of the output as new elements are added.
-        new_element: FsSkeleton._Element = self._Element(self.templates[template])
+        new_element: FsSkeleton._Element = self._Element(template)
 
         for mapping, keyword in kwargs.items():
             new_element.mappings[mapping] = keyword
@@ -137,18 +154,16 @@ class FsSkeleton:
         :param template: The actual Template object or a string.
         :return: Nothing.
         """
-        new_template: Template | str = template
-
         # I figured this would be good to add in case someone doesn't want to import Template from string in a separate
         # file.
         if type(template) is str:
-            new_template = Template(template)
+            template = Template(template)
 
         for name, _ in self.templates.items():
             if name == template_name:
                 raise ValueError
 
-        self.templates[template_name] = new_template
+        self.templates[template_name] = template
 
     def del_template(self, template_name: str) -> None:
         """
@@ -160,3 +175,9 @@ class FsSkeleton:
             raise KeyError
 
         self.templates.pop(template_name)
+
+
+if __name__ == "__main__":
+    fs_skeleton: FsSkeleton = FsSkeleton({}, "company", "name", "12/31/2021")
+    fs_skeleton.add_element(fs_skeleton.templates["account"], "test_account")
+    print(fs_skeleton.elements["test_account"].width)
