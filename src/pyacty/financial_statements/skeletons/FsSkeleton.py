@@ -12,9 +12,6 @@ class FsSkeleton:
     class _Element:
         auto_mappings: list[str] = ["divider", "indent", "spacer", "left_spacer", "central_spacer", "right_spacer"]
 
-        # TODO: Work out how to implement dynamic spacers. I'm thinking that when the parent class calls its render
-        #  function, each instance of _Element will compare their width to the highest width, and adjust their central
-        #  spacer so that everything lines up.
         def __init__(self, template: Template, indent_level: int, indent_size: int, edge: bool,
                      mappings: dict[str:str] = None) -> None:
             """
@@ -88,12 +85,6 @@ class FsSkeleton:
                 left_space: int = int(width_diff / 2 - 0.5)
                 right_space: int = int(width_diff / 2 + 0.5)
 
-            print(min_width)
-            print(self.width)
-            print(width_diff)
-            print(left_space)
-            print(right_space)
-
             div_end_char = "+" if self.edge else "|"
 
             # Subtracting 2 from min_width accounts for the border.
@@ -102,9 +93,9 @@ class FsSkeleton:
                 end = div_end_char,
                 divider = "-" * (min_width - 2),
                 indent = " " * self.total_indent,
-                spacer = " " * (min_width - 2),
+                spacer = " " * width_diff,
                 left_spacer = " " * left_space,
-                central_spacer = " " * width_diff,
+                central_spacer = "·" * width_diff,
                 right_spacer = " " * right_space
             )
 
@@ -127,7 +118,7 @@ class FsSkeleton:
     }
 
     def __init__(self, fn_stmt: dict[str:dict[str:dict[str:Any]]], company: str, fs_name: str, date: str,
-                 min_width: int = 50, margin: int = 2, indent_size: int = DEFAULT_INDENT_SIZE, column_space: int = 20,
+                 min_width: int = 75, margin: int = 2, indent_size: int = DEFAULT_INDENT_SIZE, column_space: int = 20,
                  decimals: bool = True) -> None:
         self.fn_stmt: dict[str:dict[str:dict[str:Any]]] = fn_stmt
         self.company: str = company
@@ -138,19 +129,20 @@ class FsSkeleton:
         self.margin: int = margin
         self.indent_size: int = indent_size
         self.column_space: int = column_space
+        # TODO: Actually use self.decimals.
         self.decimals: bool = decimals
 
         # Should there be a class attribute for templates which is then passed into self.templates by value? That way
         # one can choose to add a template to all instances or just a single instance easily. I'm not sure if this is a
         # good practice or not, however.
         self.templates: dict[str:Template] = {
-            "account": Template("| $indent$account_name$central_spacer$account_bal|"),
+            "account": Template("| $indent$account_name$central_spacer$account_bal |"),
             "divider": Template("$end$divider$end"),
             "header": Template("|$left_spacer$header_name$right_spacer|"),
             "spacer": Template("|$spacer|"),
             "subtotal": Template("| $indent$subtotal_name$central_spacer$subtotal_bal |"),
             "title": Template("| $title$spacer|"),
-            "total": Template("| Total $total_name$central_spacer$total_bal |")
+            "total": Template("| Total $total_name$spacer$total_bal |")
         }
         self.elements: dict[str:FsSkeleton._Element] = {}
 
@@ -211,15 +203,42 @@ class FsSkeleton:
         auto_elements: dict[str:FsSkeleton._Element] = self.elements
 
         # Header Elements
-        self.add_element(self.templates["divider"], "div_top", edge=True)
-        self.add_element(self.templates["header"], "header_company", header_name=self.company)
+        self.add_element(self.templates["divider"], "div_top", edge = True)
+        self.add_element(self.templates["header"], "header_company", header_name = self.company)
         self.add_element(self.templates["divider"], "div_1")
-        self.add_element(self.templates["header"], "header_fs_name", header_name=self.fs_name)
+        self.add_element(self.templates["header"], "header_fs_name", header_name = self.fs_name)
         self.add_element(self.templates["divider"], "div_2")
-        self.add_element(self.templates["header"], "header_date", header_name=self.f_date)
+        self.add_element(self.templates["header"], "header_date", header_name = self.f_date)
         self.add_element(self.templates["divider"], "div_3")
 
+        num_of_divs: int = 3
         # Body Elements
+        for category, accounts in self.fn_stmt.items():
+            self.add_element(self.templates["title"], f"title_{category.lower()}",
+                             title = category.lower().capitalize())
+
+            total_bal: float | int = 0.0
+
+            for account, attributes in accounts.items():
+                if attributes["d/c"] == "debit":
+                    total_bal += attributes["bal"]
+
+                else:
+                    total_bal -= attributes["bal"]
+
+                self.add_element(self.templates["account"], f"account_{account.lower()}",
+                                 account_name = account, account_bal = attributes["bal"], indent_level = 1)
+
+            self.add_element(self.templates["total"], f"total_{category.lower()}",
+                             total_name = category.lower().capitalize(), total_bal = abs(total_bal))
+            num_of_divs += 1
+            self.add_element(self.templates["divider"], f"div_{num_of_divs}")
+
+
+        else:
+            self.del_element(f"div_{num_of_divs}")
+            self.add_element(self.templates["divider"], "div_bottom", edge = True)
+
 
         for key, element in auto_elements.items():
             output += element.render(self._min_width) + "\n"

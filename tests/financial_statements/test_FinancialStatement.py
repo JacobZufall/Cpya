@@ -32,12 +32,12 @@ test_fs.fs = {
     "Stockholders' Equity": {
         "Common Stock": {
             "d/c": "credit",
-            "bal": 200
+            "bal": 200.0
         },
 
         "Retained Earnings": {
             "d/c": "credit",
-            "bal": 1_000
+            "bal": 1_000.0
         }
     }
 }
