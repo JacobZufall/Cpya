@@ -212,7 +212,6 @@ class FsSkeleton:
 
         num_of_divs: int = 3
         # Body Elements
-        print(self.decimals)
         for category, accounts in self.fn_stmt.items():
             self.add_element(self.templates["title"], f"title_{category.lower()}",
                              title = category.lower().capitalize())
