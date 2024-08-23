@@ -1,2 +1,1 @@
-from .BsSkeleton import *
-from .IsSkeleton import *
+from .FsSkeleton import *

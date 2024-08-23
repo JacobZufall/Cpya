@@ -55,6 +55,16 @@ class FsSkeleton:
             The smallest width an element can be.
             :return: The length of the string.
             """
+            print(self.template.substitute(
+                self.mappings,
+                end = "",
+                divider = "",
+                indent = " " * self.total_indent,
+                spacer = "",
+                left_spacer = "",
+                central_spacer = "",
+                right_spacer = ""
+            ))
             return len(self.template.substitute(
                 self.mappings,
                 end = "",

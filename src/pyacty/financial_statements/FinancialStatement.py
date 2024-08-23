@@ -20,7 +20,7 @@ from ..custom_exceptions import SupportError
 
 
 class FinancialStatement:
-    def __init__(self, company_name: str, date: str) -> None:
+    def __init__(self, company_name: str, date: str, decimals: bool = True) -> None:
         """
         A blank financial statement.
         :param company_name: The name of the company.
@@ -31,10 +31,12 @@ class FinancialStatement:
         # This is more of a place-holder name. If someone is making a custom financial statement they can change it.
         self.fs_name: str = "Financial Statement"
         self.date: str = date
+        self.decimals: bool = decimals
 
     @override
     def __str__(self) -> str:
-        return FsSkeleton(self.fs, self.company, self.fs_name, self.date).auto_render()
+        return FsSkeleton(self.fs, self.company, self.fs_name, self.date,
+                          decimals=self.decimals).auto_render()
 
     @override
     def __repr__(self) -> str:
