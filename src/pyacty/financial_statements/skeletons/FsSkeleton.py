@@ -129,8 +129,7 @@ class FsSkeleton:
         self.margin: int = margin
         self.indent_size: int = indent_size
         self.column_space: int = column_space
-        # TODO: Actually use self.decimals.
-        self.decimals: bool = decimals
+        self.decimals: str = ",.2f" if decimals else ",.0f"
 
         # Should there be a class attribute for templates which is then passed into self.templates by value? That way
         # one can choose to add a template to all instances or just a single instance easily. I'm not sure if this is a
@@ -213,6 +212,7 @@ class FsSkeleton:
 
         num_of_divs: int = 3
         # Body Elements
+        print(self.decimals)
         for category, accounts in self.fn_stmt.items():
             self.add_element(self.templates["title"], f"title_{category.lower()}",
                              title = category.lower().capitalize())
@@ -227,10 +227,12 @@ class FsSkeleton:
                     total_bal -= attributes["bal"]
 
                 self.add_element(self.templates["account"], f"account_{account.lower()}",
-                                 account_name = account, account_bal = attributes["bal"], indent_level = 1)
+                                 account_name = account, account_bal = f"{attributes["bal"]:{self.decimals}}",
+                                 indent_level = 1)
 
             self.add_element(self.templates["total"], f"total_{category.lower()}",
-                             total_name = category.lower().capitalize(), total_bal = abs(total_bal))
+                             total_name = category.lower().capitalize(),
+                             total_bal = f"{abs(total_bal):{self.decimals}}")
             num_of_divs += 1
             self.add_element(self.templates["divider"], f"div_{num_of_divs}")
 
