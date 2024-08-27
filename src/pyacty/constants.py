@@ -39,5 +39,6 @@ ALL_CATEGORIES: list[str] = []
 for category in BS_CATEGORIES or IS_CATEGORIES:
     ALL_CATEGORIES.append(category)
 
+# Why is this done again?
 for category in IS_CATEGORIES:
     ALL_CATEGORIES.append(category)
