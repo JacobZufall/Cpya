@@ -6,6 +6,7 @@ from typing import override
 
 from .FinancialStatement import FinancialStatement
 from .DefaultBalance import DefaultBalance
+from .skeletons.FsSkeleton import FsSkeleton
 from ..constants import IS_CATEGORIES
 from ..custom_types import fnstmt
 
@@ -41,7 +42,8 @@ class IncomeStatement(FinancialStatement):
 
     @override
     def __str__(self) -> str:
-        return IsSkeleton(self.fs, self.company, self.fs_name, self.date).return_output()
+        return FsSkeleton(self.fs, self.company, self.fs_name, self.date,
+                          decimals=self.decimals).auto_render()
 
     @override
     def reset(self) -> None:

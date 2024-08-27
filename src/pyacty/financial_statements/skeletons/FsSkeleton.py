@@ -1,5 +1,8 @@
 """
 FsSkeleton.py
+
+Considerations for this file:
+    - Some methods have A LOT of arguments. Better usage of **kwargs should be considered.
 """
 
 from string import Template
@@ -18,6 +21,9 @@ class FsSkeleton:
             A single line in the output of FsSkeleton. This class allows the dynamic updating of the width so that it
             can adapt when new elements are added.
             :param template: A string template.
+            :param indent_level: How many indents this element has.
+            :param indent_size: The size of the indent (default is 4 spaces).
+            :param edge: If the element is an edge-piece (only applicable to dividers).
             :param mappings: A dictionary of mappings that will be used, in {mapping: keyword} format.
             """
             self.template: Template = template
@@ -41,6 +47,10 @@ class FsSkeleton:
 
         @property
         def total_indent(self) -> int:
+            """
+            Calculates the total indent needed based on the specified indent size and level.
+            :return: The number of spaces needed for the indent.
+            """
             result: int = 0
 
             if self.indent_level > 0:
@@ -130,6 +140,18 @@ class FsSkeleton:
     def __init__(self, fn_stmt: dict[str:dict[str:dict[str:Any]]], company: str, fs_name: str, date: str,
                  min_width: int = 75, margin: int = 2, indent_size: int = DEFAULT_INDENT_SIZE, column_space: int = 20,
                  decimals: bool = True) -> None:
+        """
+        A class that helps format the output of a financial statement in the console.
+        :param fn_stmt: The financial statement to format.
+        :param company: The name of the company that the financial statement belongs to.
+        :param fs_name: The name of the financial statement.
+        :param date: The date of the financial statement.
+        :param min_width: The minimum width of the financial statement.
+        :param margin: How wide the margin is.
+        :param indent_size: How many spaces each indent is.
+        :param column_space: I forgot lol.
+        :param decimals: If numbers on the financial statement display decimals.
+        """
         self.fn_stmt: dict[str:dict[str:dict[str:Any]]] = fn_stmt
         self.company: str = company
         self.fs_name: str = fs_name
@@ -138,6 +160,7 @@ class FsSkeleton:
         self._min_width: int = min_width
         self.margin: int = margin
         self.indent_size: int = indent_size
+        # What is self.column_space for???
         self.column_space: int = column_space
         self.decimals: str = ",.2f" if decimals else ",.0f"
 
@@ -157,6 +180,10 @@ class FsSkeleton:
 
     @property
     def min_width(self) -> int:
+        """
+        Finds and returns the minimum width that the output can be.
+        :return: The longest string in self.elements.
+        """
         longest_str_len: int = 0
 
         for key, element in self.elements.items():
@@ -262,6 +289,16 @@ class FsSkeleton:
 
     def add_element(self, template: Template | str, key: str, indent_level: int = 0,
                     indent_size: int = DEFAULT_INDENT_SIZE, edge: bool = False, **kwargs) -> None:
+        """
+        Adds an element to the skeleton.
+        :param template: A string template, or the name of a pre-made one.
+        :param key: A unique key to identify the element.
+        :param indent_level: The indent level of the element.
+        :param indent_size: The size of each indent for the element.
+        :param edge: If the element is an edge-piece (only applicable to dividers).
+        :param kwargs:
+        :return:
+        """
         if type(template) is str:
             template = Template(template)
 
