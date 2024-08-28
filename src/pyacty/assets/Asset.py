@@ -30,6 +30,10 @@ class Asset:
         self._life = new_life
 
     @property
+    def rem_life(self) -> int:
+        return self._rem_life
+
+    @property
     def syd(self) -> int:
         running_total: int = 0
 
