@@ -3,11 +3,103 @@ TangibleAsset.py
 """
 
 from .Asset import Asset
+from ..fundamentals.Money import Money
+
+
+class TangibleAsset(Asset):
+    def __init__(self, name: str, life: int, value: Money | float | int, slvg_value: Money | float | int = 0.0,
+                 prod_cap: int = 0) -> None:
+        super().__init__(name, life, value)
+        self._slvg_value: Money = slvg_value if type(slvg_value) == Money else Money(slvg_value)
+        self.prod_cap: int = prod_cap
+
+        # Should either of these be private?
+        self.total_depr: Money = Money()
+
+    # Properties
+    @property
+    def depreciable_allocation(self) -> Money:
+        """
+        :return: The asset's value that is allowed to be depreciated.
+        """
+        return self.value - self.slvg_value
+
+    # Unlike depreciable_allocation, depreciable_value doesn't include dollars that have already been depreciated.
+    @property
+    def depreciable_value(self) -> Money:
+        """
+        :return: The asset's value that can currently be depreciated.
+        """
+        return self.net_value - self.slvg_value
+
+    @property
+    def net_value(self) -> Money:
+        return self.value - self.total_depr
+
+    @property
+    def slvg_value(self) -> Money:
+        return self._slvg_value
+    
+    @slvg_value.setter
+    def slvg_value(self, new_value: Money | float | int) -> None:
+        self._slvg_value = new_value if type(new_value) == Money else Money(new_value)
+
+    # Methods
+    def _validate_depreciation(self, depr_amt: Money) -> None:
+        if depr_amt <= self.net_value:
+            self.total_depr += depr_amt
+
+        else:
+            self.total_depr += self.depreciable_value
+
+    def depreciate(self, method: int, periods: int = 1, decline: float = 1.0, units_prod: int = 0) -> None:
+        """
+        [Supported Depreciation Methods] \n
+        0: Straight Line Method \n
+        1: Declining Balance Method \n
+        2: Sum of the Years' Digits Method \n
+        3: Units of Production Method \n
+        :param method:
+        :param periods:
+        :param decline:
+        :param units_prod:
+        :return:
+        """
+        match method:
+            # Straight Line
+            case 0:
+                self._validate_depreciation((self.depreciable_allocation / self.life) * periods)
+
+            # Declining Balance
+            case 1:
+                self._validate_depreciation(((self.net_value / self.life) * decline) * periods)
+
+            # Sum of the Years' Digits
+            case 2:
+                self._validate_depreciation(self.depreciable_allocation * ((self._rem_life / 12) / self.syd))
+
+            # Units of Production
+            case 3:
+                self._validate_depreciation((self.depreciable_value / self.prod_cap) * units_prod)
 
 
 
 
-# class TangibleAsset(Asset):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# class OldTangibleAsset(Asset):
 #     def __init__(self, name: str, life: int, value: float, slvg_value: float = 0.0, prod_cap: int = 0) -> None:
 #         """
 #         :param name: The name of the asset.

@@ -14,10 +14,12 @@ class Asset:
         self._rem_life: int = life
         self._value: Money = value if type(value) == Money else Money(value)
 
+    # Dunders
     @override
     def __str__(self) -> str:
         pass
 
+    # Properties
     @property
     def life(self) -> int:
         return self._life
@@ -37,9 +39,10 @@ class Asset:
         return running_total
 
     @property
-    def value(self) -> float:
-        return self._value.value
+    def value(self) -> Money:
+        return self._value
 
     @value.setter
     def value(self, new_value: Money | float | int) -> None:
+        # I don't know if this should happen, but I can't think of any reason why it shouldn't...
         self._value = new_value if type(new_value) == Money else Money(new_value)
