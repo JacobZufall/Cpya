@@ -63,7 +63,7 @@ def calculation_test() -> None:
     # Straight-line depreciation test
     depreciate_scenarios(0, scenarios, conditions)
     for _, asset in scenarios.items():
-        assert asset.depreciable_value.get_value() == asset.value - asset.slvg_value
+        assert asset.depreciable_value.get_value() == asset._value - asset.slvg_value
         assert asset.last_depr.get_value() == ((asset.def_value - asset.slvg_value) / asset.life) * conditions[
             "test_periods"] or asset.depreciable_value.get_value(1)
 
@@ -72,7 +72,7 @@ def calculation_test() -> None:
     # Declining balance depreciation test
     depreciate_scenarios(1, scenarios, conditions)
     for _, asset in scenarios.items():
-        assert asset.depreciable_value.get_value() == asset.value - asset.slvg_value
+        assert asset.depreciable_value.get_value() == asset._value - asset.slvg_value
         # asset.total_depr[-2] retrieves the total depreciation prior to asset.depreciate() being called on the first
         # line of this loop.
         # Also, I have no idea why PyCharm wants to format it this way, but I'll leave it for now.
@@ -85,7 +85,7 @@ def calculation_test() -> None:
     # Sum of the years' digits depreciation test
     depreciate_scenarios(2, scenarios, conditions)
     for _, asset in scenarios.items():
-        assert asset.depreciable_value.get_value() == asset.value - asset.slvg_value
+        assert asset.depreciable_value.get_value() == asset._value - asset.slvg_value
         assert (asset.last_depr.get_value() == asset.def_value * (asset.rem_life + conditions["test_periods"]) /
                 asset.syd or asset.depreciable_value.get_value(1))
 
@@ -94,7 +94,7 @@ def calculation_test() -> None:
     # Units of production depreciation test
     depreciate_scenarios(3, scenarios, conditions)
     for _, asset in scenarios.items():
-        assert asset.depreciable_value.get_value() == asset.value - asset.slvg_value
+        assert asset.depreciable_value.get_value() == asset._value - asset.slvg_value
         assert (asset.last_depr.get_value() == (asset.depreciable_value.get_value(1) / asset.prod_cap) *
                 conditions["units_prod"] or asset.depreciable_value.get_value(1))
 

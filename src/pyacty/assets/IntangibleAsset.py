@@ -20,6 +20,6 @@ class IntangibleAsset(Asset):
         :param periods: The number of periods (usually years) to depreciate.
         :return: Nothing.
         """
-        self.value -= periods * (self.value / self._life)
+        self._value -= periods * (self._value / self._life)
 
     

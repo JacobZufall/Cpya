@@ -3,6 +3,8 @@ FsSkeleton.py
 
 Considerations for this file:
     - Some methods have A LOT of arguments. Better usage of **kwargs should be considered.
+
+# TODO: Implement Money class here so that decimals can be more centrally formatted.
 """
 
 from string import Template
