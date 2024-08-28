@@ -2,177 +2,195 @@
 test_TangibleAsset.py
 """
 
+import unittest as ut
+
 from src.pyacty.assets.TangibleAsset import TangibleAsset
 
-# Define test scenarios here.
-scenarios: dict[str:TangibleAsset] = {
-    "scenario_01": TangibleAsset("Draw", (5 * 12), 1_000, 100, 2_500),
-    "scenario_02": TangibleAsset("Apple", (7 * 12), 50_000, 2_000, 3_000),
-    "scenario_03": TangibleAsset("Irbing", (10 * 12), 100_000, 0, 9_000),
-    "scenario_04": TangibleAsset("Colith", (25 * 12), 5_000_000, 1_000_000, 5_000),
-    "scenario_05": TangibleAsset("TheFireEnder", (1 * 12), 100_000, 0, 4_750)
-}
 
+class TestTangibleAsset(ut.TestCase):
+    def test_straight_line(self) -> None:
+        asset_one: TangibleAsset = TangibleAsset("Test Asset", 10 * 12, 100_000)
 
-def reset_scenarios(scenario_dict: dict[str:any]) -> None:
-    """
-    Resets all scenarios in a given array.
-    :param scenario_dict: The dictionary containing the scenario(s).
-    :return: Nothing.
-    """
-    for _, asset in scenario_dict.items():
-        asset.reset()
+        # Ensures that the properties were set and can be retrieved properly.
+        self.assertEqual(asset_one.depreciable_allocation, 100_000)
+        self.assertEqual(asset_one.depreciable_value, 100_000)
+        self.assertEqual(asset_one.net_value, 100_000)
+        self.assertEqual(asset_one.slvg_value, 0)
 
+        # Ensures that depreciate depreciates the correct amount.
+        self.assertEqual(asset_one.depreciate(0), 10_000)
 
-def depreciate_scenarios(method: int, scenario_dict: dict[str:any], cond_dict: dict[str:any]) -> None:
-    """
-    Depreciates all scenarios in an array by a given method.\n
-    [Supported Depreciation Methods] \n
-    0: Straight Line Method \n
-    1: Declining Balance Method \n
-    2: Sum of the Years' Digits Method \n
-    3: Units of Production Method \n
-    :param method: The depreciation method.
-    :param scenario_dict: The dictionary containing the scenario(s).
-    :param cond_dict: The dictionary containing parameters for # of periods, declining %, and units produced.
-    :return: Nothing
-    """
-    for _, asset in scenario_dict.items():
-        asset.depreciate(method, cond_dict["test_periods"], cond_dict["db_decline"], cond_dict["units_prod"])
-        # Rounded to two decimal places, or pennies.
-        asset.last_depr.change_value(round(asset.last_depr.get_value(), 2))
+        # Ensures that the properties were updated accordingly.
+        self.assertEqual(asset_one.depreciable_allocation, 100_000)
+        self.assertEqual(asset_one.depreciable_value, 90_000)
+        self.assertEqual(asset_one.net_value, 90_000)
+        self.assertEqual(asset_one.slvg_value, 0)
 
+        # Testing depreciation for two periods just to ensure it doesn't change.
+        self.assertEqual(asset_one.depreciate(0), 10_000)
 
-def calculation_test() -> None:
-    """
-    These assertions just re-do what was already done and aren't static. However, these are good for making sure you
-    don't accidentally change how depreciation is calculated.
-    :return: Nothing.
-    """
-    conditions: dict[str:any] = {
-        "test_periods": 12,
-        "db_decline": 1.5,
-        "units_prod": 500
-    }
+        # Ensures that the properties were updated accordingly.
+        self.assertEqual(asset_one.depreciable_allocation, 100_000)
+        self.assertEqual(asset_one.depreciable_value, 80_000)
+        self.assertEqual(asset_one.net_value, 80_000)
+        self.assertEqual(asset_one.slvg_value, 0)
 
-    # In the event that an asset is 100% depreciated, the regular expression will return false and raise an assertion
-    # error. In this case, it'll check if it equals asset.depreciable_value[-2]. If an asset is fully depreciated,
-    # asset.depreciable_value[-1] will be 0, so asset.depreciable_value[-2] will be how much was last depreciated,
-    # since it was the max amount that could be depreciated.
+        # Same tests, this time with a salvage value.
+        asset_two: TangibleAsset = TangibleAsset("Test Asset", 10 * 12, 100_000, 10_000)
 
-    # Straight-line depreciation test
-    depreciate_scenarios(0, scenarios, conditions)
-    for _, asset in scenarios.items():
-        assert asset.depreciable_value.get_value() == asset._value - asset.slvg_value
-        assert asset.last_depr.get_value() == ((asset.def_value - asset.slvg_value) / asset.life) * conditions[
-            "test_periods"] or asset.depreciable_value.get_value(1)
+        self.assertEqual(asset_two.depreciable_allocation, 90_000)
+        self.assertEqual(asset_two.depreciable_value, 90_000)
+        self.assertEqual(asset_two.net_value, 100_000)
+        self.assertEqual(asset_two.slvg_value, 10_000)
 
-    reset_scenarios(scenarios)
+        self.assertEqual(asset_two.depreciate(0), 9_000)
 
-    # Declining balance depreciation test
-    depreciate_scenarios(1, scenarios, conditions)
-    for _, asset in scenarios.items():
-        assert asset.depreciable_value.get_value() == asset._value - asset.slvg_value
-        # asset.total_depr[-2] retrieves the total depreciation prior to asset.depreciate() being called on the first
-        # line of this loop.
-        # Also, I have no idea why PyCharm wants to format it this way, but I'll leave it for now.
-        assert (asset.last_depr.get_value() == (((asset.def_value - (asset.total_depr.get_value(1) or 0)) / asset.life)
-                                                * conditions["db_decline"]) * conditions["test_periods"] or
-                asset.depreciable_value.get_value(1))
+        self.assertEqual(asset_two.depreciable_allocation, 90_000)
+        self.assertEqual(asset_two.depreciable_value, 81_000)
+        self.assertEqual(asset_two.net_value, 91_000)
+        self.assertEqual(asset_two.slvg_value, 10_000)
 
-    reset_scenarios(scenarios)
+        self.assertEqual(asset_two.depreciate(0), 9_000)
 
-    # Sum of the years' digits depreciation test
-    depreciate_scenarios(2, scenarios, conditions)
-    for _, asset in scenarios.items():
-        assert asset.depreciable_value.get_value() == asset._value - asset.slvg_value
-        assert (asset.last_depr.get_value() == asset.def_value * (asset.rem_life + conditions["test_periods"]) /
-                asset.syd or asset.depreciable_value.get_value(1))
+        self.assertEqual(asset_two.depreciable_allocation, 90_000)
+        self.assertEqual(asset_two.depreciable_value, 72_000)
+        self.assertEqual(asset_two.net_value, 82_000)
+        self.assertEqual(asset_two.slvg_value, 10_000)
 
-    reset_scenarios(scenarios)
+    def test_declining_balance(self) -> None:
+        # Declining balance ignores salvage value, so testing asset_two ensures it ignores it in calculations.
+        asset_two: TangibleAsset = TangibleAsset("Test Asset", 10 * 12, 100_000, 10_000)
 
-    # Units of production depreciation test
-    depreciate_scenarios(3, scenarios, conditions)
-    for _, asset in scenarios.items():
-        assert asset.depreciable_value.get_value() == asset._value - asset.slvg_value
-        assert (asset.last_depr.get_value() == (asset.depreciable_value.get_value(1) / asset.prod_cap) *
-                conditions["units_prod"] or asset.depreciable_value.get_value(1))
+        self.assertEqual(asset_two.depreciable_allocation, 90_000)
+        self.assertEqual(asset_two.depreciable_value, 90_000)
+        self.assertEqual(asset_two.net_value, 100_000)
+        self.assertEqual(asset_two.slvg_value, 10_000)
 
-    reset_scenarios(scenarios)
+        self.assertEqual(asset_two.depreciate(1, decline=2.0).value, 20_000)
 
+        self.assertEqual(asset_two.depreciable_allocation, 90_000)
+        self.assertEqual(asset_two.depreciable_value, 70_000)
+        self.assertEqual(asset_two.net_value, 80_000)
+        self.assertEqual(asset_two.slvg_value, 10_000)
 
-def result_test() -> None:
-    """
-    These assertions make sure we're getting the expected value, or the same value we get calculating it by hand or with
-    another program that's reliable. I think the only thing that needs to be asserted is self.last_depr[-1]
-    :return: Nothing.
-    """
-    conditions: dict[str:any] = {
-        "test_periods": 12,
-        "db_decline": 1.0,
-        "units_prod": 500
-    }
+        self.assertEqual(asset_two.depreciate(1, decline=2.0), 16_000)
 
-    # Straight-line depreciation test
-    depreciate_scenarios(0, scenarios, conditions)
+        self.assertEqual(asset_two.depreciable_allocation, 90_000)
+        self.assertEqual(asset_two.depreciable_value, 54_000)
+        self.assertEqual(asset_two.net_value, 64_000)
+        self.assertEqual(asset_two.slvg_value, 10_000)
 
-    assert scenarios["scenario_01"].last_depr.get_value() == 180.0
-    assert scenarios["scenario_02"].last_depr.get_value() == 6_857.14
-    assert scenarios["scenario_03"].last_depr.get_value() == 10_000.0
-    assert scenarios["scenario_04"].last_depr.get_value() == 160_000.0
-    assert scenarios["scenario_05"].last_depr.get_value() == 100_000.0
+    def test_sum_years(self) -> None:
+        asset_one: TangibleAsset = TangibleAsset("Test Asset", 10 * 12, 100_000)
 
-    reset_scenarios(scenarios)
+        self.assertEqual(asset_one.depreciable_allocation, 100_000)
+        self.assertEqual(asset_one.depreciable_value, 100_000)
+        self.assertEqual(asset_one.net_value, 100_000)
+        self.assertEqual(asset_one.slvg_value, 0)
 
-    # Declining balance depreciation test
-    # 150% test
-    conditions["db_decline"] = 1.5
-    depreciate_scenarios(1, scenarios, conditions)
+        self.assertEqual(asset_one.depreciate(2), 18_181.82)
 
-    assert scenarios["scenario_01"].last_depr.get_value() == 300.0
-    assert scenarios["scenario_02"].last_depr.get_value() == 10_714.29
-    assert scenarios["scenario_03"].last_depr.get_value() == 15_000.0
-    assert scenarios["scenario_04"].last_depr.get_value() == 300_000.0
-    # scenario_05 is unique because it should depreciate $150,000, but the asset is only worth $100,000.
-    assert scenarios["scenario_05"].last_depr.get_value() == 100_000.0
+        self.assertEqual(asset_one.depreciable_allocation, 100_000)
+        self.assertEqual(asset_one.depreciable_value, 81_818.18)
+        self.assertEqual(asset_one.net_value, 81_818.18)
+        self.assertEqual(asset_one.slvg_value, 0)
 
-    reset_scenarios(scenarios)
+        self.assertEqual(asset_one.depreciate(2), 16_363.64)
 
-    # 200% test
-    conditions["db_decline"] = 2.0
-    depreciate_scenarios(1, scenarios, conditions)
+        asset_two: TangibleAsset = TangibleAsset("Test Asset", 10 * 12, 100_000, 10_000)
 
-    assert scenarios["scenario_01"].last_depr.get_value() == 400.0
-    assert scenarios["scenario_02"].last_depr.get_value() == 14_285.71
-    assert scenarios["scenario_03"].last_depr.get_value() == 20_000.0
-    assert scenarios["scenario_04"].last_depr.get_value() == 400_000.0
-    assert scenarios["scenario_05"].last_depr.get_value() == 100_000.0
+        self.assertEqual(asset_two.depreciable_allocation, 90_000)
+        self.assertEqual(asset_two.depreciable_value, 90_000)
+        self.assertEqual(asset_two.net_value, 100_000)
+        self.assertEqual(asset_two.slvg_value, 10_000)
 
-    reset_scenarios(scenarios)
+        self.assertEqual(asset_two.depreciate(2), 16_363.64)
 
-    # Sum of the years' digits depreciation test
-    depreciate_scenarios(2, scenarios, conditions)
+        self.assertEqual(asset_two.depreciable_allocation, 90_000)
+        self.assertEqual(asset_two.depreciable_value, 73_636.36)
+        self.assertEqual(asset_two.net_value, 83_636.36)
+        self.assertEqual(asset_two.slvg_value, 10_000)
 
-    assert scenarios["scenario_01"].last_depr.get_value() == 300.0
-    assert scenarios["scenario_02"].last_depr.get_value() == 12_000.0
-    assert scenarios["scenario_03"].last_depr.get_value() == 18_181.82
-    assert scenarios["scenario_04"].last_depr.get_value() == 307_692.31
-    assert scenarios["scenario_05"].last_depr.get_value() == 100_000.0
+        self.assertEqual(asset_two.depreciate(2), 14_727.27)
 
-    reset_scenarios(scenarios)
+        self.assertEqual(asset_two.depreciable_allocation, 90_000)
+        self.assertEqual(asset_two.depreciable_value, 58_909.09)
+        self.assertEqual(asset_two.net_value, 68_909.09)
+        self.assertEqual(asset_two.slvg_value, 10_000)
 
-    # Units of production depreciation test
-    depreciate_scenarios(3, scenarios, conditions)
+    def test_units_prod(self) -> None:
+        # Just to test what happens if someone forgets to specify the amount of units produced or a production cap.
+        asset_one: TangibleAsset = TangibleAsset("Test Asset", 10 * 12, 100_000)
 
-    assert scenarios["scenario_01"].last_depr.get_value() == 180.0
-    assert scenarios["scenario_02"].last_depr.get_value() == 8_000.0
-    assert scenarios["scenario_03"].last_depr.get_value() == 5_555.56
-    assert scenarios["scenario_04"].last_depr.get_value() == 400_000.0
-    assert scenarios["scenario_05"].last_depr.get_value() == 10_526.32
+        self.assertEqual(asset_one.depreciable_allocation, 100_000)
+        self.assertEqual(asset_one.depreciable_value, 100_000)
+        self.assertEqual(asset_one.net_value, 100_000)
+        self.assertEqual(asset_one.slvg_value, 0)
 
-    reset_scenarios(scenarios)
+        # It's expected that this results in a ZeroDivisionError, since the formula for the Units of Production method
+        # involves dividing by the prod_cap of the asset. Therefore, if this doesn't result in an error, then we have a
+        # problem.
+        try:
+            self.assertEqual(asset_one.depreciate(3), 0)
+
+        except ZeroDivisionError:
+            pass
+
+        else:
+            raise ArithmeticError("A production capacity of 0 should result in a ZeroDivisionError. Either "
+                                  "prod_cap != 0 for this test case, or the formula is wrong!")
+
+        asset_three: TangibleAsset = TangibleAsset("Test Asset", 10 * 12, 100_000, prod_cap=1_000)
+
+        self.assertEqual(asset_three.depreciable_allocation, 100_000)
+        self.assertEqual(asset_three.depreciable_value, 100_000)
+        self.assertEqual(asset_three.net_value, 100_000)
+        self.assertEqual(asset_three.slvg_value, 0)
+        self.assertEqual(asset_three.prod_cap, 1_000)
+
+        self.assertEqual(asset_three.depreciate(3, units_prod=100), 10_000)
+
+        self.assertEqual(asset_three.depreciable_allocation, 100_000)
+        self.assertEqual(asset_three.depreciable_value, 90_000)
+        self.assertEqual(asset_three.net_value, 90_000)
+        self.assertEqual(asset_three.slvg_value, 0)
+        self.assertEqual(asset_three.prod_cap, 1_000)
+
+        asset_four: TangibleAsset = TangibleAsset("Test Asset", 10 * 12, 100_000, 10_000, 1_000)
+
+        self.assertEqual(asset_four.depreciable_allocation, 90_000)
+        self.assertEqual(asset_four.depreciable_value, 90_000)
+        self.assertEqual(asset_four.net_value, 100_000)
+        self.assertEqual(asset_four.slvg_value, 10_000)
+        self.assertEqual(asset_four.prod_cap, 1_000)
+
+        self.assertEqual(asset_four.depreciate(3, units_prod=100), 9_000)
+
+        self.assertEqual(asset_four.depreciable_allocation, 90_000)
+        self.assertEqual(asset_four.depreciable_value.value, 81_000)
+        self.assertEqual(asset_four.net_value, 91_000)
+        self.assertEqual(asset_four.slvg_value, 10_000)
+        self.assertEqual(asset_four.prod_cap, 1_000)
+
+        # This asset is just to test behavior when an asset is depreciated all the way.
+        asset_five: TangibleAsset = TangibleAsset("Test Asset", 10 * 12, 100_000, prod_cap=100)
+
+        self.assertEqual(asset_five.depreciable_allocation, 100_000)
+        self.assertEqual(asset_five.depreciable_value, 100_000)
+        self.assertEqual(asset_five.net_value, 100_000)
+        self.assertEqual(asset_five.slvg_value, 0)
+        self.assertEqual(asset_five.prod_cap, 100)
+
+        self.assertEqual(asset_five.depreciate(3, units_prod=100), 100_000)
+
+        self.assertEqual(asset_five.depreciable_allocation, 100_000)
+        self.assertEqual(asset_five.depreciable_value, 0)
+        self.assertEqual(asset_five.net_value, 0)
+        self.assertEqual(asset_five.slvg_value, 0)
+        self.assertEqual(asset_five.prod_cap, 100)
+
+        self.assertEqual(asset_five.depreciate(3, units_prod=100), 0)
 
 
 if __name__ == "__main__":
-    calculation_test()
-    result_test()
+    ut.main()
