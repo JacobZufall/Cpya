@@ -8,6 +8,7 @@ from ..fundamentals.Money import Money
 
 
 class Asset:
+    # Dunders
     def __init__(self, name: str, life: int, value: Money | float | int) -> None:
         """
         A partially abstract class.
@@ -20,7 +21,6 @@ class Asset:
         self._rem_life: int = life
         self._value: Money = value if type(value) == Money else Money(value)
 
-    # Dunders
     @override
     def __str__(self) -> str:
         pass

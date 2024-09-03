@@ -7,6 +7,7 @@ from ..fundamentals.Money import Money
 
 
 class TangibleAsset(Asset):
+    # Dunders
     def __init__(self, name: str, life: int, value: Money | float | int, slvg_value: Money | float | int = 0.0,
                  prod_cap: int = 0) -> None:
         """
@@ -19,6 +20,7 @@ class TangibleAsset(Asset):
         """
         super().__init__(name, life, value)
         self._slvg_value: Money = slvg_value if type(slvg_value) == Money else Money(slvg_value)
+        # I don't think prod_cap needs any further considerations, since it's just a denominator in a single equation.
         self.prod_cap: int = prod_cap
         # Also known as accumulated depreciation.
         self._total_depr: Money = Money()

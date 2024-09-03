@@ -7,6 +7,7 @@ from ..fundamentals.Money import Money
 
 
 class IntangibleAsset(Asset):
+    # Dunders
     def __init__(self, name: str, life: int, value: float):
         super().__init__(name, life, value)
         self._total_amort: Money = Money()
