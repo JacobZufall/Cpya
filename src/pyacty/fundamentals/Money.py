@@ -6,6 +6,7 @@ are output to the console. The class attribute "show_decimals" can be changed to
 decimals across an entire project easily.
 """
 
+import math
 from typing import Any, override, Self
 
 # Not sure if there's a better way to do this.
@@ -20,6 +21,10 @@ def assure_type(other) -> float | int:
 
 class Money:
     show_decimals: bool = False
+    # By default, Python uses IEEE 754 rounding rules. This standard results in 0.5 being rounded down to 0, which is
+    # the opposite of what accountants are used to. By default, the Money class will round 0.5 up, but this can be
+    # changed by simply changing the value of the boolean below.
+    ieee_754_rounding: bool = False
 
     def __init__(self, value: int | float = 0, symbol: str = "$") -> None:
         """
@@ -107,7 +112,16 @@ class Money:
         displaying the number to the user, we don't need to be more precise than the second decimal.
         :return: The value of Money, rounded to the nearest 100ths.
         """
-        return round(self.value, 2)
+        if not self.ieee_754_rounding:
+            mantissa: float = round((self.value * 100) - math.floor(self.value * 100), 1)
+
+            if mantissa < 0.5:
+                return math.floor(self.value * 100) / 100
+
+            return math.ceil(self.value * 100) / 100
+
+        else:
+            return round(self.value, 2)
 
     @property
     def num_format(self) -> str:
