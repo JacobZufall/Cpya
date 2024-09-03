@@ -88,7 +88,7 @@ class TestTangibleAsset(ut.TestCase):
         self.assertEqual(asset_two.total_depr, 0)
         self.assertEqual(asset_two.prod_cap, 0)
 
-        self.assertEqual(asset_two.depreciate(1, decline=2.0).value, 20_000)
+        self.assertEqual(asset_two.depreciate(1, decline=2.0), 20_000)
 
         self.assertEqual(asset_two.depreciable_allocation, 90_000)
         self.assertEqual(asset_two.depreciable_value, 70_000)

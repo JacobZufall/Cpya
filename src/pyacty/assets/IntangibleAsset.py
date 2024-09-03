@@ -10,6 +10,7 @@ class IntangibleAsset(Asset):
     # Dunders
     def __init__(self, name: str, life: int, value: float):
         super().__init__(name, life, value)
+        # Also known as accumulated amortization.
         self._total_amort: Money = Money()
 
     # Properties
@@ -54,7 +55,7 @@ class IntangibleAsset(Asset):
         match method:
             # Straight Line
             case 0:
-                total_amortized = self._validate_amortization((self.net_value / self.life) * periods)
+                total_amortized = self._validate_amortization((self.value / self.life) * periods)
 
             # Declining Balance
             case 1:
