@@ -46,6 +46,8 @@ class Money:
     def __radd__(self, other: Any) -> Self:
         return Money(assure_type(other) + self.value)
 
+    # For comparisons, such as this one, should we figure out a way to compare self.value as well? Or would this be
+    # too confusing to use.
     def __eq__(self, other: Any) -> bool:
         return self.rounded_value == assure_type(other)
 
