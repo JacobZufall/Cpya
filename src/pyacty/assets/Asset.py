@@ -9,7 +9,7 @@ from ..fundamentals.Money import Money
 
 class Asset:
     # Dunders
-    def __init__(self, name: str, life: int, value: Money | float | int) -> None:
+    def __init__(self, name: str, life: int, value: int | float | Money) -> None:
         """
         A partially abstract class.
         :param name: The name of the asset.
@@ -20,6 +20,13 @@ class Asset:
         self._life: int = life
         self._rem_life: int = life
         self._value: Money = value if type(value) == Money else Money(value)
+
+        # Stored for later use.
+        self.init_values: dict[str:str | int | float | Money] = {
+            "name": self.name,
+            "life": self._life,
+            "value": self._value
+        }
 
     @override
     def __str__(self) -> str:
@@ -68,3 +75,11 @@ class Asset:
         """
         # I don't know if this should happen, but I can't think of any reason why it shouldn't...
         self._value = new_value if type(new_value) == Money else Money(new_value)
+
+    # Methods
+    def reset(self) -> None:
+        """
+        Resets the asset to its post-initialization state.
+        :return: Nothing.
+        """
+        self.__init__(self.init_values["name"], self.init_values["life"], self.init_values["value"])

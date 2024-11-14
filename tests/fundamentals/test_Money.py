@@ -1,5 +1,9 @@
 """
 test_Money.py
+
+With this class, it's important to keep in mind that all math is performed on non-rounded values, even though a rounded
+value is always displayed. This ensures that a number is still 100% accurate, even after 100 operations have been
+performed on it.
 """
 
 import unittest as ut
@@ -78,31 +82,34 @@ class TestMoney(ut.TestCase):
         self.assertEqual(self.bal_one % 10, 0.10)
 
     def test_mul(self) -> None:
-        pass
+        self.assertEqual(self.bal_one * 10, 100_001.01)
 
     def test_rmul(self) -> None:
-        pass
+        self.assertEqual(10 * self.bal_one, 100_001.01)
 
     def test_ne(self) -> None:
-        pass
+        self.assertNotEqual(self.bal_one.value, 10_000.10)
+        self.assertNotEqual(self.bal_one, 10_000.101)
 
     def test_pow(self) -> None:
-        pass
+        self.assertEqual(self.bal_one ** 2, 100_002_020.01)
 
     def test_rpow(self) -> None:
-        pass
+        bal_temp: Money = Money(2)
+        self.assertEqual(self.bal_one ** bal_temp, 100_002_020.01)
 
     def test_sub(self) -> None:
-        pass
+        self.assertEqual(self.bal_one - 100, 9_900.10)
 
     def test_rsub(self) -> None:
-        pass
+        self.assertEqual(100 - self.bal_one, -9_900.10)
 
     def test_truediv(self) -> None:
-        pass
+        self.assertEqual(self.bal_one / 2, 5_000.05)
 
     def test_rtruediv(self) -> None:
-        pass
+        bal_temp: Money = Money(2)
+        self.assertEqual(self.bal_one / bal_temp, 5_000.05)
 
     def test_rounded_values(self) -> None:
         self.assertEqual(self.bal_one.rounded_value, 10_000.10)

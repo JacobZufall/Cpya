@@ -23,7 +23,7 @@ class Money:
     show_decimals: bool = False
     # By default, Python uses IEEE 754 rounding rules. This standard results in 0.5 being rounded down to 0, which is
     # the opposite of what accountants are used to. By default, the Money class will round 0.5 up, but this can be
-    # changed by simply changing the value of the boolean below.
+    # changed by simply changing the value of the class attribute below.
     ieee_754_rounding: bool = False
 
     def __init__(self, value: int | float = 0, symbol: str = "$") -> None:
@@ -112,7 +112,7 @@ class Money:
         When performing math such as addition, subtraction, multiplication, division, etc. on Money, we want to preserve
         every single decimal place to ensure the most accurate answer. However, when performing comparisons, or
         displaying the number to the user, we don't need to be more precise than the second decimal.
-        :return: The value of Money, rounded to the nearest 100ths.
+        :return: The value of Money, rounded to the nearest 100ths place.
         """
         if not self.ieee_754_rounding:
             mantissa: float = round((self.value * 100) - math.floor(self.value * 100), 1)

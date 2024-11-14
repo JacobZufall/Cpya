@@ -32,11 +32,11 @@ IS_CATEGORIES: Final[list[str]] = [
 
 # Comprehensive list of all categories
 
-# This isn't technically a constant because it's modified in the following
-# lines, but it still shouldn't be modified outside of this file.
+# This isn't technically a constant because it's modified in the following lines, but it still shouldn't be modified
+# outside of this file.
 ALL_CATEGORIES: list[str] = []
 
-for category in BS_CATEGORIES or IS_CATEGORIES:
+for category in BS_CATEGORIES:
     ALL_CATEGORIES.append(category)
 
 for category in IS_CATEGORIES:

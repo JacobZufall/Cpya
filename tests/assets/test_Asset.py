@@ -6,10 +6,12 @@ import unittest as ut
 
 from src.pyacty.assets.Asset import Asset
 
+asset_one: Asset = Asset("Test Asset", 10 * 12, 100_000)
+
 
 class TestAsset(ut.TestCase):
     def test_properties(self) -> None:
-        asset_one: Asset = Asset("Test Asset", 10 * 12, 100_000)
+        asset_one.reset()
 
         self.assertEqual(asset_one.value, 100_000)
         self.assertEqual(asset_one.life, 120)

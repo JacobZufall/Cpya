@@ -1,5 +1,11 @@
 """
 IntangibleAsset.py
+
+Unlike hte TangibleAsset class, this class doesn't override the reset method inherited from Asset. I don't think it
+needs to because IntangibleAsset doesn't have any unique values, besides _total_amort, which always starts as a
+brand-new instance of Money (which is $0).
+
+I'm not sure if Python actually behaves as I'm expecting it to, however.
 """
 
 from .Asset import Asset

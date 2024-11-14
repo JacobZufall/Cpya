@@ -1,6 +1,7 @@
 """
 TangibleAsset.py
 """
+from typing import override
 
 from .Asset import Asset
 from ..fundamentals.Money import Money
@@ -24,6 +25,10 @@ class TangibleAsset(Asset):
         self.prod_cap: int = prod_cap
         # Also known as accumulated depreciation.
         self._total_depr: Money = Money()
+
+        # Stored for later use.
+        self.init_values["slvg_value"] = self._slvg_value
+        self.init_values["prod_cap"] = self.prod_cap
 
     # Properties
     @property
@@ -150,3 +155,14 @@ class TangibleAsset(Asset):
         self._rem_life -= periods
 
         return total_depreciated
+
+    # Is there a more efficient way to override this?
+    @override
+    def reset(self) -> None:
+        self.__init__(
+            self.init_values["name"],
+            self.init_values["life"],
+            self.init_values["value"],
+            self.init_values["slvg_value"],
+            self.init_values["prod_cap"]
+        )
