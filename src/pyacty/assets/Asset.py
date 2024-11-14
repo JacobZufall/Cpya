@@ -2,64 +2,84 @@
 Asset.py
 """
 
-from typing import final
+from typing import override
+
+from ..fundamentals.Money import Money
 
 
 class Asset:
-    def __init__(self, name: str, life: int, value: float) -> None:
+    # Dunders
+    def __init__(self, name: str, life: int, value: int | float | Money) -> None:
         """
+        A partially abstract class.
         :param name: The name of the asset.
-        :param life: The life of the asset (months).
-        :param value: The value of the asset ($).
+        :param life: The life of the asset (in months).
+        :param value: The value of the asset.
         """
         self.name: str = name
+        self._life: int = life
+        self._rem_life: int = life
+        self._value: Money = value if type(value) == Money else Money(value)
 
-        self.life: int = life
-        self.rem_life: int = life
+        # Stored for later use.
+        self.init_values: dict[str:str | int | float | Money] = {
+            "name": self.name,
+            "life": self._life,
+            "value": self._value
+        }
 
-        self.def_value: float = value
-        self.value: float = value
+    @override
+    def __str__(self) -> str:
+        pass
 
-        self.syd: int = self._calc_syd(self.life)
-
-    def reset(self) -> None:
+    # Properties
+    @property
+    def life(self) -> int:
         """
-        Returns an asset to its original state. Designed to be used for testing.
+        :return: The life of the asset (in months).
+        """
+        return self._life
+
+    @life.setter
+    def life(self, new_life) -> None:
+        """
+        Updates the life and remaining life of an asset accordingly.
+        :param new_life: The new life of the asset (in months).
         :return: Nothing.
         """
-        self.value = self.def_value
-        self.rem_life = self.life
+        self._rem_life += new_life - self._life
+        self._life = new_life
 
-    @final
-    def update_life(self, new_life: int) -> None:
+    @property
+    def rem_life(self) -> int:
         """
-        Changes the base-life of the asset and appropriately updates other attributes.
-        :param new_life: The new life of the asset.
-        :return: Nothing.
+        :return: The remaining life of the asset (in months).
         """
-        self.rem_life += new_life - self.life
-        self.life = new_life
-        self.syd = self._calc_syd(self.life)
+        return self._rem_life
 
-    def update_value(self, new_value: float) -> None:
+    @property
+    def value(self) -> Money:
         """
-        Changes the base-value of the asset and appropriately updates other attributes.
+        :return: The value of the asset.
+        """
+        return self._value
+
+    # I believe that since any change in value is considered a change of an accounting estimate, everything is handled
+    # prospectively, so we don't need to touch other numbers like the totals for depreciation and amortization.
+    @value.setter
+    def value(self, new_value: Money | float | int) -> None:
+        """
+        Updates the value of the asset and automatically handles types.
         :param new_value: The new value of the asset.
         :return: Nothing.
         """
-        self.value += new_value - self.def_value
-        self.def_value = new_value
+        # I don't know if this should happen, but I can't think of any reason why it shouldn't...
+        self._value = new_value if type(new_value) == Money else Money(new_value)
 
-    @staticmethod
-    def _calc_syd(life: int) -> int:
+    # Methods
+    def reset(self) -> None:
         """
-        Calculates the sum of the years' digits to be used in calculating depreciation under the applicable method.
-        :param life: The life of the asset in months, usually self.life when used internally.
-        :return: Sum of the years' digits.
+        Resets the asset to its post-initialization state.
+        :return: Nothing.
         """
-        running_total: int = 0
-
-        for i in range(1, int(life / 12) + 1):
-            running_total += i
-
-        return running_total
+        self.__init__(self.init_values["name"], self.init_values["life"], self.init_values["value"])
