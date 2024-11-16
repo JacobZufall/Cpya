@@ -6,7 +6,7 @@ However, some people may wish to add more detail to their balance sheet, and dis
 allowance for doubtful accounts, for example. Therefore, the option exists.
 """
 
-from src.pyacty.financial_statements.DefaultBalance import DefaultBalance
+from src.pyacty.fundamentals.DefaultBalance import DefaultBalance
 
 # The names of these variables don't matter, they're just examples.
 scenarios: dict[str:DefaultBalance] = {

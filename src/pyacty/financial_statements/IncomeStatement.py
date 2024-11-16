@@ -5,7 +5,7 @@ IncomeStatement.py
 from typing import override
 
 from .FinancialStatement import FinancialStatement
-from .DefaultBalance import DefaultBalance
+from ..fundamentals.DefaultBalance import DefaultBalance
 from .skeletons.FsSkeleton import FsSkeleton
 from ..constants import IS_CATEGORIES
 from ..custom_types import fnstmt
@@ -57,10 +57,10 @@ class IncomeStatement(FinancialStatement):
         if category.lower() not in IS_CATEGORIES:
             raise ValueError("Invalid category type.")
 
-        db: DefaultBalance = DefaultBalance(category.lower(), contra)
+        db: str = DefaultBalance.find_default_balance(category, contra)
 
         self.fs[category.lower()][name] = {
-            "d/c": db.def_bal,
+            "d/c": db,
             "bal": start_bal
         }
 

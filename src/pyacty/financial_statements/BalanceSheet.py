@@ -4,7 +4,7 @@ BalanceSheet.py
 
 from typing import override
 
-from .DefaultBalance import DefaultBalance
+from ..fundamentals.DefaultBalance import DefaultBalance
 from .FinancialStatement import FinancialStatement
 from .skeletons.FsSkeleton import FsSkeleton
 from ..constants import BS_CATEGORIES
@@ -75,18 +75,18 @@ class BalanceSheet(FinancialStatement):
         if term.lower() not in ["current", "non-current"]:
             raise ValueError("Invalid term.")
 
-        db: DefaultBalance = DefaultBalance(category, contra)
+        db: str = DefaultBalance.find_default_balance(category, contra)
 
         # Equity doesn't have separate sections for current and non-current, so we ignore it.
         if category.lower() == "equity":
             self.fs[category.lower()][name] = {
-                "d/c": db.def_bal,
+                "d/c": db,
                 "bal": start_bal
             }
 
         else:
             self.fs[category.lower()][name] = {
-                "d/c": db.def_bal,
+                "d/c": db,
                 "bal": start_bal,
                 "term": term.lower()
             }
