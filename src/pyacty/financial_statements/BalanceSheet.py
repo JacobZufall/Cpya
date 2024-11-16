@@ -75,7 +75,7 @@ class BalanceSheet(FinancialStatement):
         if term.lower() not in ["current", "non-current"]:
             raise ValueError("Invalid term.")
 
-        db: DefaultBalance = DefaultBalance(category.lower(), contra)
+        db: DefaultBalance = DefaultBalance(category, contra)
 
         # Equity doesn't have separate sections for current and non-current, so we ignore it.
         if category.lower() == "equity":
