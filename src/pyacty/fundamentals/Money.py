@@ -40,6 +40,10 @@ class Money:
     def __str__(self) -> str:
         return f"{self.symbol}{self.rounded_value:{self.num_format}}"
 
+    @override
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}: {self.__dict__}"
+
     def __add__(self, other: Any) -> Self:
         return Money(self.value + assure_type(other))
 

@@ -1,5 +1,7 @@
 """
 Balance.py
+
+This class will be removed eventually, don't use it.
 """
 
 from src.pyacty.constants import ALL_CATEGORIES

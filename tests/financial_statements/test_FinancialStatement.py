@@ -6,7 +6,7 @@ from src.pyacty.statements.FinancialStatement import FinancialStatement
 
 test_fs: FinancialStatement = FinancialStatement("Zufall Company", "12/31/2024")
 
-test_fs.fs = {
+test_fs.fn_stmt = {
     "Assets": {
         "Cash": {
             "d/c": "debit",

@@ -3,12 +3,12 @@ FsSkeleton.py
 
 Considerations for this file:
     - Some methods have A LOT of arguments. Better usage of **kwargs should be considered.
-
-# TODO: Implement Money class here so that decimals can be more centrally formatted.
 """
 
 from string import Template
-from typing import Any, Final
+from typing import Final
+
+from ...fundamentals.Account import Account
 
 DEFAULT_INDENT_SIZE: Final[int] = 4
 
@@ -139,9 +139,9 @@ class FsSkeleton:
         "12": "December"
     }
 
-    def __init__(self, fn_stmt: dict[str:dict[str:dict[str:Any]]], company: str, fs_name: str, date: str,
-                 min_width: int = 75, margin: int = 2, indent_size: int = DEFAULT_INDENT_SIZE, column_space: int = 20,
-                 decimals: bool = True) -> None:
+    def __init__(self, fn_stmt: dict[str:list[Account]], company: str, fs_name: str, date: str,
+                 min_width: int = 75, margin: int = 2, indent_size: int = DEFAULT_INDENT_SIZE,
+                 column_space: int = 20) -> None:
         """
         A class that helps format the output of a financial statement in the console.
         :param fn_stmt: The financial statement to format.
@@ -152,19 +152,17 @@ class FsSkeleton:
         :param margin: How wide the margin is.
         :param indent_size: How many spaces each indent is.
         :param column_space: I forgot lol.
-        :param decimals: If numbers on the financial statement display decimals.
         """
-        self.fn_stmt: dict[str:dict[str:dict[str:Any]]] = fn_stmt
+        self.fn_stmt: dict[str:list[Account]] = fn_stmt
         self.company: str = company
         self.fs_name: str = fs_name
-        self.f_date: str = self._format_date(date)
+        self.formatted_date: str = self._format_date(date)
 
         self._min_width: int = min_width
         self.margin: int = margin
         self.indent_size: int = indent_size
         # What is self.column_space for???
         self.column_space: int = column_space
-        self.decimals: str = ",.2f" if decimals else ",.0f"
 
         # Should there be a class attribute for templates which is then passed into self.templates by value? That way
         # one can choose to add a template to all instances or just a single instance easily. I'm not sure if this is a
@@ -246,7 +244,7 @@ class FsSkeleton:
         self.add_element(self.templates["divider"], "div_1")
         self.add_element(self.templates["header"], "header_fs_name", header_name = self.fs_name)
         self.add_element(self.templates["divider"], "div_2")
-        self.add_element(self.templates["header"], "header_date", header_name = self.f_date)
+        self.add_element(self.templates["header"], "header_date", header_name = self.formatted_date)
         self.add_element(self.templates["divider"], "div_3")
 
         num_of_divs: int = 3
@@ -257,20 +255,13 @@ class FsSkeleton:
 
             total_bal: float | int = 0.0
 
-            for account, attributes in accounts.items():
-                if attributes["d/c"] == "debit":
-                    total_bal += attributes["bal"]
+            for account in accounts:
+                total_bal += account.true_balance
 
-                else:
-                    total_bal -= attributes["bal"]
-
-                self.add_element(self.templates["account"], f"account_{account.lower()}",
-                                 account_name = account, account_bal = f"{attributes["bal"]:{self.decimals}}",
+                self.add_element(self.templates["account"], f"account_{account.name.lower()}",
+                                 account_name = account.name, account_bal = account.balance,
                                  indent_level = 1)
 
-            self.add_element(self.templates["total"], f"total_{category.lower()}",
-                             total_name = category.lower().capitalize(),
-                             total_bal = f"{abs(total_bal):{self.decimals}}")
             num_of_divs += 1
             self.add_element(self.templates["divider"], f"div_{num_of_divs}")
 
@@ -299,7 +290,7 @@ class FsSkeleton:
         :param indent_size: The size of each indent for the element.
         :param edge: If the element is an edge-piece (only applicable to dividers).
         :param kwargs:
-        :return:
+        :return: Nothing.
         """
         if type(template) is str:
             template = Template(template)

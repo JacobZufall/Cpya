@@ -1,42 +1,41 @@
 """
 FinancialStatement.py
 
-FinancialStatement is a partially abstract class due to the unique nature of each financial statement.
+This is the main class for all financial statement related classes. It is designed to serve as a blank template that is
+easy to use and inherit.
 
-This class also serves as a blank statement for one to make their own custom financial statement.
+PyActy also contains pre-made BalanceSheet and IncomeStatement classes, mainly for usage but also to provide an example
+of how this class can be inherited and used.
 """
 
-from abc import abstractmethod
 import csv
 from csv import writer
 import json
 import os
 from typing import TextIO, final, override
 
-from ..fundamentals.Account import Account
 from .skeletons.FsSkeleton import FsSkeleton
-from ..constants import ALL_CATEGORIES
+from ..fundamentals.Account import Account
+from ..fundamentals.Money import Money
 from ..custom_exceptions import SupportError, AccountExistsError, AccountNotFoundError
 
 
 class FinancialStatement:
-    def __init__(self, company_name: str, date: str, decimals: bool = True) -> None:
+    def __init__(self, statement_name: str, company_name: str, date: str) -> None:
         """
         A blank financial statement.
         :param company_name: The name of the company.
         :param date: The date of the financial statement.
         """
-        self.fs: dict[str:list[Account]] = {}
+        self.fn_stmt: dict[str:list[Account]] = {}
         self.company: str = company_name
         # This is more of a place-holder name. If someone is making a custom financial statement they can change it.
-        self.fs_name: str = "Financial Statement"
+        self.fs_name: str = statement_name
         self.date: str = date
-        self.decimals: bool = decimals
 
     @override
     def __str__(self) -> str:
-        return FsSkeleton(self.fs, self.company, self.fs_name, self.date,
-                          decimals=self.decimals).auto_render()
+        return FsSkeleton(self.fn_stmt, self.company, self.fs_name, self.date).auto_render()
 
     @override
     def __repr__(self) -> str:
@@ -47,35 +46,9 @@ class FinancialStatement:
         Returns the financial statement to its default state.
         :return: Nothing.
         """
-        self.fs = {}
+        self.fn_stmt = {}
 
-    # Is this not already handled by the TrueBalance class?
     @final
-    def true_value(self, account: str) -> float:
-        """
-        Finds the true value of an account, which is a positive float if the normal balance of the account is a
-        debit, and a negative float if the normal balance of the account is a credit.
-        :param account: The account to find the true value of.
-        :return: The true value of the account.
-        """
-        # Looping through ALL_CATEGORIES allows this method to work with any financial statement saving the work of
-        # having to override the method for each child class.
-        for category in ALL_CATEGORIES:
-            try:
-                if self.fs[category][account]["d/c"] == "debit":
-                    # All values should be stored as positive floats, but this is just in case they aren't for some
-                    # reason. Accounts have no reason to be negative.
-                    return abs(self.fs[category][account]["balance"])
-                else:
-                    return self.fs[category][account]["balance"] * -1.0
-            except KeyError:
-                continue
-        else:
-            raise KeyError("Account not found!")
-
-    # I'm sorry.
-    # I'm not sure if this should be final or not. Overriding it may make it so that load_fs() won't work properly.
-    # @final
     def save_fs(self, directory: str, file_name: str, file_type: str = "all") -> None:
         """
         Saves the financial statement to the given directory.
@@ -86,8 +59,7 @@ class FinancialStatement:
         """
         valid_file_types: list[str] = ["csv", "json"]
 
-        # I'm not entirely sure if I want this to be private or not.
-        def __make_file(extension: str) -> TextIO:
+        def _make_file(extension: str) -> TextIO:
             """
             Makes the file the data is saved to.
             :param extension: The type of file to save to.
@@ -101,7 +73,7 @@ class FinancialStatement:
             0: Saves all files.
             1: Saves CSV file only.
             2: Saves JSON file only.
-            :param option: What types of files to save.
+            :param option: What types of file(s) to save.
             :return: Nothing
             """
             outfile: TextIO
@@ -115,15 +87,15 @@ class FinancialStatement:
             #  number. Expenses should be negative as well. The true_value() function should be useful for this.
             if option == 1 or option == 0:
                 try:
-                    outfile = __make_file("csv")
+                    outfile = _make_file("csv")
 
                 except FileNotFoundError:
                     os.mkdir(directory)
-                    outfile = __make_file("csv")
+                    outfile = _make_file("csv")
 
                 csv_writer: writer = csv.writer(outfile)
 
-                for fs_category, fs_accounts in self.fs.items():
+                for fs_category, fs_accounts in self.fn_stmt.items():
                     csv_writer.writerow([fs_category.capitalize()])
 
                     for account, attributes in fs_accounts.items():
@@ -140,13 +112,13 @@ class FinancialStatement:
             # JSON file
             if option == 2 or option == 0:
                 try:
-                    outfile = __make_file("json")
+                    outfile = _make_file("json")
 
                 except FileNotFoundError:
                     os.mkdir(directory)
-                    outfile = __make_file("json")
+                    outfile = _make_file("json")
 
-                outfile.write(json.dumps(self.fs, indent=4))
+                outfile.write(json.dumps(self.fn_stmt, indent=4))
                 outfile.close()
 
         if file_type == "all":
@@ -161,6 +133,7 @@ class FinancialStatement:
             else:
                 save_files(2)
 
+    @final
     def load_fs(self, directory: str):
         """
         Considerations for this method:
@@ -171,60 +144,66 @@ class FinancialStatement:
         if not directory.lower().endswith(".json"):
             raise SupportError("PyActy only supports loading .JSON files!")
 
-        self.fs = json.load(open(directory))
+        self.fn_stmt = json.load(open(directory))
 
     def total_accounts(self) -> dict[str:float]:
+        """
+        Totals the value of each account in each financial statement category.
+        :return: The totals, separated by category.
+        """
         totals: dict[str:float] = {}
 
-        for category, accounts in self.fs.items():
-            for account, attributes in accounts.items():
-                for attribute, value in attributes.items():
-                    if attribute == "bal":
-                        try:
-                            totals[category] += value
+        for category, accounts in self.fn_stmt.items():
+            for account in accounts:
+                try:
+                    totals[category] += account.balance
 
-                        except KeyError:
-                            totals[category] = value
+                except KeyError:
+                    totals[category] = account.balance
 
         return totals
 
-    def add_account(self, name: str, category: str, normal_balance: str = "debit", starting_balance: float = 0.0,
-                    term: str | None = None) -> None:
+    def add_account(self, category: str = "", name: str = "", normal_balance: str = "debit",
+                    starting_balance: float | Money = Money(), term: str | None = None, new_account: Account | None = None) -> None:
         """
-        Creates a new account with a default balance of $0.
+        Creates a new account and adds it to the financial statement.
         :param name: The name of the account.
         :param category: The category of the account (asset/liability/equity/revenue/expense).
-        :param normal_balance:
+        :param normal_balance: The normal balance of the account.
         :param starting_balance: The beginning balance of the account.
         :param term: The term of the account (short or long).
+        :param new_account: An already existing instance of Account. If this argument is filled, all other arguments
+        (except category) are ignored.
         :return: Nothing.
         """
         # Ensures that the account doesn't already exist in ANY category. This means you can't have an account named
         # "Cash" in the "Assets" category and the "Equity" category.
-        for category, accounts in self.fs.items():
+        for _, accounts in self.fn_stmt.items():
             for account in accounts:
                 if name == account.name:
                     raise AccountExistsError
 
-        # This method call only does something if the category doesn't exist, since the method checks first.
-        self.fs[category].insert(Account(name, normal_balance, starting_balance, term))
+        # A new account can be created with this function, or an already existing account may be used.
+        if new_account is None:
+            new_account = Account(name, normal_balance, starting_balance, term)
 
-    @abstractmethod
+        try:
+            self.fn_stmt[category].insert(new_account)
+
+        except KeyError:
+            self.fn_stmt[category] = [new_account]
+
     def remove_account(self, name: str) -> None:
         """
         Deletes a specified account from the financial statement.
         :param name: The name of the account.
         :return: Nothing.
         """
-        for category, accounts in self.fs.items():
+        for category, accounts in self.fn_stmt.items():
             for i in range(len(accounts)):
                 if name == accounts[i].name:
-                    self.fs[category].remove(i)
+                    self.fn_stmt[category].remove(i)
                     break
 
         else:
             raise NameError
-
-if __name__ == "__main__":
-    testFs: FinancialStatement = FinancialStatement("PyActy", "12/31/2024")
-    print(testFs)
