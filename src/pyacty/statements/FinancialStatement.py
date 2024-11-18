@@ -13,9 +13,10 @@ import json
 import os
 from typing import TextIO, final, override
 
+from ..fundamentals.Account import Account
 from .skeletons.FsSkeleton import FsSkeleton
 from ..constants import ALL_CATEGORIES
-from ..custom_exceptions import SupportError
+from ..custom_exceptions import SupportError, AccountExistsError, AccountNotFoundError
 
 
 class FinancialStatement:
@@ -25,7 +26,7 @@ class FinancialStatement:
         :param company_name: The name of the company.
         :param date: The date of the financial statement.
         """
-        self.fs: dict[str:dict[str:dict[str:str | int | float]]] = {}
+        self.fs: dict[str:list[Account]] = {}
         self.company: str = company_name
         # This is more of a place-holder name. If someone is making a custom financial statement they can change it.
         self.fs_name: str = "Financial Statement"
@@ -187,25 +188,42 @@ class FinancialStatement:
 
         return totals
 
-    @abstractmethod
-    def add_account(self, name: str, category: str, start_bal: float = 0.0, contra: bool = False) -> None:
+    def add_account(self, name: str, category: str, normal_balance: str = "debit", starting_balance: float = 0.0,
+                    term: str | None = None) -> None:
         """
         Creates a new account with a default balance of $0.
         :param name: The name of the account.
         :param category: The category of the account (asset/liability/equity/revenue/expense).
-        :param start_bal: The beginning balance of the account.
-        :param contra: If the account is a contra account.
+        :param normal_balance:
+        :param starting_balance: The beginning balance of the account.
+        :param term: The term of the account (short or long).
         :return: Nothing.
         """
+        # Ensures that the account doesn't already exist in ANY category. This means you can't have an account named
+        # "Cash" in the "Assets" category and the "Equity" category.
+        for category, accounts in self.fs.items():
+            for account in accounts:
+                if name == account.name:
+                    raise AccountExistsError
+
+        # This method call only does something if the category doesn't exist, since the method checks first.
+        self.fs[category].insert(Account(name, normal_balance, starting_balance, term))
 
     @abstractmethod
-    def del_account(self, name: str) -> None:
+    def remove_account(self, name: str) -> None:
         """
         Deletes a specified account from the financial statement.
         :param name: The name of the account.
         :return: Nothing.
         """
+        for category, accounts in self.fs.items():
+            for i in range(len(accounts)):
+                if name == accounts[i].name:
+                    self.fs[category].remove(i)
+                    break
 
+        else:
+            raise NameError
 
 if __name__ == "__main__":
     testFs: FinancialStatement = FinancialStatement("PyActy", "12/31/2024")

@@ -2,7 +2,7 @@
 Balance.py
 """
 
-from ..constants import ALL_CATEGORIES
+from src.pyacty.constants import ALL_CATEGORIES
 
 
 class Balance:

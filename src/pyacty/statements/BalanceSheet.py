@@ -4,7 +4,7 @@ BalanceSheet.py
 
 from typing import override
 
-from ..fundamentals.Balance import Balance
+from src.pyacty.statements.Balance import Balance
 from .FinancialStatement import FinancialStatement
 from .skeletons.FsSkeleton import FsSkeleton
 from ..constants import BS_CATEGORIES
@@ -91,7 +91,7 @@ class BalanceSheet(FinancialStatement):
             }
 
     @override
-    def del_account(self, name: str) -> None:
+    def remove_account(self, name: str) -> None:
         for category in BS_CATEGORIES:
             try:
                 self.fs[category].pop(name)
