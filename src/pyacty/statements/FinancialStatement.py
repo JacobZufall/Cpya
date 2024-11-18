@@ -15,7 +15,6 @@ from typing import TextIO, final, override
 
 from .skeletons.FsSkeleton import FsSkeleton
 from ..constants import ALL_CATEGORIES
-from ..custom_types import fnstmt
 from ..custom_exceptions import SupportError
 
 
@@ -26,7 +25,7 @@ class FinancialStatement:
         :param company_name: The name of the company.
         :param date: The date of the financial statement.
         """
-        self.fs: fnstmt = {}
+        self.fs: dict[str:dict[str:dict[str:str | int | float]]] = {}
         self.company: str = company_name
         # This is more of a place-holder name. If someone is making a custom financial statement they can change it.
         self.fs_name: str = "Financial Statement"

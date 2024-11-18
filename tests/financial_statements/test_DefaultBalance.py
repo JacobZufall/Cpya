@@ -6,21 +6,21 @@ However, some people may wish to add more detail to their balance sheet, and dis
 allowance for doubtful accounts, for example. Therefore, the option exists.
 """
 
-from src.pyacty.fundamentals.DefaultBalance import DefaultBalance
+from src.pyacty.fundamentals.Balance import Balance
 
 # The names of these variables don't matter, they're just examples.
-scenarios: dict[str:DefaultBalance] = {
-    "cash": DefaultBalance("asset"),
-    "accumulated_depr": DefaultBalance("asset", True),
-    "acts_payable": DefaultBalance("liability"),
-    "discount_notes_payable": DefaultBalance("liability", True),
-    "common_stock": DefaultBalance("equity"),
-    "treasury_stock": DefaultBalance("equity", True),
-    "revenue": DefaultBalance("revenue"),
-    "sales_discounts": DefaultBalance("revenue", True),
-    "supplies_expense": DefaultBalance("expense"),
+scenarios: dict[str:Balance] = {
+    "cash": Balance("asset"),
+    "accumulated_depr": Balance("asset", True),
+    "acts_payable": Balance("liability"),
+    "discount_notes_payable": Balance("liability", True),
+    "common_stock": Balance("equity"),
+    "treasury_stock": Balance("equity", True),
+    "revenue": Balance("revenue"),
+    "sales_discounts": Balance("revenue", True),
+    "supplies_expense": Balance("expense"),
     # I cannot think of a real-world example of a contra-expense account.
-    "contra_expense": DefaultBalance("expense", True)
+    "contra_expense": Balance("expense", True)
 }
 
 for account, balance in scenarios.items():

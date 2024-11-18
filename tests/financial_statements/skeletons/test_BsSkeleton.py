@@ -2,7 +2,7 @@
 test_BsSkeleton.py
 """
 
-from src.pyacty.financial_statements.skeletons.BsSkeleton import BsSkeleton
+from src.pyacty.statements.skeletons.BsSkeleton import BsSkeleton
 
 
 test_bs: dict[str:dict[str:dict[str:str | float]]] = {

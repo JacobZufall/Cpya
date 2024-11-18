@@ -5,10 +5,9 @@ IncomeStatement.py
 from typing import override
 
 from .FinancialStatement import FinancialStatement
-from ..fundamentals.DefaultBalance import DefaultBalance
+from ..fundamentals.Balance import Balance
 from .skeletons.FsSkeleton import FsSkeleton
 from ..constants import IS_CATEGORIES
-from ..custom_types import fnstmt
 
 
 class IncomeStatement(FinancialStatement):
@@ -34,7 +33,7 @@ class IncomeStatement(FinancialStatement):
         :param date: The date of the financial statement.
         """
         super().__init__(company_name, date)
-        self.fs: fnstmt = {
+        self.fs: dict[str:dict[str:dict[str:str | int | float]]] = {
             "revenue": {},
             "expense": {}
         }
@@ -57,7 +56,7 @@ class IncomeStatement(FinancialStatement):
         if category.lower() not in IS_CATEGORIES:
             raise ValueError("Invalid category type.")
 
-        db: str = DefaultBalance.find_default_balance(category, contra)
+        db: str = Balance.find_default_balance(category, contra)
 
         self.fs[category.lower()][name] = {
             "d/c": db,

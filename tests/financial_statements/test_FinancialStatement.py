@@ -2,7 +2,7 @@
 test_FinancialStatement.py
 """
 
-from src.pyacty.financial_statements.FinancialStatement import FinancialStatement
+from src.pyacty.statements.FinancialStatement import FinancialStatement
 
 test_fs: FinancialStatement = FinancialStatement("Zufall Company", "12/31/2024")
 

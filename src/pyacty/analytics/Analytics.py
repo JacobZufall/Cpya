@@ -2,8 +2,8 @@
 Analytics.py
 """
 
-from ..financial_statements.BalanceSheet import BalanceSheet
-from ..financial_statements.IncomeStatement import IncomeStatement
+from ..statements.BalanceSheet import BalanceSheet
+from ..statements.IncomeStatement import IncomeStatement
 
 
 class Analytics:

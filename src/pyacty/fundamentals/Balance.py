@@ -1,11 +1,11 @@
 """
-DefaultBalance.py
+Balance.py
 """
 
 from ..constants import ALL_CATEGORIES
 
 
-class DefaultBalance:
+class Balance:
     # True is debit, False is credit. See find_default_balance method.
     classifications: dict[str:bool] = {
         "asset": True,
@@ -28,7 +28,7 @@ class DefaultBalance:
             raise ValueError("Invalid category type.")
 
         def_bal: str
-        cat_value: bool = DefaultBalance.classifications[category] if not contra else not DefaultBalance.classifications[category]
+        cat_value: bool = Balance.classifications[category] if not contra else not Balance.classifications[category]
 
         if cat_value:
             def_bal = "debit"
@@ -37,3 +37,13 @@ class DefaultBalance:
             def_bal = "credit"
 
         return def_bal
+
+    @staticmethod
+    def find_true_balance(account: dict[str:dict[str:str | int | float]]) -> float:
+        """
+        Returns the true value of an account depending on if its true balance is debit or credit.
+        :param account: The account to find the true balance of.
+        :return: The true balance of the account.
+        """
+        return account["bal"] if account["d/c"] == "debit" else account["bal"] * -1.0
+

@@ -4,11 +4,10 @@ BalanceSheet.py
 
 from typing import override
 
-from ..fundamentals.DefaultBalance import DefaultBalance
+from ..fundamentals.Balance import Balance
 from .FinancialStatement import FinancialStatement
 from .skeletons.FsSkeleton import FsSkeleton
 from ..constants import BS_CATEGORIES
-from ..custom_types import fnstmt
 
 
 class BalanceSheet(FinancialStatement):
@@ -43,7 +42,7 @@ class BalanceSheet(FinancialStatement):
         :param date: The date of the financial statement.
         """
         super().__init__(company_name, date)
-        self.fs: fnstmt = {
+        self.fs: dict[str:dict[str:dict[str:str | int | float]]] = {
             "asset": {},
             "liability": {},
             "equity": {}
@@ -75,7 +74,7 @@ class BalanceSheet(FinancialStatement):
         if term.lower() not in ["current", "non-current"]:
             raise ValueError("Invalid term.")
 
-        db: str = DefaultBalance.find_default_balance(category, contra)
+        db: str = Balance.find_default_balance(category, contra)
 
         # Equity doesn't have separate sections for current and non-current, so we ignore it.
         if category.lower() == "equity":

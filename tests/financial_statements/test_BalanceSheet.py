@@ -2,7 +2,7 @@
 test_BalanceSheet.py
 """
 
-from src.pyacty.financial_statements.BalanceSheet import BalanceSheet
+from src.pyacty.statements.BalanceSheet import BalanceSheet
 
 #
 bal_sheet: BalanceSheet = BalanceSheet("PyActy", "12/31/2024")
