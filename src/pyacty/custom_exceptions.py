@@ -5,11 +5,6 @@ custom_exceptions.py
 from typing import Any
 
 
-class SupportError(Exception):
-    def __init__(self, message: Any):
-        super().__init__(message)
-
-
 class AccountExistsError(Exception):
     def __init__(self, message: Any) -> None:
         """

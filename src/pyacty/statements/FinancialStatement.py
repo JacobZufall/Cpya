@@ -17,7 +17,7 @@ from typing import TextIO, final, override
 from .skeletons.FsSkeleton import FsSkeleton
 from ..fundamentals.Account import Account
 from ..fundamentals.Money import Money
-from ..custom_exceptions import SupportError, AccountExistsError, AccountNotFoundError
+from ..custom_exceptions import AccountExistsError
 
 
 class FinancialStatement:
@@ -98,14 +98,8 @@ class FinancialStatement:
                 for fs_category, fs_accounts in self.fn_stmt.items():
                     csv_writer.writerow([fs_category.capitalize()])
 
-                    for account, attributes in fs_accounts.items():
-                        value: float = 0.0
-
-                        for attribute, info in attributes.items():
-                            if attribute == "bal":
-                                value = info
-
-                        csv_writer.writerow(["", account, value])
+                    for account in fs_accounts:
+                        csv_writer.writerow(["", account.name, account.value])
 
                 outfile.close()
 
@@ -117,6 +111,24 @@ class FinancialStatement:
                 except FileNotFoundError:
                     os.mkdir(directory)
                     outfile = _make_file("json")
+
+                # Neither Account nor Money objects can be stored in a JSON file, so they must be serialized.
+                serial_fs: dict[str:list[dict[str:str | bool | dict[str:str | int | float] | None]]] = {}
+
+                for category, accounts in self.fn_stmt.items():
+                    serial_fs[category] = []
+
+                    for account in accounts:
+                        serial_fs[category].append({
+                            "name": account.name,
+                            "normal_balance": account.normal_balance,
+                            "balance": {
+                                "value": account.balance.value,
+                                "symbol": account.balance.symbol
+                            },
+                            "contra": account.contra,
+                            "term": account.term
+                        })
 
                 outfile.write(json.dumps(self.fn_stmt, indent=4))
                 outfile.close()
@@ -135,16 +147,8 @@ class FinancialStatement:
 
     @final
     def load_fs(self, directory: str):
-        """
-        Considerations for this method:
-        - Should it be overridden or final?
-        - Should it return the loaded file or modify self.fs directly?
-        - Should we only load JSON files or CSV files too?
-        """
-        if not directory.lower().endswith(".json"):
-            raise SupportError("PyActy only supports loading .JSON files!")
-
-        self.fn_stmt = json.load(open(directory))
+        # TODO: Make it so financial statements can be loaded from files.
+        pass
 
     def total_accounts(self) -> dict[str:float]:
         """
@@ -164,13 +168,15 @@ class FinancialStatement:
         return totals
 
     def add_account(self, category: str = "", name: str = "", normal_balance: str = "debit",
-                    starting_balance: float | Money = Money(), term: str | None = None, new_account: Account | None = None) -> None:
+                    starting_balance: float | Money = Money(), contra: bool = False, term: str | None = None,
+                    new_account: Account | None = None) -> None:
         """
         Creates a new account and adds it to the financial statement.
         :param name: The name of the account.
         :param category: The category of the account (asset/liability/equity/revenue/expense).
         :param normal_balance: The normal balance of the account.
         :param starting_balance: The beginning balance of the account.
+        :param contra: If the account is a contra-account or not.
         :param term: The term of the account (short or long).
         :param new_account: An already existing instance of Account. If this argument is filled, all other arguments
         (except category) are ignored.
@@ -185,7 +191,7 @@ class FinancialStatement:
 
         # A new account can be created with this function, or an already existing account may be used.
         if new_account is None:
-            new_account = Account(name, normal_balance, starting_balance, term)
+            new_account = Account(name, normal_balance, starting_balance, contra, term)
 
         try:
             self.fn_stmt[category].insert(new_account)

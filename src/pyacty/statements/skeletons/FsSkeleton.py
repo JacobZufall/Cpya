@@ -139,6 +139,16 @@ class FsSkeleton:
         "12": "December"
     }
 
+    templates: dict[str:Template] = {
+        "account": Template("| $indent$account_name$central_spacer$account_bal |"),
+        "divider": Template("$end$divider$end"),
+        "header": Template("|$left_spacer$header_name$right_spacer|"),
+        "spacer": Template("|$spacer|"),
+        "subtotal": Template("| $indent$subtotal_name$central_spacer$subtotal_bal |"),
+        "title": Template("| $title$spacer|"),
+        "total": Template("| Total $total_name$spacer$total_bal |")
+    }
+
     def __init__(self, fn_stmt: dict[str:list[Account]], company: str, fs_name: str, date: str,
                  min_width: int = 75, margin: int = 2, indent_size: int = DEFAULT_INDENT_SIZE,
                  column_space: int = 20) -> None:
@@ -159,23 +169,12 @@ class FsSkeleton:
         self.formatted_date: str = self._format_date(date)
 
         self._min_width: int = min_width
+
+        # What are these three attributes for? I can't find usage of them anywhere.
         self.margin: int = margin
         self.indent_size: int = indent_size
-        # What is self.column_space for???
         self.column_space: int = column_space
 
-        # Should there be a class attribute for templates which is then passed into self.templates by value? That way
-        # one can choose to add a template to all instances or just a single instance easily. I'm not sure if this is a
-        # good practice or not, however.
-        self.templates: dict[str:Template] = {
-            "account": Template("| $indent$account_name$central_spacer$account_bal |"),
-            "divider": Template("$end$divider$end"),
-            "header": Template("|$left_spacer$header_name$right_spacer|"),
-            "spacer": Template("|$spacer|"),
-            "subtotal": Template("| $indent$subtotal_name$central_spacer$subtotal_bal |"),
-            "title": Template("| $title$spacer|"),
-            "total": Template("| Total $total_name$spacer$total_bal |")
-        }
         self.elements: dict[str:FsSkeleton._Element] = {}
 
     @property

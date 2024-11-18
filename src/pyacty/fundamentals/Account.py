@@ -4,6 +4,10 @@ Account.py
 The justification for this class is to reduce the amount of for loops used in other files to improve readability. Prior
 to this class, dictionaries were used, which required nested loops often, which got annoying. The ability to access
 an attribute directly reduces the amount of for loops needed.
+
+Alternatively, I considered making a "Category" class, since a category holds a bunch of instances of Account inside
+an instance of FinancialStatement. However, I decided against this so that the Account class could be used in more
+places. Also, it felt unnecessary to have a category be anything more than a list.
 """
 
 from typing import override
