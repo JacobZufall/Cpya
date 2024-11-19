@@ -13,26 +13,6 @@ from ..fundamentals.Account import Account
 
 class IncomeStatement(FinancialStatement):
     def __init__(self, company_name: str, date: str) -> None:
-        """
-        Here is an example of what the income statement looks like.\n
-        self.fs = {
-            "revenue": {
-                "Revenue": {
-                    "d/c": "credit",\n
-                    "bal": 0.0
-                }
-            },
-
-            "expense": {
-                "Interest Expense": {
-                    "d/c": "debit",\n
-                    "bal": 0.0
-                }
-            }
-        }
-        :param company_name: The name of the company.
-        :param date: The date of the financial statement.
-        """
         super().__init__("Income Statement", company_name, date)
         self.fn_stmt: dict[str:list[Account]] = {
             "revenue": {},

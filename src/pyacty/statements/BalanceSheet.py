@@ -12,35 +12,6 @@ from ..fundamentals.Account import Account
 
 class BalanceSheet(FinancialStatement):
     def __init__(self, company_name: str, date: str) -> None:
-        """
-        Here is an example of what the balance sheet looks like.\n
-        self.fs = {
-            "asset": {
-                "Cash": {
-                    "d/c": "debit",\n
-                    "bal": 0.0,\n
-                    "term": "current"
-                }
-            },
-
-            "liability": {
-                "Accounts Payable": {
-                    "d/c": "credit",\n
-                    "bal": 0.0,\n
-                    "term": "current"
-                }
-            },
-
-            "equity": {
-                "Common Stock": {
-                    "d/c": "credit",\n
-                    "bal": 0.0
-                }
-            }
-        }
-        :param company_name: The name of the company.
-        :param date: The date of the financial statement.
-        """
         super().__init__("Balance Sheet", company_name, date)
         self.fn_stmt: dict[str:list[Account]] = {
             "asset": [],
