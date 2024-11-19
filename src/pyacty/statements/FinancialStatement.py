@@ -31,7 +31,6 @@ class FinancialStatement:
         # Enables one to change what the default is.
         self.default_fs: dict[str:list[Account]] = self.fn_stmt
         self.company: str = company_name
-        # This is more of a place-holder name. If someone is making a custom financial statement they can change it.
         self.fs_name: str = statement_name
         self.date: str = date
 

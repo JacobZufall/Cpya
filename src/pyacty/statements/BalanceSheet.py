@@ -4,10 +4,10 @@ BalanceSheet.py
 
 from typing import override
 
-from src.pyacty.statements.Balance import Balance
 from .FinancialStatement import FinancialStatement
-from .skeletons.FsSkeleton import FsSkeleton
+from .. import Money
 from ..constants import BS_CATEGORIES
+from ..fundamentals.Account import Account
 
 
 class BalanceSheet(FinancialStatement):
@@ -41,68 +41,27 @@ class BalanceSheet(FinancialStatement):
         :param company_name: The name of the company.
         :param date: The date of the financial statement.
         """
-        super().__init__(company_name, date)
-        self.fs: dict[str:dict[str:dict[str:str | int | float]]] = {
-            "asset": {},
-            "liability": {},
-            "equity": {}
+        super().__init__("Balance Sheet", company_name, date)
+        self.fn_stmt: dict[str:list[Account]] = {
+            "asset": [],
+            "liability": [],
+            "equity": []
         }
-        self.fs_name: str = "Balance Sheet"
+        self.default_fs: dict[str:list[Account]] = self.fn_stmt
 
+    # TODO: Consider adding automatic determination of the normal_balance argument?
     @override
-    def __str__(self) -> str:
-        return FsSkeleton(self.fs, self.company, self.fs_name, self.date,
-                          decimals=self.decimals).auto_render()
+    def add_account(self, category: str = "", name: str = "", normal_balance: str = "debit",
+                    starting_balance: float | Money = Money(), contra: bool = False, term: str | None = None,
+                    new_account: Account | None = None) -> None:
+        if category != "" and category not in BS_CATEGORIES:
+            raise ValueError
 
-    @override
-    def reset(self) -> None:
-        self.fs = {
-            "asset": {},
-            "liability": {},
-            "equity": {}
-        }
+        super().add_account(category, name, normal_balance, starting_balance,
+                            contra, term, new_account)
 
-    # Contra should always be the last parameter because it's the least likely to be used, especially in balance sheet
-    # accounts, since it's often netted with its non-contra counterpart.
-    @override
-    def add_account(self, name: str, category: str, start_bal: float = 0.0, term: str = "current",
-                    contra: bool = False) -> None:
-
-        if category.lower() not in BS_CATEGORIES:
-            raise ValueError("Invalid category type.")
-
-        if term.lower() not in ["current", "non-current"]:
-            raise ValueError("Invalid term.")
-
-        db: str = Balance.find_default_balance(category, contra)
-
-        # Equity doesn't have separate sections for current and non-current, so we ignore it.
-        if category.lower() == "equity":
-            self.fs[category.lower()][name] = {
-                "d/c": db,
-                "bal": start_bal
-            }
-
-        else:
-            self.fs[category.lower()][name] = {
-                "d/c": db,
-                "bal": start_bal,
-                "term": term.lower()
-            }
-
-    @override
-    def remove_account(self, name: str) -> None:
-        for category in BS_CATEGORIES:
-            try:
-                self.fs[category].pop(name)
-                break
-
-            except KeyError:
-                pass
-
-        else:
-            raise KeyError("Account not found!")
-
+    # I didn't change anything about this method when I adapted the Account class. But I think most of the heavy lifting
+    # was done by the total_accounts() method in the parent class anyway, so it shouldn't matter.
     def check_bs(self) -> (bool, str):
         """
         Checks if the balance sheet balances.

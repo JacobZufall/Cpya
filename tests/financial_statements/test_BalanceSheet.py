@@ -55,10 +55,10 @@ def test_two() -> None:
     bal_sheet.save_fs("./output", "test_bs")
 
     bal_sheet.reset()
-    assert bal_sheet.fs == {"asset": {}, "liability": {}, "equity": {}}
+    assert bal_sheet.fn_stmt == {"asset": {}, "liability": {}, "equity": {}}
 
     bal_sheet.load_fs("./output/test_bs.json")
-    assert bal_sheet.fs == {
+    assert bal_sheet.fn_stmt == {
         "asset": {
             "Cash": {
                 "d/c": "debit",

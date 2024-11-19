@@ -5,9 +5,10 @@ IncomeStatement.py
 from typing import override
 
 from .FinancialStatement import FinancialStatement
-from src.pyacty.statements.Balance import Balance
 from .skeletons.FsSkeleton import FsSkeleton
+from .. import Money
 from ..constants import IS_CATEGORIES
+from ..fundamentals.Account import Account
 
 
 class IncomeStatement(FinancialStatement):
@@ -32,49 +33,31 @@ class IncomeStatement(FinancialStatement):
         :param company_name: The name of the company.
         :param date: The date of the financial statement.
         """
-        super().__init__(company_name, date)
-        self.fs: dict[str:dict[str:dict[str:str | int | float]]] = {
+        super().__init__("Income Statement", company_name, date)
+        self.fn_stmt: dict[str:list[Account]] = {
             "revenue": {},
             "expense": {}
         }
-        self.fs_name: str = "Income Statement"
+        self.default_fs: dict[str:list[Account]] = self.fn_stmt
 
     @override
     def __str__(self) -> str:
-        return FsSkeleton(self.fs, self.company, self.fs_name, self.date,
-                          decimals=self.decimals).auto_render()
+        return FsSkeleton(self.fn_stmt, self.company, self.fs_name, self.date).auto_render()
 
     @override
     def reset(self) -> None:
-        self.fs = {
-            "revenue": {},
-            "expense": {}
-        }
+        self.fn_stmt = self.default_fs
 
+    # TODO: Consider adding automatic determination of the normal_balance argument?
     @override
-    def add_account(self, name: str, category: str, start_bal: float = 0.0, contra: bool = False) -> None:
-        if category.lower() not in IS_CATEGORIES:
-            raise ValueError("Invalid category type.")
+    def add_account(self, category: str = "", name: str = "", normal_balance: str = "debit",
+                    starting_balance: float | Money = Money(), contra: bool = False, term: str | None = None,
+                    new_account: Account | None = None) -> None:
+        if category != "" and category not in IS_CATEGORIES:
+            raise ValueError
 
-        db: str = Balance.find_default_balance(category, contra)
-
-        self.fs[category.lower()][name] = {
-            "d/c": db,
-            "bal": start_bal
-        }
-
-    @override
-    def remove_account(self, name: str) -> None:
-        for category in IS_CATEGORIES:
-            try:
-                self.fs[category].pop(name)
-                break
-
-            except KeyError:
-                pass
-
-        else:
-            raise KeyError("Account not found!")
+        super().add_account(category, name, normal_balance, starting_balance,
+                            contra, term, new_account)
 
     def net_income(self) -> float:
         """
