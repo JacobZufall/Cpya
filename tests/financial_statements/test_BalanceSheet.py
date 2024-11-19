@@ -52,12 +52,12 @@ def test_two() -> None:
     :return: Nothing.
     """
     # save_fs() isn't directly tested. But, if the other assertions in this test pass, that means it worked.
-    bal_sheet.save_fs("./output", "test_bs")
+    bal_sheet.save("./output", "test_bs")
 
     bal_sheet.reset()
     assert bal_sheet.fn_stmt == {"asset": {}, "liability": {}, "equity": {}}
 
-    bal_sheet.load_fs("./output/test_bs.json")
+    bal_sheet.load("./output/test_bs.json")
     assert bal_sheet.fn_stmt == {
         "asset": {
             "Cash": {

@@ -50,7 +50,7 @@ class FinancialStatement:
         self.fn_stmt = self.default_fs
 
     @final
-    def save_fs(self, directory: str, file_name: str, file_type: str = "all") -> None:
+    def save(self, directory: str, file_name: str, file_type: str = "all") -> None:
         """
         Saves the financial statement to the given directory.
         :param directory: The directory to save the financial statement to.
@@ -131,7 +131,7 @@ class FinancialStatement:
                             "term": account.term
                         })
 
-                outfile.write(json.dumps(self.fn_stmt, indent=4))
+                outfile.write(json.dumps(serial_fs, indent=4))
                 outfile.close()
 
         if file_type == "all":
@@ -147,7 +147,7 @@ class FinancialStatement:
                 save_files(2)
 
     @final
-    def load_fs(self, directory: str):
+    def load(self, directory: str):
         # TODO: Make it so financial statements can be loaded from files.
         pass
 
@@ -195,7 +195,7 @@ class FinancialStatement:
             new_account = Account(name, normal_balance, starting_balance, contra, term)
 
         try:
-            self.fn_stmt[category].insert(new_account)
+            self.fn_stmt[category].append(new_account)
 
         except KeyError:
             self.fn_stmt[category] = [new_account]
