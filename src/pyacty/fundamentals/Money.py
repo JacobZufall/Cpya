@@ -2,8 +2,8 @@
 Money.py
 
 The Money class is a class that is designed to be used internally in PyActy to assist in formatting numbers when they
-are output to the console. The class attribute "show_decimals" can be changed to allow a user to either show or hide
-decimals across an entire project easily.
+    are output to the console. The class attribute "show_decimals" can be changed to allow a user to either show or hide
+    decimals across an entire project easily.
 """
 
 import math
@@ -20,6 +20,7 @@ def assure_type(other) -> float | int:
 
 
 class Money:
+    # TODO: Consider if these should be moved to a global configuration file.
     show_decimals: bool = False
     # By default, Python uses IEEE 754 rounding rules. This standard results in 0.5 being rounded down to 0, which is
     # the opposite of what accountants are used to. By default, the Money class will round 0.5 up, but this can be

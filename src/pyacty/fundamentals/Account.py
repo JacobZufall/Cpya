@@ -2,12 +2,16 @@
 Account.py
 
 The justification for this class is to reduce the amount of for loops used in other files to improve readability. Prior
-to this class, dictionaries were used, which required nested loops often, which got annoying. The ability to access
-an attribute directly reduces the amount of for loops needed.
+    to this class, dictionaries were used, which required nested loops often, which got annoying. The ability to access
+    an attribute directly reduces the amount of for loops needed.
 
 Alternatively, I considered making a "Category" class, since a category holds a bunch of instances of Account inside
-an instance of FinancialStatement. However, I decided against this so that the Account class could be used in more
-places. Also, it felt unnecessary to have a category be anything more than a list.
+    an instance of FinancialStatement. However, I decided against this so that the Account class could be used in more
+    places. Also, it felt unnecessary to have a category be anything more than a list.
+
+TODO: Add support for a t-chart so that one can view the history of changes to the balance of the account easily. My
+    idea for this involves making the balance attribute private and using getters and setters, so that when the value is
+    set we can record the change to a certain list, and then display all changes when the t-chart is called.
 """
 
 from typing import override

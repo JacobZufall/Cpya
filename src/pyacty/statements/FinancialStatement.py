@@ -28,6 +28,8 @@ class FinancialStatement:
         :param date: The date of the financial statement.
         """
         self.fn_stmt: dict[str:list[Account]] = {}
+        # Enables one to change what the default is.
+        self.default_fs: dict[str:list[Account]] = self.fn_stmt
         self.company: str = company_name
         # This is more of a place-holder name. If someone is making a custom financial statement they can change it.
         self.fs_name: str = statement_name
@@ -46,7 +48,7 @@ class FinancialStatement:
         Returns the financial statement to its default state.
         :return: Nothing.
         """
-        self.fn_stmt = {}
+        self.fn_stmt = self.default_fs
 
     @final
     def save_fs(self, directory: str, file_name: str, file_type: str = "all") -> None:
