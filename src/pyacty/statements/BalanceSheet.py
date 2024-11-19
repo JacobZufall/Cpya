@@ -5,7 +5,7 @@ BalanceSheet.py
 from typing import override
 
 from .FinancialStatement import FinancialStatement
-from .. import Money
+from ..fundamentals.Money import Money
 from ..constants import BS_CATEGORIES
 from ..fundamentals.Account import Account
 
