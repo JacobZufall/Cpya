@@ -139,8 +139,8 @@ class FsSkeleton:
         "12": "December"
     }
 
-    # You could consider using string justifying methods instead of $indent. I personally chose not to do this because
-    # I was already doing $central_spacer anyway.
+    # TODO: Maybe consider using string justifying instead of $indent, $divider, and other blank space things in the
+    #  template? This might help fix the issue of the spacing being messed up when a number is too long.
     templates: dict[str:Template] = {
         "account": Template("| $indent$account_name$central_spacer$account_bal |"),
         "divider": Template("$end$divider$end"),
