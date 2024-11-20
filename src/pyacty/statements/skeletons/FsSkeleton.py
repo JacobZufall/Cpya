@@ -139,6 +139,8 @@ class FsSkeleton:
         "12": "December"
     }
 
+    # You could consider using string justifying methods instead of $indent. I personally chose not to do this because
+    # I was already doing $central_spacer anyway.
     templates: dict[str:Template] = {
         "account": Template("| $indent$account_name$central_spacer$account_bal |"),
         "divider": Template("$end$divider$end"),
