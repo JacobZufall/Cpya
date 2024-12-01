@@ -1,5 +1,7 @@
 """
 BalanceSheet.py
+
+This class is primarily intended to serve as an example of how FinancialStatement can be inherited.
 """
 
 from typing import override
@@ -25,6 +27,15 @@ class BalanceSheet(FinancialStatement):
     def add_account(self, category: str = "", name: str = "", normal_balance: str = "debit",
                     starting_balance: float | Money = Money(), contra: bool = False, term: str | None = None,
                     new_account: Account | None = None) -> None:
+        """
+        Overrides FinancialStatement.add_account(), see parent method for details.
+
+        This method extends add_account() by validating the argument passed in the category parameter to see if it's
+        a valid balance sheet category.
+
+        :raises ValueError: Raises when the specified category is not listed as a valid balance sheet category in
+        /pyacty/constants.py/. See file for details.
+        """
         if category != "" and category not in BS_CATEGORIES:
             raise ValueError
 
@@ -36,6 +47,7 @@ class BalanceSheet(FinancialStatement):
     def check_bs(self) -> (bool, str):
         """
         Checks if the balance sheet balances.
+
         :return: Returns if the balance sheet balances (as a boolean) and the reason why it doesn't balance, if
         applicable.
         """

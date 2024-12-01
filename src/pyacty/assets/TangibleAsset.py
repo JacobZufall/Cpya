@@ -65,7 +65,6 @@ class TangibleAsset(Asset):
         """
         Updates the salvage value of the asset and automatically handles types.
         :param new_value: The new salvage value of the asset.
-        :return: Nothing.
         """
         self._slvg_value = new_value if type(new_value) == Money else Money(new_value)
 

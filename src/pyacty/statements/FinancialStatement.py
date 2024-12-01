@@ -24,6 +24,7 @@ class FinancialStatement:
     def __init__(self, statement_name: str, company_name: str, date: str) -> None:
         """
         A blank financial statement.
+
         :param company_name: The name of the company.
         :param date: The date of the financial statement.
         """
@@ -45,7 +46,6 @@ class FinancialStatement:
     def reset(self) -> None:
         """
         Returns the financial statement to its default state.
-        :return: Nothing.
         """
         self.fn_stmt = self.default_fs
 
@@ -53,10 +53,10 @@ class FinancialStatement:
     def save(self, directory: str, file_name: str, file_type: str = "all") -> None:
         """
         Saves the financial statement to the given directory.
+
         :param directory: The directory to save the financial statement to.
         :param file_name: The name of the file.
         :param file_type: The type of file to save to (CSV or JSON).
-        :return: Nothing.
         """
         valid_file_types: list[str] = ["csv", "json"]
 
@@ -74,8 +74,8 @@ class FinancialStatement:
             0: Saves all files.
             1: Saves CSV file only.
             2: Saves JSON file only.
+
             :param option: What types of file(s) to save.
-            :return: Nothing
             """
             outfile: TextIO
 
@@ -154,6 +154,7 @@ class FinancialStatement:
     def total_accounts(self) -> dict[str:float]:
         """
         Totals the value of each account in each financial statement category.
+
         :return: The totals, separated by category.
         """
         totals: dict[str:float] = {}
@@ -173,6 +174,7 @@ class FinancialStatement:
                     new_account: Account | None = None) -> None:
         """
         Creates a new account and adds it to the financial statement.
+
         :param name: The name of the account.
         :param category: The category of the account (asset/liability/equity/revenue/expense).
         :param normal_balance: The normal balance of the account.
@@ -181,7 +183,6 @@ class FinancialStatement:
         :param term: The term of the account (short or long).
         :param new_account: An already existing instance of Account. If this argument is filled, all other arguments
         (except category) are ignored.
-        :return: Nothing.
         """
         # Ensures that the account doesn't already exist in ANY category. This means you can't have an account named
         # "Cash" in the "Assets" category and the "Equity" category.
@@ -203,8 +204,9 @@ class FinancialStatement:
     def remove_account(self, name: str) -> None:
         """
         Deletes a specified account from the financial statement.
+
         :param name: The name of the account.
-        :return: Nothing.
+        :raises NameError: Raises when the account specified does not exist.
         """
         for category, accounts in self.fn_stmt.items():
             for i in range(len(accounts)):
@@ -213,4 +215,4 @@ class FinancialStatement:
                     break
 
         else:
-            raise NameError
+            raise NameError(f"No account by the name of \"{name}\" exists in {self.fs_name}.")

@@ -1,5 +1,7 @@
 """
 IncomeStatement.py
+
+This class is primarily intended to serve as an example of how FinancialStatement can be inherited.
 """
 
 from typing import override
@@ -33,6 +35,15 @@ class IncomeStatement(FinancialStatement):
     def add_account(self, category: str = "", name: str = "", normal_balance: str = "debit",
                     starting_balance: float | Money = Money(), contra: bool = False, term: str | None = None,
                     new_account: Account | None = None) -> None:
+        """
+        Overrides FinancialStatement.add_account(), see parent method for details.
+
+        This method extends add_account() by validating the argument passed in the category parameter to see if it's
+        a valid income statement category.
+
+        :raises ValueError: Raises when the specified category is not listed as a valid income statement category in
+        /pyacty/constants.py/. See file for details.
+        """
         if category != "" and category not in IS_CATEGORIES:
             raise ValueError
 
